@@ -491,13 +491,6 @@
       transform: rotateY(180deg);
     }
 
-    /* Only enable hover on non-touch devices */
-    @media (hover: hover) and (pointer: fine) {
-      .flip-card:hover {
-        transform: rotateY(180deg);
-      }
-    }
-
     .flip-card-front,
     .flip-card-back {
       position: absolute;
@@ -1627,53 +1620,14 @@
       });
     });
 
-    // Flip card click handling for mobile and better interaction
+    // Flip card click handling - click to toggle
     const flipCards = document.querySelectorAll('.flip-card');
 
-    // Check if device supports touch
-    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-
     flipCards.forEach(card => {
-      if (isTouchDevice) {
-        // For touch devices, use click to toggle
-        card.addEventListener('click', function(e) {
-          e.preventDefault();
-          // Close all other cards first
-          flipCards.forEach(otherCard => {
-            if (otherCard !== this) {
-              otherCard.classList.remove('flipped');
-            }
-          });
-          // Toggle this card
-          this.classList.toggle('flipped');
-        });
-      } else {
-        // For desktop, optionally add click to lock the flip
-        let isLocked = false;
-
-        card.addEventListener('click', function(e) {
-          e.preventDefault();
-          isLocked = !isLocked;
-          if (isLocked) {
-            this.classList.add('flipped');
-          } else {
-            this.classList.remove('flipped');
-          }
-        });
-
-        // Only remove flipped class on mouseleave if not locked
-        card.addEventListener('mouseleave', function() {
-          if (!isLocked) {
-            this.classList.remove('flipped');
-          }
-        });
-
-        card.addEventListener('mouseenter', function() {
-          if (!isLocked) {
-            this.classList.add('flipped');
-          }
-        });
-      }
+      card.addEventListener('click', function(e) {
+        // Toggle this card
+        this.classList.toggle('flipped');
+      });
     });
   </script>
 </body>
