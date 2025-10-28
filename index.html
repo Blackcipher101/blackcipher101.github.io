@@ -487,9 +487,15 @@
       cursor: pointer;
     }
 
-    .flip-card:hover,
     .flip-card.flipped {
       transform: rotateY(180deg);
+    }
+
+    /* Only enable hover on non-touch devices */
+    @media (hover: hover) and (pointer: fine) {
+      .flip-card:hover {
+        transform: rotateY(180deg);
+      }
     }
 
     .flip-card-front,
@@ -1624,16 +1630,50 @@
     // Flip card click handling for mobile and better interaction
     const flipCards = document.querySelectorAll('.flip-card');
 
-    flipCards.forEach(card => {
-      card.addEventListener('click', function(e) {
-        // Toggle flipped class on click
-        this.classList.toggle('flipped');
-      });
+    // Check if device supports touch
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
-      // Remove flipped class when mouse leaves (for desktop)
-      card.addEventListener('mouseleave', function() {
-        this.classList.remove('flipped');
-      });
+    flipCards.forEach(card => {
+      if (isTouchDevice) {
+        // For touch devices, use click to toggle
+        card.addEventListener('click', function(e) {
+          e.preventDefault();
+          // Close all other cards first
+          flipCards.forEach(otherCard => {
+            if (otherCard !== this) {
+              otherCard.classList.remove('flipped');
+            }
+          });
+          // Toggle this card
+          this.classList.toggle('flipped');
+        });
+      } else {
+        // For desktop, optionally add click to lock the flip
+        let isLocked = false;
+
+        card.addEventListener('click', function(e) {
+          e.preventDefault();
+          isLocked = !isLocked;
+          if (isLocked) {
+            this.classList.add('flipped');
+          } else {
+            this.classList.remove('flipped');
+          }
+        });
+
+        // Only remove flipped class on mouseleave if not locked
+        card.addEventListener('mouseleave', function() {
+          if (!isLocked) {
+            this.classList.remove('flipped');
+          }
+        });
+
+        card.addEventListener('mouseenter', function() {
+          if (!isLocked) {
+            this.classList.add('flipped');
+          }
+        });
+      }
     });
   </script>
 </body>
