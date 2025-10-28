@@ -487,7 +487,8 @@
       cursor: pointer;
     }
 
-    .flip-card:hover {
+    .flip-card:hover,
+    .flip-card.flipped {
       transform: rotateY(180deg);
     }
 
@@ -1617,6 +1618,21 @@
       cursor.style.opacity = '1';
       trails.forEach((trail, index) => {
         trail.element.style.opacity = (1 - (index / maxTrails)) * 0.6;
+      });
+    });
+
+    // Flip card click handling for mobile and better interaction
+    const flipCards = document.querySelectorAll('.flip-card');
+
+    flipCards.forEach(card => {
+      card.addEventListener('click', function(e) {
+        // Toggle flipped class on click
+        this.classList.toggle('flipped');
+      });
+
+      // Remove flipped class when mouse leaves (for desktop)
+      card.addEventListener('mouseleave', function() {
+        this.classList.remove('flipped');
       });
     });
   </script>
