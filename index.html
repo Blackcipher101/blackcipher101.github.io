@@ -17,13 +17,11 @@
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400..700&amp;display=swap">
-  <link rel="stylesheet" href="assets/css/site.css?v=20261106h">
+  <link rel="preload" href="assets/fonts/space-grotesk-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/css/site.css?v=20261106i">
   <script>document.documentElement.classList.add('js');</script>
-  <script type="module" src="assets/js/site.js?v=20261106g"></script>
-  <script type="module" src="assets/js/audience.js?v=20261106g"></script>
+  <script type="module" src="assets/js/site.js?v=20261106i"></script>
+  <script type="module" src="assets/js/audience.js?v=20261106i"></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -48,7 +46,7 @@
     <section class="s-hero" id="top" aria-label="Introduction">
       <div class="wrap">
         <div class="bento">
-          <form class="card tailor reveal" id="tailor" role="search" aria-labelledby="tailor-title" autocomplete="off">
+          <form class="card tailor" id="tailor" role="search" aria-labelledby="tailor-title" autocomplete="off">
             <div class="tailor-ask">
               <label class="mono tailor-label" id="tailor-title" for="tailor-input">Who's visiting?</label>
               <div class="tailor-field">
@@ -56,7 +54,7 @@
                 <button class="btn btn-lime" type="submit">Tailor the page</button>
               </div>
               <p class="tailor-hint" id="tailor-hint">The page reorders itself for you. Nothing is sent anywhere.</p>
-              <div class="tailor-chips" role="group" aria-label="Audience presets" id="tailor-chips"></div>
+              <div class="tailor-chips" role="group" aria-label="Audience presets" id="tailor-chips"><button type="button" class="chip-btn" data-preset="startup" aria-pressed="false">Startup founder / CTO</button><button type="button" class="chip-btn" data-preset="recruiter" aria-pressed="false">Recruiter / hiring manager</button><button type="button" class="chip-btn" data-preset="enterprise" aria-pressed="false">Big company / enterprise</button><button type="button" class="chip-btn" data-preset="underwater" aria-pressed="false">Underwater / marine</button><button type="button" class="chip-btn" data-preset="embodied" aria-pressed="false">Embodied AI / humanoids</button><button type="button" class="chip-btn" data-preset="av" aria-pressed="false">Autonomous vehicles</button><button type="button" class="chip-btn" data-preset="defence" aria-pressed="false">Defence</button><button type="button" class="chip-btn" data-preset="inspection" aria-pressed="false">Inspection / industrial</button><button type="button" class="chip-btn" data-preset="legged" aria-pressed="false">Legged robots</button></div>
             </div>
             <div class="tailor-now" id="tailor-now" hidden>
               <p><span class="mono">Viewing as</span> <strong id="tailor-name"></strong></p>
@@ -69,7 +67,7 @@
             </div>
             <p class="tailor-status" id="tailor-status" aria-live="polite"></p>
           </form>
-          <div class="card card-violet c-brand reveal" data-tilt>
+          <div class="card card-violet c-brand" data-tilt>
             <svg class="mark" viewBox="0 0 120 80" role="img" aria-label="NN monogram: a zig-zag path with pose nodes">
               <polyline points="10,70 10,10 60,70 60,10 110,70 110,10" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="square"/>
               <g fill="#d9f45b"><circle cx="10" cy="70" r="5"/><circle cx="60" cy="70" r="5"/><circle cx="110" cy="10" r="7"/></g>
@@ -80,7 +78,7 @@
             </div>
           </div>
 
-          <div class="card card-grad c-head reveal" data-tilt>
+          <div class="card card-grad c-head" data-tilt>
             <span class="pill-label mono"><span class="dot" aria-hidden="true"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="3" fill="#fff"/></svg></span><span data-aud="pill">State estimation · SLAM · Planning · Embodied AI</span></span>
             <h1 data-aud="headline">I build the software that tells robots <b>where they are</b> and <b>where to go</b>.</h1>
             <div>
@@ -93,25 +91,25 @@
             </div>
           </div>
 
-          <figure class="card c-photo reveal" data-tilt>
-            <img src="assets/img/nehal-stage.webp" srcset="assets/img/nehal-stage-sm.webp 384w, assets/img/nehal-stage.webp 640w" sizes="(max-width: 700px) 100vw, 400px" width="640" height="800" fetchpriority="high" decoding="async" alt="Nehal Nevle presenting on stage at zDay 2023, the launch of ZPod, India's first autonomous vehicle, with the ZPod beside him">
+          <figure class="card c-photo" data-tilt>
+            <img src="assets/img/nehal-stage.webp" srcset="assets/img/nehal-stage-sm.webp 384w, assets/img/nehal-stage.webp 640w" sizes="(max-width: 700px) 100vw, 400px" width="640" height="800" decoding="async" alt="Nehal Nevle presenting on stage at zDay 2023, the launch of ZPod, India's first autonomous vehicle, with the ZPod beside him">
             <figcaption class="mono"><span class="dot" aria-hidden="true"></span>Launching ZPod · zDay 2023</figcaption>
           </figure>
 
-          <div class="card card-lime c-rov reveal">
+          <div class="card card-lime c-rov">
             <img src="assets/img/rov.svg" width="580" height="650" alt="Original illustration of an underwater ROV with thrusters, a camera dome, a tether and Doppler velocity log beams" fetchpriority="high">
             <span class="mono">Now</span>
             <h2>Underwater autonomy</h2>
             <p>Visual-inertial odometry, DVL fusion and inspection tooling for robots that cannot see GPS.</p>
           </div>
 
-          <div class="card card-warm c-stack reveal" data-tilt>
+          <div class="card card-warm c-stack" data-tilt>
             <span class="mono">The whole stack</span>
             <h2>Perception to planning. <b>Every body.</b></h2>
             <p>Estimation and mapping, prediction and planning, embodied AI and its deployment on real robots, simulation and CI.</p>
           </div>
 
-          <div class="card c-now reveal" data-tilt>
+          <div class="card c-now" data-tilt>
             <span class="mono live">Currently</span>
             <p class="role">Autonomy Engineer</p>
             <p>Griffin Labs, Singapore. Building generalisable autonomy.</p>
@@ -119,7 +117,7 @@
           </div>
         </div>
 
-        <ul class="strip reveal" aria-label="Robot embodiments worked on">
+        <ul class="strip" aria-label="Robot embodiments worked on">
           <li class="tag mono">Embodiments</li>
           <li class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 15v-4l3-5h12l3 5v4z"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>Autonomous cars &amp; pods</li>
           <li class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="5" cy="16" r="3"/><circle cx="19" cy="16" r="3"/><path d="M5 16l5-7h5l4 7M10 9l3 7"/></svg>Two-wheelers</li>

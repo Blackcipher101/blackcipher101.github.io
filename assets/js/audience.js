@@ -205,19 +205,20 @@ function init() {
     when.prepend(b);
   });
 
-  // Chips. Recruiters are a key audience: their chip goes second so it is visible without scrolling on phones.
-  const presetIds = Object.keys(PRESETS);
-  const chipOrder = [presetIds[0], 'recruiter', ...presetIds.slice(1).filter((id) => id !== 'recruiter')];
-  for (const id of chipOrder) {
-    const p = PRESETS[id];
-    const c = document.createElement('button');
-    c.type = 'button';
-    c.className = 'chip-btn';
-    c.dataset.preset = id;
-    c.textContent = p.label;
-    c.setAttribute('aria-pressed', 'false');
+  // Chips are in the HTML (Recruiter second, so it is visible without scrolling on phones) so the bar does not grow
+  // after first paint; create any that are missing (e.g. a preset added in JS only) and wire them all up here.
+  for (const id of Object.keys(PRESETS)) {
+    let c = chipsBox.querySelector(`.chip-btn[data-preset="${id}"]`);
+    if (!c) {
+      c = document.createElement('button');
+      c.type = 'button';
+      c.className = 'chip-btn';
+      c.dataset.preset = id;
+      c.textContent = PRESETS[id].label;
+      c.setAttribute('aria-pressed', 'false');
+      chipsBox.appendChild(c);
+    }
     c.addEventListener('click', () => choose(id, { source: 'chip' }));
-    chipsBox.appendChild(c);
   }
 
   form.addEventListener('submit', (ev) => {
