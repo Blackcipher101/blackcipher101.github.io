@@ -5,7 +5,7 @@
 // Neither sensor observes absolute position, so position error always grows; how fast
 // depends on which velocity source is alive. This is a teaching model, not the
 // estimator in uw-vio-dvl.
-import { View, Loop, COLORS, gauss, clamp } from './common.js?v=20261106b';
+import { View, Loop, COLORS, gauss, clamp } from './common.js?v=20261106c';
 
 const W = 30, H = 18;                 // world, metres
 const SIM_DT = 0.02;                  // filter / sim step, s

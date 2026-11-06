@@ -4,7 +4,7 @@
 // - Choice comes from ?for=<id> first, then localStorage, else the general page.
 // - Free text is matched to a preset by keyword scoring (see KEYWORDS and score()).
 // - A preset changes: hero pill/headline/lede, the projects intro, which project cards
-//   show and in what order (max 6), the demo order, and which experience cards and
+//   show and in what order (max 6), which demos show and in what order, and which experience cards and
 //   bullets are marked as relevant. All copy repeats claims already made on the page.
 // Rationale for the preset list and keyword sets: AUDIENCES.md.
 
@@ -23,7 +23,7 @@ export const PRESETS = {
     pitch: 'Founding-team experience twice: pre-seed to Series A on ZPod, then a $500K raise, product and public demo at BYTES (EF, YC Startup School).',
     work: 'Shipped, measured side projects across estimation, RL and simulation.',
     projects: ['vio', 'rov', 'q14', 'inspect', 'klt', 'tb3'],
-    demos: ['mppi', 'slam', 'dvl'],
+    demos: ['mppi', 'cartpole', 'scara', 'slam'],
     jobs: ['mz', 'bytes', 'griffin'],
     points: ['zero', 'series', 'raise', 'demo', 'accel'],
   },
@@ -35,7 +35,7 @@ export const PRESETS = {
     pitch: 'Led planning & prediction, wrote production-scale autonomy code, and builds evaluation you can reproduce.',
     work: 'Benchmarked against ground truth, with the evaluation scripts in each repo.',
     projects: ['vio', 'klt', 'bench', 'calib', 'inspect', 'tb3'],
-    demos: ['slam', 'mppi', 'dvl'],
+    demos: ['scara', 'slam', 'mppi', 'dvl'],
     jobs: ['mz', 'griffin', 'aeroarc'],
     points: ['zero', 'series', 'ci', 'sim'],
   },
@@ -47,7 +47,7 @@ export const PRESETS = {
     pitch: 'Five underwater perception and estimation repos plus an RL ROV controller, all measured against ground truth.',
     work: 'Underwater perception and estimation, with results measured against ground truth. Negative results are published too.',
     projects: ['vio', 'rov', 'klt', 'calib', 'inspect', 'bench'],
-    demos: ['dvl', 'slam', 'mppi'],
+    demos: ['dvl', 'sonar', 'slam', 'mppi'],
     jobs: [],
     points: [],
   },
@@ -59,9 +59,9 @@ export const PRESETS = {
     pitch: 'RL that holds up beyond its training range, physics written from scratch, and deployment on real robots.',
     work: 'RL, simulation and VLM projects, each with its evaluation.',
     projects: ['rov', 'q14', 'wip', 'inspect', 'vio', 'tb3'],
-    demos: ['mppi', 'slam', 'dvl'],
-    jobs: ['griffin', 'mz', 'aeroarc'],
-    points: ['rl', 'ue', 'sim'],
+    demos: ['cartpole', 'scara', 'mppi', 'slam'],
+    jobs: ['griffin', 'mz', 'aeroarc', 'edu'],
+    points: ['rl', 'ue', 'sim', 'mlss', 'eeml'],
   },
   av: {
     label: 'Autonomous vehicles',
@@ -71,7 +71,7 @@ export const PRESETS = {
     pitch: 'ZPod end to end: planning, prediction, simulation and CI for India\'s first autonomous vehicle.',
     work: 'Planning, SLAM and estimation projects outside work.',
     projects: ['tb3', 'vio', 'klt', 'bench', 'q14', 'rov'],
-    demos: ['mppi', 'slam', 'dvl'],
+    demos: ['mppi', 'slam', 'cartpole', 'dvl'],
     jobs: ['mz', 'bytes'],
     points: ['zero', 'sim', 'ue', 'ci', 'ga', 'rl', 'dw'],
   },
@@ -83,7 +83,7 @@ export const PRESETS = {
     pitch: 'Defence robotics at Aeroarc (VIRA, ARCV MULE), plus estimation built for degraded sensing.',
     work: 'Estimation that survives sensor dropout, measured against ground truth.',
     projects: ['vio', 'calib', 'klt', 'q14', 'tb3', 'bench'],
-    demos: ['dvl', 'mppi', 'slam'],
+    demos: ['sonar', 'dvl', 'mppi', 'slam'],
     jobs: ['aeroarc', 'mz'],
     points: ['sim', 'ci'],
   },
@@ -95,7 +95,7 @@ export const PRESETS = {
     pitch: 'Reality-capture hardware, automated inspection reports and calibration health checks.',
     work: 'Inspection and calibration tooling, measured on real dive data.',
     projects: ['inspect', 'calib', 'vio', 'bench', 'klt', 'tb3'],
-    demos: ['slam', 'dvl', 'mppi'],
+    demos: ['scara', 'slam', 'sonar', 'dvl'],
     jobs: ['phi', 'griffin', 'clutter'],
     points: ['yolo', 'fsm'],
   },
@@ -107,7 +107,7 @@ export const PRESETS = {
     pitch: 'Legged robots from both sides: real quadrupeds, and the dynamics written from scratch.',
     work: 'Locomotion, dynamics and RL projects.',
     projects: ['q14', 'wip', 'rov', 'tb3', 'vio', 'klt'],
-    demos: ['mppi', 'slam', 'dvl'],
+    demos: ['cartpole', 'scara', 'mppi', 'slam'],
     jobs: ['aeroarc', 'mz'],
     points: ['rl', 'ga'],
   },
@@ -119,9 +119,9 @@ export const PRESETS = {
     pitch: 'Skills: state estimation, SLAM, planning & prediction, RL, simulation, CI/CD · C++, Python, CUDA, ROS 2 · nehalnevle@gmail.com',
     work: 'A short list of public projects, each with measured results.',
     projects: ['vio', 'rov', 'q14', 'klt', 'inspect', 'tb3'],
-    demos: ['slam', 'mppi', 'dvl'],
+    demos: ['slam', 'cartpole', 'scara', 'mppi'],
     jobs: ['griffin', 'aeroarc', 'bytes', 'mz'],
-    points: ['zero', 'series', 'raise', 'accel', 'ci', 'lead'],
+    points: ['zero', 'series', 'raise', 'accel', 'ci', 'lead', 'mlss', 'eeml'],
   },
 };
 
@@ -288,7 +288,7 @@ function init() {
     reorder(projGrid, '[data-proj]', 'proj', order, animate, (el) => {
       el.classList.toggle('proj-wide', el.dataset.proj === wide);
     });
-    // 3. demos: order only
+    // 3. demos: selection + order (featured demo first; the general page shows all)
     reorder(demoGrid, '[data-demo]', 'demo', p ? p.demos : general.demos, animate);
     // 4. experience emphasis
     $$('[data-job]').forEach((el) => el.classList.toggle('is-feature', !!p && p.jobs.includes(el.dataset.job)));

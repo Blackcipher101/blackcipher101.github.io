@@ -11,7 +11,7 @@ The "Who's visiting?" bar re-tailors the page in the browser. It has no backend 
   - the hero pill, headline and lede
   - the projects intro
   - which project cards show and in what order (at most 6, most relevant first)
-  - the order of the demos
+  - which demos show and in what order (4 of the 6, the featured one first; the general page shows all 6)
   - which experience cards get a "Relevant" badge, and which bullets are bolded
   - a one-line pitch in the "Viewing as" bar
 - **Copy rule:** all preset copy repeats claims already on the page or in the repo READMEs. Nothing is added.
@@ -22,15 +22,31 @@ The "Who's visiting?" bar re-tailors the page in the browser. It has no backend 
 |---|---|---|
 | `startup` | Startup founder / CTO | 0 → 1 on ZPod, tech + product lead at BYTES, full-stack breadth |
 | `enterprise` | Big company / enterprise | production-scale code, closed-loop CI/CD, leadership roles, reproducible evaluation |
-| `underwater` | Underwater / marine | the five `uw-*` repos and rov-rl-mujoco; the DVL demo first |
+| `underwater` | Underwater / marine | the five `uw-*` repos and rov-rl-mujoco |
 | `embodied` | Embodied AI / humanoid labs | RL (rov-rl-mujoco, H-GAIL/PPO), Q14 dynamics, humanoid RL in progress, Griffin Labs |
-| `av` | Autonomous vehicles | Minus Zero planning & prediction, simulators, DriveWorks; the MPPI demo first |
+| `av` | Autonomous vehicles | Minus Zero planning & prediction, simulators, DriveWorks |
 | `defence` | Defence | Aeroarc VIRA and ARCV MULE, estimation under sensor dropout |
 | `inspection` | Inspection / industrial / facilities | PhiSCAN, uw-inspect-report, uw-calib-health, Griffin Labs (TCR, Mega), Clutterbot |
 | `legged` | Legged robots | ARCV MULE, Q14 Dynamics Lab, humanoid RL in progress |
 | `recruiter` | Recruiter / hiring manager | the timeline in one paragraph, a skills line, contact |
 
 These nine cover the kinds of reader the work actually serves: company stage (startup, enterprise), domain (underwater, AV, defence, inspection), robot type (embodied/humanoid, legged), and role (recruiting). A domain that has no matching work behind it has no preset.
+
+## Featured demos
+
+| id | Demos, in order | Why the first one |
+|---|---|---|
+| `startup` | MPPI, cart-pole RL, SCARA, SLAM | planning was the ZPod job; then breadth |
+| `enterprise` | SCARA, SLAM, MPPI, DVL | deterministic, limit-aware motion planning |
+| `underwater` | DVL, sonar VFH, SLAM, MPPI | the idea behind uw-vio-dvl |
+| `embodied` | cart-pole RL, SCARA, MPPI, SLAM | a learned policy trained by `tools/train_pendulum.py` |
+| `av` | MPPI, SLAM, cart-pole RL, DVL | planning & prediction at Minus Zero |
+| `defence` | sonar VFH, DVL, MPPI, SLAM | navigating with degraded sensing |
+| `inspection` | SCARA, SLAM, sonar VFH, DVL | manipulation for workcells such as Mega |
+| `legged` | cart-pole RL, SCARA, MPPI, SLAM | balance and recovery from pushes |
+| `recruiter` | SLAM, cart-pole RL, SCARA, MPPI | a mix across estimation, learning, manipulation, planning |
+
+The `embodied` and `recruiter` presets also bold the two summer schools in the Education card.
 
 ## Keyword lists (summary; the exact weights are in `KEYWORDS`)
 

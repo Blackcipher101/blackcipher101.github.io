@@ -20,10 +20,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400..700&amp;display=swap">
-  <link rel="stylesheet" href="assets/css/site.css?v=20261106b">
+  <link rel="stylesheet" href="assets/css/site.css?v=20261106c">
   <script>document.documentElement.classList.add('js');</script>
-  <script type="module" src="assets/js/site.js?v=20261106b"></script>
-  <script type="module" src="assets/js/audience.js?v=20261106b"></script>
+  <script type="module" src="assets/js/site.js?v=20261106c"></script>
+  <script type="module" src="assets/js/audience.js?v=20261106c"></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -171,7 +171,7 @@
               <span class="demo-hint mono">Loading demo…</span>
             </div>
             <div class="demo-side">
-              <span class="mono" style="color:var(--lime)">Demo 01 · SLAM</span>
+              <span class="mono demo-tag" style="color:var(--lime)">SLAM</span>
               <h3 id="slam-title">Close the loop</h3>
               <p>Wheel odometry has a small heading bias, so the estimate (coral) drifts away from the truth (dashed). Drive back to the start: a loop-closure edge (lime) appears. Optimise runs Levenberg–Marquardt on the full 2D pose graph.</p>
               <div class="controls">
@@ -189,6 +189,31 @@
             </div>
           </article>
 
+          <!-- Demo: learned cart-pole swing-up -->
+          <article class="card demo reveal" data-demo="cartpole" aria-labelledby="cartpole-title">
+            <div class="demo-stage">
+              <canvas width="1000" height="500" style="--ar: 2 / 1" aria-label="Cart-pole simulation balanced by a learned policy. Drag the pole to swing it, tap to flick it." role="img"></canvas>
+              <span class="demo-hint mono">Loading demo…</span>
+            </div>
+            <div class="demo-side">
+              <span class="mono demo-tag" style="color:var(--lime)">Embodied AI · RL</span>
+              <h3 id="cartpole-title">Swing up, stay up</h3>
+              <p>A small neural network, trained offline with evolution strategies, swings the pole up from hanging and balances it with at most 20 N on the cart. Drag the pole or tap to flick it, and watch it recover. Switch to the classical energy + LQR controller to compare. Training script: <code>tools/train_pendulum.py</code>.</p>
+              <div class="controls">
+                <button class="btn btn-lime" type="button" data-act="push">Push</button>
+                <button class="btn btn-ghost" type="button" data-act="mode" aria-pressed="false">Switch to LQR</button>
+                <button class="btn btn-ghost" type="button" data-act="reset">Hang down</button>
+              </div>
+              <p class="demo-msg demo-note" data-out="policy" aria-live="polite"></p>
+              <dl class="stats">
+                <div class="stat"><dt>Upright for</dt><dd data-out="up">–</dd></div>
+                <div class="stat"><dt>Swing-up time</dt><dd data-out="swing">–</dd></div>
+                <div class="stat"><dt>Cart force</dt><dd data-out="f">–</dd></div>
+                <div class="stat"><dt>Pole angle</dt><dd data-out="ang">–</dd></div>
+              </dl>
+            </div>
+          </article>
+
           <!-- Demo 2: MPPI -->
           <article class="card demo reveal" data-demo="mppi" aria-labelledby="mppi-title">
             <div class="demo-stage">
@@ -196,7 +221,7 @@
               <span class="demo-hint mono">Loading demo…</span>
             </div>
             <div class="demo-side">
-              <span class="mono" style="color:var(--lime)">Demo 02 · Planning</span>
+              <span class="mono demo-tag" style="color:var(--lime)">Planning</span>
               <h3 id="mppi-title">MPPI playground</h3>
               <p>256 noisy control sequences are rolled out over a 2.6 s horizon, 20 times a second. Each is scored for goal progress and clearance. The plan (coral) is their cost-weighted average. Lime rollouts are cheap, violet ones are expensive.</p>
               <div class="controls">
@@ -214,6 +239,32 @@
             </div>
           </article>
 
+          <!-- Demo: SCARA arm -->
+          <article class="card demo reveal" data-demo="scara" aria-labelledby="scara-title">
+            <div class="demo-stage">
+              <canvas width="1000" height="600" style="--ar: 5 / 3" aria-label="Top view of a two-link SCARA arm. Tap to set a target, drag the obstacle to move it." role="img"></canvas>
+              <span class="demo-hint mono">Loading demo…</span>
+            </div>
+            <div class="demo-side">
+              <span class="mono demo-tag" style="color:var(--lime)">Manipulation</span>
+              <h3 id="scara-title">Reach around it</h3>
+              <p>A two-link SCARA arm from above. Analytic inverse kinematics picks the elbow pose within the joint limits, and every move follows a minimum-jerk profile. If the straight joint-space move would hit the obstacle, A* routes around it in configuration space (inset: blocked poses in coral). Shaded: the reachable workspace.</p>
+              <div class="controls">
+                <button class="btn btn-lime" type="button" data-act="target">Random target</button>
+                <button class="btn btn-ghost" type="button" data-act="elbow" aria-pressed="false">Elbow: left</button>
+                <button class="btn btn-ghost" type="button" data-act="obstacle" aria-pressed="true">Obstacle</button>
+                <button class="btn btn-ghost" type="button" data-act="reset">Reset</button>
+              </div>
+              <p class="demo-msg" data-out="msg" aria-live="polite"></p>
+              <dl class="stats">
+                <div class="stat"><dt>Tip error</dt><dd data-out="err">–</dd></div>
+                <div class="stat"><dt>Joints q1 · q2</dt><dd data-out="q">–</dd></div>
+                <div class="stat"><dt>Plan</dt><dd data-out="plan">–</dd></div>
+                <div class="stat"><dt>Move time</dt><dd data-out="t">–</dd></div>
+              </dl>
+            </div>
+          </article>
+
           <!-- Demo 3: DVL dropout -->
           <article class="card demo reveal" data-demo="dvl" aria-labelledby="dvl-title">
             <div class="demo-stage">
@@ -221,7 +272,7 @@
               <span class="demo-hint mono">Loading demo…</span>
             </div>
             <div class="demo-side">
-              <span class="mono" style="color:var(--lime)">Demo 03 · Underwater</span>
+              <span class="mono demo-tag" style="color:var(--lime)">Underwater</span>
               <h3 id="dvl-title">Lights out</h3>
               <p>A Kalman filter integrates a biased accelerometer and corrects it with velocity from the camera and/or a DVL. Black out the camera with and without the DVL and watch the estimate (coral) leave the true path (cream). A toy model of the idea behind <a href="https://github.com/Blackcipher101/uw-vio-dvl">uw-vio-dvl</a>.</p>
               <div class="controls">
@@ -241,6 +292,30 @@
                 <div class="stat"><dt>2σ bound</dt><dd data-out="sig">–</dd></div>
                 <div class="stat"><dt>Max err, dark</dt><dd data-out="max">–</dd></div>
                 <div class="stat"><dt>Sim time</dt><dd data-out="t">–</dd></div>
+              </dl>
+            </div>
+          </article>
+          <!-- Demo: sonar obstacle avoidance -->
+          <article class="card demo reveal" data-demo="sonar" aria-labelledby="sonar-title">
+            <div class="demo-stage">
+              <canvas width="1000" height="625" style="--ar: 8 / 5" aria-label="Top view of an ROV avoiding pillars with a sonar fan. Tap to set a goal, drag pillars to move them." role="img"></canvas>
+              <span class="demo-hint mono">Loading demo…</span>
+            </div>
+            <div class="demo-side">
+              <span class="mono demo-tag" style="color:var(--lime)">Sonar navigation</span>
+              <h3 id="sonar-title">Feel the way</h3>
+              <p>An ROV sees only a noisy sonar fan. Echoes build a certainty grid (violet), a vector field histogram (ring) marks blocked directions in coral, and the ROV steers into the free gap closest to the goal. This is a VFH planner; the RL version of this task in <a href="https://github.com/Blackcipher101/rov-rl-mujoco">rov-rl-mujoco</a> is still training.</p>
+              <div class="controls">
+                <button class="btn btn-lime" type="button" data-act="shuffle">Shuffle pillars</button>
+                <button class="btn btn-ghost" type="button" data-act="current" aria-pressed="false">Cross-current</button>
+                <button class="btn btn-ghost" type="button" data-act="reset">Reset</button>
+              </div>
+              <p class="demo-msg">Tap to set a goal. Drag a pillar to move it. Turn on the cross-current to see what an unmodelled disturbance does.</p>
+              <dl class="stats">
+                <div class="stat"><dt>Goals reached</dt><dd data-out="goals">0</dd></div>
+                <div class="stat"><dt>Collisions</dt><dd data-out="hits">0</dd></div>
+                <div class="stat"><dt>Min clearance</dt><dd data-out="clear">–</dd></div>
+                <div class="stat"><dt>Speed</dt><dd data-out="v">–</dd></div>
               </dl>
             </div>
           </article>
@@ -365,6 +440,7 @@
             <span class="mono">04 / Experience</span>
             <h2 id="xp-title">Where I've<br>built robots</h2>
           </div>
+          <p class="xp-places">Worked in: Singapore · Bengaluru</p>
         </div>
         <ol class="xp">
           <li class="card job xp-griffin has-art reveal" data-job="griffin">
@@ -471,9 +547,18 @@
           </li>
 
           <li class="card card-violet job xp-edu reveal" data-job="edu">
-            <p class="when mono">Education</p>
-            <h3>B.Tech ELC (Robotics)</h3>
-            <p class="org">Amrita Vishwa Vidyapeetham</p>
+            <div class="edu-col">
+              <p class="when mono">Education</p>
+              <h3>B.Tech ELC (Robotics)</h3>
+              <p class="org">Amrita Vishwa Vidyapeetham</p>
+            </div>
+            <div class="edu-col">
+              <p class="when mono">Summer schools</p>
+              <ul class="pts">
+                <li data-pt="mlss">Machine Learning Summer School, Genoa, Italy</li>
+                <li data-pt="eeml">EEML (Eastern European Machine Learning Summer School), Budapest</li>
+              </ul>
+            </div>
           </li>
         </ol>
       </div>
