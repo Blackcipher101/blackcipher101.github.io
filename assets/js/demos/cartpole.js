@@ -5,7 +5,7 @@
 // wall model here mirror that script exactly, so the browser runs the same system the
 // policy was evaluated on. The classical contrast is energy-pumping swing-up + LQR.
 // theta = 0 is upright; positive theta leans the pole toward +x.
-import { View, Loop, COLORS, clamp } from './common.js?v=20261106c';
+import { View, Loop, COLORS, clamp } from './common.js?v=20261106d';
 
 const POLICY_URL = new URL('../../data/cartpole-policy.json', import.meta.url);
 POLICY_URL.search = new URL(import.meta.url).search;

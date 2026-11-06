@@ -20,10 +20,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400..700&amp;display=swap">
-  <link rel="stylesheet" href="assets/css/site.css?v=20261106c">
+  <link rel="stylesheet" href="assets/css/site.css?v=20261106d">
   <script>document.documentElement.classList.add('js');</script>
-  <script type="module" src="assets/js/site.js?v=20261106c"></script>
-  <script type="module" src="assets/js/audience.js?v=20261106c"></script>
+  <script type="module" src="assets/js/site.js?v=20261106d"></script>
+  <script type="module" src="assets/js/audience.js?v=20261106d"></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -423,9 +423,21 @@
               <div class="metric"><strong>RRT*</strong><span>custom Nav2 plugin in C++ · Docker image</span></div>
             </div>
           </a>
+          <a class="card proj reveal" data-proj="humanoid" href="https://github.com/Blackcipher101/humanoid-mimic-rl" data-tilt>
+            <figure>
+              <img src="assets/img/humanoid-walk.webp" width="640" height="480" loading="lazy" decoding="async" alt="Booster T1 humanoid walking forward in MuJoCo with a trained PPO policy">
+              <figcaption>Frame: humanoid-mimic-rl README · © Nehal Nevle</figcaption>
+            </figure>
+            <div class="proj-body">
+              <h3>humanoid-mimic-rl</h3>
+              <p>Booster T1 humanoid in MuJoCo MJX: PPO walking, plus get-up, backflip, DeepMimic imitation and a SuperMimic reimplementation (training).</p>
+              <div class="metric"><strong>0 falls</strong><span>128 × 20 s walk episodes · 100 % success · 0.47 m/s vs 0.5 commanded</span></div>
+            </div>
+          </a>
           <div class="card proj-wip reveal" data-proj="wip">
             <span class="mono" style="color:var(--lime)">In progress</span>
-            <div class="wip"><span>Humanoid RL in MuJoCo</span><span class="badge">In progress</span></div>
+            <div class="wip"><span>Humanoid get-up, backflip and SuperMimic</span><span class="badge">Training</span></div>
+            <div class="wip"><span>Sonar-based RL navigation for the ROV</span><span class="badge">Evaluating</span></div>
             <a class="btn btn-ghost" href="https://github.com/Blackcipher101">All repositories on GitHub</a>
           </div>
         </div>
