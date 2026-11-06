@@ -19,13 +19,13 @@ export const PRESETS = {
     label: 'Startup founder / CTO',
     pill: 'Founding engineer · 0 → 1 · Full stack',
     headline: 'I take autonomy from <b>zero</b> to <b>launch</b>.',
-    lede: 'Founding engineer at Minus Zero: took ZPod, India\'s first autonomous vehicle, from zero to 100k+ lines of production code and its zDay 2023 launch. Led tech and product at BYTES. Estimation, planning, simulation and CI in one person.',
-    pitch: 'Founding-team experience: 0 → 1 on ZPod, tech and product lead at BYTES, and the whole robotics stack.',
+    lede: 'Founding engineer at Minus Zero: took ZPod, India\'s first autonomous vehicle, from zero to 100k+ lines of production code and its zDay 2023 launch, from pre-seed to Series A. Founding member at BYTES: raised $500K, built the product, ran a public demo; selected for Entrepreneur First and YC Startup School.',
+    pitch: 'Founding-team experience twice: pre-seed to Series A on ZPod, then a $500K raise, product and public demo at BYTES (EF, YC Startup School).',
     work: 'Shipped, measured side projects across estimation, RL and simulation.',
     projects: ['vio', 'rov', 'q14', 'inspect', 'klt', 'tb3'],
     demos: ['mppi', 'slam', 'dvl'],
     jobs: ['mz', 'bytes', 'griffin'],
-    points: ['zero', 'sim', 'ci'],
+    points: ['zero', 'series', 'raise', 'demo', 'accel'],
   },
   enterprise: {
     label: 'Big company / enterprise',
@@ -37,7 +37,7 @@ export const PRESETS = {
     projects: ['vio', 'klt', 'bench', 'calib', 'inspect', 'tb3'],
     demos: ['slam', 'mppi', 'dvl'],
     jobs: ['mz', 'griffin', 'aeroarc'],
-    points: ['zero', 'ci', 'sim'],
+    points: ['zero', 'series', 'ci', 'sim'],
   },
   underwater: {
     label: 'Underwater / marine',
@@ -111,18 +111,6 @@ export const PRESETS = {
     jobs: ['aeroarc', 'mz'],
     points: ['rl', 'ga'],
   },
-  research: {
-    label: 'Research / academia',
-    pill: 'Benchmarks · Negative results · Open code',
-    headline: 'Measured results, <b>negative ones included</b>.',
-    lede: 'Underwater estimation research evaluated against ground truth: a tightly coupled DVL (ATE 3.88 m → 0.66 m in a 20 s blackout, simulated DVL), a CUDA KLT front end, calibration monitoring, and a benchmark that publishes its negative results. Plus an RL vs PID study and multibody dynamics from scratch.',
-    pitch: 'Open repos with the evaluation behind each number, including the experiments that did not work.',
-    work: 'Each repo holds its evaluation. Negative results are published too.',
-    projects: ['bench', 'vio', 'calib', 'klt', 'rov', 'q14'],
-    demos: ['slam', 'dvl', 'mppi'],
-    jobs: ['mz'],
-    points: ['sim', 'ue', 'rl'],
-  },
   recruiter: {
     label: 'Recruiter / hiring manager',
     pill: 'Estimation · SLAM · Planning · RL',
@@ -133,7 +121,7 @@ export const PRESETS = {
     projects: ['vio', 'rov', 'q14', 'klt', 'inspect', 'tb3'],
     demos: ['slam', 'mppi', 'dvl'],
     jobs: ['griffin', 'aeroarc', 'bytes', 'mz'],
-    points: ['zero', 'ci', 'lead'],
+    points: ['zero', 'series', 'raise', 'accel', 'ci', 'lead'],
   },
 };
 
@@ -144,7 +132,7 @@ export const PRESETS = {
  * the earlier preset in PRESETS order; zero means no match.
  */
 export const KEYWORDS = {
-  startup: { startup: 3, 'start-up': 3, founder: 3, 'co-founder': 3, cofounder: 3, founding: 2, cto: 3, ceo: 1, seed: 2, 'series a': 2, 'early stage': 3, 'early-stage': 3, 'small team': 2, mvp: 2, stealth: 1, yc: 2, venture: 1, '0 to 1': 2, 'zero to one': 2 },
+  startup: { startup: 3, 'start-up': 3, founder: 3, 'co-founder': 3, cofounder: 3, founding: 2, cto: 3, ceo: 1, seed: 2, 'series a': 2, 'early stage': 3, 'early-stage': 3, 'small team': 2, mvp: 2, stealth: 1, yc: 2, 'y combinator': 2, 'entrepreneur first': 2, ef: 1, fundraising: 2, investor: 2, vc: 2, venture: 1, '0 to 1': 2, 'zero to one': 2 },
   enterprise: { enterprise: 3, corporation: 3, corp: 3, 'big company': 3, 'large company': 3, 'big tech': 3, fortune: 2, multinational: 3, mnc: 3, oem: 2, 'tier 1': 2, 'tier-1': 2, faang: 3, reliability: 2, production: 1, scale: 1, bosch: 2, siemens: 2, nvidia: 1, amazon: 1, google: 1 },
   underwater: { underwater: 4, subsea: 4, auv: 4, auvs: 4, dvl: 4, marine: 3, ocean: 3, rov: 3, rovs: 3, sonar: 3, aquatic: 3, offshore: 2, maritime: 2, sea: 2, hull: 2, naval: 1, vessel: 1, diver: 1, water: 1 },
   embodied: { embodied: 4, humanoid: 4, 'physical ai': 4, vla: 4, 'vision-language-action': 4, 'robot learning': 4, 'foundation model': 3, 'reinforcement learning': 3, imitation: 3, sim2real: 3, 'sim-to-real': 3, mujoco: 3, dexterous: 3, rl: 2, isaac: 2, manipulation: 2, 'general purpose': 2, generalist: 2, 'ai lab': 2, policy: 1 },
@@ -152,7 +140,6 @@ export const KEYWORDS = {
   defence: { defence: 4, defense: 4, military: 4, army: 4, drdo: 4, 'unmanned ground': 4, tactical: 3, ugv: 3, ugvs: 3, 'air force': 3, 'dual-use': 3, 'dual use': 3, navy: 2, surveillance: 2, border: 2, security: 1, government: 1 },
   inspection: { inspection: 4, inspect: 3, industrial: 3, facilities: 3, cleaning: 3, 'digital twin': 3, scanner: 3, scanning: 3, infrastructure: 3, workcell: 3, ndt: 3, 'non-destructive': 3, facility: 2, lidar: 2, survey: 2, plant: 2, factory: 2, warehouse: 2, maintenance: 2, manufacturing: 2, cobot: 2, logistics: 1 },
   legged: { legged: 4, quadruped: 4, 'robot dog': 4, 'robotic dog': 4, locomotion: 4, biped: 3, gait: 3, unitree: 3, anymal: 3, 'boston dynamics': 3, 'ghost robotics': 3, dog: 2, walking: 2, legs: 2, spot: 2 },
-  research: { phd: 4, professor: 4, academia: 4, academic: 4, university: 4, postdoc: 4, research: 3, researcher: 3, publication: 3, thesis: 3, icra: 3, iros: 3, rss: 3, corl: 3, paper: 2, papers: 2, benchmark: 2, student: 2, grant: 2, conference: 2, lab: 1 },
   recruiter: { recruiter: 4, recruiting: 4, headhunter: 4, 'hiring manager': 4, talent: 3, hr: 3, cv: 3, resume: 3, 'résumé': 3, sourcing: 3, hiring: 2, hire: 2, candidate: 2, role: 1, position: 1, job: 1, opening: 1 },
 };
 

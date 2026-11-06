@@ -28,10 +28,9 @@ The "Who's visiting?" bar re-tailors the page in the browser. It has no backend 
 | `defence` | Defence | Aeroarc VIRA and ARCV MULE, estimation under sensor dropout |
 | `inspection` | Inspection / industrial / facilities | PhiSCAN, uw-inspect-report, uw-calib-health, Griffin Labs (TCR, Mega), Clutterbot |
 | `legged` | Legged robots | ARCV MULE, Q14 Dynamics Lab, humanoid RL in progress |
-| `research` | Research / academia | uw-vslam-bench and its negative results, measured baselines |
 | `recruiter` | Recruiter / hiring manager | the timeline in one paragraph, a skills line, contact |
 
-These ten cover the kinds of reader the work actually serves: company stage (startup, enterprise), domain (underwater, AV, defence, inspection), robot type (embodied/humanoid, legged), and role (research, recruiting). A domain that has no matching work behind it has no preset.
+These nine cover the kinds of reader the work actually serves: company stage (startup, enterprise), domain (underwater, AV, defence, inspection), robot type (embodied/humanoid, legged), and role (recruiting). A domain that has no matching work behind it has no preset.
 
 ## Keyword lists (summary; the exact weights are in `KEYWORDS`)
 
@@ -43,5 +42,4 @@ These ten cover the kinds of reader the work actually serves: company stage (sta
 - **defence:** defence/defense, military, army, drdo, unmanned ground, tactical, ugv, dual-use
 - **inspection:** inspection, industrial, facilities, cleaning, digital twin, scanner, infrastructure, workcell, ndt, lidar
 - **legged:** legged, quadruped, robot dog, locomotion, biped, gait, unitree, anymal
-- **research:** phd, professor, academia, university, postdoc, research, publication, thesis, icra/iros/rss/corl
 - **recruiter:** recruiter, headhunter, hiring manager, talent, hr, cv, resume, sourcing, hiring
