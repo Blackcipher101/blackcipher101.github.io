@@ -11,7 +11,7 @@ The "Who's visiting?" bar re-tailors the page in the browser. It has no backend 
   - the hero pill, headline and lede
   - the projects intro
   - which project cards show and in what order (at most 6, most relevant first)
-  - which demos show and in what order (4 of the 6, the featured one first; the general page shows all 6)
+  - which demos show and in what order (4 of the 8, the featured one first; the general page shows all 8)
   - which experience cards get a "Relevant" badge, and which bullets are bolded
   - a one-line pitch in the "Viewing as" bar
 - **Copy rule:** all preset copy repeats claims already on the page or in the repo READMEs. Nothing is added.
@@ -39,9 +39,9 @@ These nine cover the kinds of reader the work actually serves: company stage (st
 | `startup` | MPPI, cart-pole RL, SCARA, SLAM | planning was the ZPod job; then breadth |
 | `enterprise` | SCARA, SLAM, MPPI, DVL | deterministic, limit-aware motion planning (IK + A*), measured against a learned policy |
 | `underwater` | DVL, sonar VFH, SLAM, MPPI | the idea behind uw-vio-dvl |
-| `embodied` | cart-pole RL, SCARA, MPPI, SLAM | a learned policy (`tools/train_pendulum.py`) racing LQR in the same run; then a learned SCARA reaching policy (`tools/train_scara.py`) |
+| `embodied` | cart-pole RL, stand-off DQN, SCARA, MPPI | a learned policy (`tools/train_pendulum.py`) racing LQR in the same run; then a Double DQN against a tuned P controller (`tools/train_standoff.mjs`) |
 | `av` | MPPI, SLAM, cart-pole RL, DVL | planning & prediction at Minus Zero |
-| `defence` | sonar VFH, DVL, MPPI, SLAM | navigating with degraded sensing |
+| `defence` | box-track diffusion, sonar VFH, stand-off DQN, DVL | tracking a manoeuvring target in a long-range camera with calibrated uncertainty (synthetic tracks); then navigating and estimating with degraded sensing |
 | `inspection` | SCARA, SLAM, sonar VFH, DVL | manipulation for workcells such as Mega: learned reaching vs an IK planner |
 | `legged` | cart-pole RL, SCARA, MPPI, SLAM | balance and recovery from pushes |
 | `recruiter` | SLAM, cart-pole RL, SCARA, MPPI | a mix across estimation, learning, manipulation, planning |

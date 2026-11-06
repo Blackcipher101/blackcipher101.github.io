@@ -20,10 +20,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400..700&amp;display=swap">
-  <link rel="stylesheet" href="assets/css/site.css?v=20261106f2">
+  <link rel="stylesheet" href="assets/css/site.css?v=20261106g">
   <script>document.documentElement.classList.add('js');</script>
-  <script type="module" src="assets/js/site.js?v=20261106f2"></script>
-  <script type="module" src="assets/js/audience.js?v=20261106f2"></script>
+  <script type="module" src="assets/js/site.js?v=20261106g"></script>
+  <script type="module" src="assets/js/audience.js?v=20261106g"></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -299,6 +299,59 @@
                 <div class="stat"><dt>Collisions</dt><dd data-out="hits">0</dd></div>
                 <div class="stat"><dt>Min clearance</dt><dd data-out="clear">–</dd></div>
                 <div class="stat"><dt>Speed</dt><dd data-out="v">–</dd></div>
+              </dl>
+            </div>
+          </article>
+
+          <!-- Demo: stand-off tracking, Double DQN vs tuned P controller -->
+          <article class="card demo reveal" data-demo="standoff" aria-labelledby="standoff-title">
+            <div class="demo-stage">
+              <canvas width="1000" height="625" style="--ar: 8 / 5" aria-label="Top view of a manoeuvring beacon followed by two points, a learned Double-DQN agent and a proportional controller, each trying to hold a set distance, with a strip chart of range error below. Tap for a new run." role="img"></canvas>
+              <span class="demo-hint mono">Loading demo…</span>
+            </div>
+            <div class="demo-side">
+              <span class="mono demo-tag" style="color:var(--lime)">Tracking · RL</span>
+              <h3 id="standoff-title">Hold the distance</h3>
+              <p>Two followers try to stay 10 m from a beacon that weaves, sweeps and turns, using the same noisy relative position and velocity. Same plant, acceleration limit, beacon path and noise for both. Lime: a Double DQN trained offline. Peach: a proportional controller with tuned gains. Two of the five paths were never used in training. Training script: <code>tools/train_standoff.mjs</code>.</p>
+              <div class="controls">
+                <button class="btn btn-lime" type="button" data-act="new">New run</button>
+                <button class="btn btn-ghost" type="button" data-act="path">Path: Smooth weave</button>
+              </div>
+              <p class="demo-msg demo-note" data-out="policy" aria-live="polite"></p>
+              <p class="vs-key mono"><span class="vs-a">Double DQN</span><span class="vs-b">P controller</span></p>
+              <dl class="stats">
+                <div class="stat"><dt>RMS range error</dt><dd class="vs-pair"><span class="vs-a" data-out="rms-a">–</span><span class="vs-b" data-out="rms-b">–</span></dd></div>
+                <div class="stat"><dt>In ±10 % band</dt><dd class="vs-pair"><span class="vs-a" data-out="band-a">–</span><span class="vs-b" data-out="band-b">–</span></dd></div>
+                <div class="stat"><dt>Closest approach</dt><dd class="vs-pair"><span class="vs-a" data-out="min-a">–</span><span class="vs-b" data-out="min-b">–</span></dd></div>
+                <div class="stat"><dt>Status</dt><dd class="vs-pair"><span class="vs-a" data-out="state-a">–</span><span class="vs-b" data-out="state-b">–</span></dd></div>
+              </dl>
+            </div>
+          </article>
+
+          <!-- Demo: box-track prediction in a long-range camera, diffusion vs constant velocity -->
+          <article class="card demo reveal" data-demo="boxtrack" aria-labelledby="boxtrack-title">
+            <div class="demo-stage">
+              <canvas width="1000" height="563" style="--ar: 16 / 9" aria-label="Zoomed crop of a synthetic long-range camera image showing a target's past bounding boxes, its true future path, a constant-velocity prediction with its uncertainty ellipse, and diffusion-model samples with their probability region. Tap for a new track." role="img"></canvas>
+              <span class="demo-hint mono">Loading demo…</span>
+            </div>
+            <div class="demo-side">
+              <span class="mono demo-tag" style="color:var(--lime)">Tracking · EO sensing</span>
+              <h3 id="boxtrack-title">Where will it be?</h3>
+              <p>A tracker that sees a target's box for 0.8 s has to say where it will be 1.2 s later, and how sure it is. Lime: a small diffusion model draws many possible futures, conditioned on the target class's agility. Peach: the constant-velocity prediction standard trackers use. Synthetic tracks from a 1280 × 720 px, 30° camera; no real imagery. The tracks are toy manoeuvres, not a model of any real platform.</p>
+              <div class="controls">
+                <button class="btn btn-lime" type="button" data-act="new">New track</button>
+                <button class="btn btn-ghost" type="button" data-act="motion">Motion: any</button>
+                <button class="btn btn-ghost" type="button" data-act="agility">Agility: any</button>
+                <button class="btn btn-ghost" type="button" data-act="range">Range: 500 m</button>
+                <button class="btn btn-ghost" type="button" data-act="replay">Replay denoising</button>
+              </div>
+              <p class="demo-msg demo-note" data-out="policy" aria-live="polite"></p>
+              <p class="vs-key mono"><span class="vs-a">Diffusion</span><span class="vs-b">Constant velocity</span></p>
+              <dl class="stats">
+                <div class="stat"><dt>Off at 1.2 s</dt><dd class="vs-pair"><span class="vs-a" data-out="err-a">–</span><span class="vs-b" data-out="err-b">–</span></dd></div>
+                <div class="stat"><dt>90 % region</dt><dd class="vs-pair"><span class="vs-a" data-out="area-a">–</span><span class="vs-b" data-out="area-b">–</span></dd></div>
+                <div class="stat"><dt>Truth inside</dt><dd class="vs-pair"><span class="vs-a" data-out="in-a">–</span><span class="vs-b" data-out="in-b">–</span></dd></div>
+                <div class="stat"><dt>Target</dt><dd data-out="target">–</dd></div>
               </dl>
             </div>
           </article>
