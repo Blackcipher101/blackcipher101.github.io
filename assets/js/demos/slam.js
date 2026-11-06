@@ -3,8 +3,8 @@
 // odometry becomes edges, and revisiting a place adds a loop-closure edge (simulated
 // scan match: the true relative pose plus small noise). "Optimise" runs a real
 // Levenberg-Marquardt solve (posegraph.js) and animates each iterate.
-import { View, Loop, COLORS, gauss, clamp } from './common.js';
-import { optimise, chi2, composePose, relativePose, wrapAngle } from './posegraph.js';
+import { View, Loop, COLORS, gauss, clamp } from './common.js?v=20261106b';
+import { optimise, chi2, composePose, relativePose, wrapAngle } from './posegraph.js?v=20261106b';
 
 const W = 20, H = 12;                 // world, metres
 const KEYFRAME_DIST_M = 0.6;
@@ -30,7 +30,7 @@ export function mount(root) {
 
   let worker = null;
   try {
-    worker = new Worker(new URL('./posegraph-worker.js', import.meta.url), { type: 'module' });
+    worker = new Worker(new URL(`./posegraph-worker.js${new URL(import.meta.url).search}`, import.meta.url), { type: 'module' });
   } catch (_) {
     worker = null; // fall back to solving on the main thread
   }

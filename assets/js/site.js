@@ -11,7 +11,7 @@ if (reduceMotion || !('IntersectionObserver' in window)) {
     for (const e of entries) {
       if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
     }
-  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+  }, { rootMargin: '0px 0px -24px 0px', threshold: 0 }); // reveal as soon as the top edge is on screen: tall cards left holes in the grid with an area threshold
   reveals.forEach((el) => io.observe(el));
 }
 
@@ -39,6 +39,10 @@ if (finePointer && !reduceMotion) {
     });
   });
 }
+
+// Cache-busting query of this module (index.html sets ?v=...), forwarded to lazily imported demo modules so a
+// deploy never mixes new and old files from the browser cache.
+const ASSET_QUERY = new URL(import.meta.url).search;
 
 // ---- demos: import on approach, run only while visible ----
 const demos = document.querySelectorAll('[data-demo]');
@@ -68,7 +72,7 @@ async function load(root) {
   try {
     const canvas = root.querySelector('canvas');
     if (!canvas || !canvas.getContext('2d')) throw new Error('Canvas 2D is not available');
-    const mod = await import(`./demos/${root.dataset.demo}.js`);
+    const mod = await import(`./demos/${root.dataset.demo}.js${ASSET_QUERY}`);
     instances.set(root, mod.mount(root));
     root.querySelector('.demo-hint')?.remove();
     sync(root);
