@@ -9,7 +9,7 @@
 // same angular velocity, a tap flicks both the same way, and a drag pulls each pole tip
 // toward the same point relative to its own rail.
 // theta = 0 is upright; positive theta leans the pole toward +x.
-import { View, Loop, COLORS, clamp, setHeadline } from './common.js?v=20261106m';
+import { View, Loop, COLORS, clamp, setHeadline } from './common.js?v=20261106n';
 
 const POLICY_URL = new URL('../../data/cartpole-policy.json', import.meta.url);
 POLICY_URL.search = new URL(import.meta.url).search;

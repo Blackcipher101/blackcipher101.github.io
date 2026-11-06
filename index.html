@@ -18,7 +18,7 @@
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
   <link rel="preload" href="assets/fonts/space-grotesk-latin-var.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="assets/css/site.css?v=20261106m">
+  <link rel="stylesheet" href="assets/css/site.css?v=20261106n">
   <script>document.documentElement.classList.add('js');
   // Section order for the audience preset, set before first paint so nothing moves (no layout shift).
   // Same choice rule and preset -> group map as assets/js/audience.js (PRESETS[..].sections), which re-checks it.
@@ -32,12 +32,12 @@
     // hero does not change height on screen. Same URL as the module tag below, so it runs only once.
     if (g.hasOwnProperty(id)) {
       var s = document.createElement('script');
-      s.type = 'module'; s.src = 'assets/js/audience.js?v=20261106m'; s.setAttribute('blocking', 'render');
+      s.type = 'module'; s.src = 'assets/js/audience.js?v=20261106n'; s.setAttribute('blocking', 'render');
       document.head.appendChild(s);
     }
   })();</script>
-  <script type="module" src="assets/js/site.js?v=20261106m"></script>
-  <script type="module" src="assets/js/audience.js?v=20261106m"></script>
+  <script type="module" src="assets/js/site.js?v=20261106n"></script>
+  <script type="module" src="assets/js/audience.js?v=20261106n"></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -504,12 +504,11 @@
                 <canvas width="1000" height="625" style="--ar: 8 / 5" aria-label="Top view of a manoeuvring beacon followed by two points, a learned Double-DQN agent and a proportional controller, each trying to hold a set distance, with a strip chart of range error below. Tap for a new run." role="img"></canvas>
                 <span class="demo-hint mono">Loading demo…</span>
               </div>
-              <p class="demo-msg demo-note" data-out="policy" aria-live="polite"></p>
             </div>
             <div class="demo-side">
               <span class="mono demo-tag" style="color:var(--lime)">Tracking · RL</span>
               <h3 id="standoff-title">Hold the distance</h3>
-              <p>Two followers try to stay 10 m from a beacon that weaves, sweeps and turns, using the same noisy relative position and velocity. Same plant, acceleration limit, beacon path and noise for both. Lime: a Double DQN trained offline. Peach: a proportional controller with tuned gains. Two of the five paths were never used in training. Training script: <code>tools/train_standoff.mjs</code>.</p>
+              <p class="demo-lede">Two followers try to hold 10 m from a weaving beacon: a learned Double DQN (lime) and a P controller (peach).</p>
               <div class="controls">
                 <button class="btn btn-lime" type="button" data-act="new">New run</button>
                 <button class="btn btn-ghost" type="button" data-act="path">Path: Smooth weave</button>
@@ -521,6 +520,11 @@
                 <div class="stat"><dt>Closest approach</dt><dd class="vs-pair"><span class="vs-a" data-out="min-a">–</span><span class="vs-b" data-out="min-b">–</span></dd></div>
                 <div class="stat"><dt>Status</dt><dd class="vs-pair"><span class="vs-a" data-out="state-a">–</span><span class="vs-b" data-out="state-b">–</span></dd></div>
               </dl>
+              <details class="demo-more">
+                <summary>How it works · numbers</summary>
+                <p>Two followers try to stay 10 m from a beacon that weaves, sweeps and turns, using the same noisy relative position and velocity. Same plant, acceleration limit, beacon path and noise for both. Lime: a Double DQN trained offline. Peach: a proportional controller with tuned gains. Two of the five paths were never used in training. Training script: <code>tools/train_standoff.mjs</code>.</p>
+                <p class="demo-note" data-out="policy" aria-live="polite"></p>
+              </details>
             </div>
           </article>
 
@@ -531,12 +535,11 @@
                 <canvas width="1000" height="563" style="--ar: 16 / 9" aria-label="Zoomed crop of a synthetic long-range camera image showing a target's past bounding boxes, its true future path, a constant-velocity prediction with its uncertainty ellipse, and diffusion-model samples with their probability region. Tap for a new track." role="img"></canvas>
                 <span class="demo-hint mono">Loading demo…</span>
               </div>
-              <p class="demo-msg demo-note" data-out="policy" aria-live="polite"></p>
             </div>
             <div class="demo-side">
               <span class="mono demo-tag" style="color:var(--lime)">Tracking · EO sensing</span>
               <h3 id="boxtrack-title">Where will it be?</h3>
-              <p>A tracker that sees a target's box for 0.8 s has to say where it will be 1.2 s later, and how sure it is. Lime: a small diffusion model draws many possible futures, conditioned on the target class's agility. Peach: the constant-velocity prediction standard trackers use. Synthetic tracks from a 1280 × 720 px, 30° camera; no real imagery. The tracks are toy manoeuvres, not a model of any real platform.</p>
+              <p class="demo-lede">Where will a tracked box be 1.2 s ahead? A small diffusion model (lime) against constant velocity (peach).</p>
               <div class="controls">
                 <button class="btn btn-lime" type="button" data-act="new">New track</button>
                 <button class="btn btn-ghost" type="button" data-act="motion">Motion: any</button>
@@ -551,6 +554,11 @@
                 <div class="stat"><dt>Truth inside</dt><dd class="vs-pair"><span class="vs-a" data-out="in-a">–</span><span class="vs-b" data-out="in-b">–</span></dd></div>
                 <div class="stat"><dt>Target</dt><dd data-out="target">–</dd></div>
               </dl>
+              <details class="demo-more">
+                <summary>How it works · numbers</summary>
+                <p>A tracker that sees a target's box for 0.8 s has to say where it will be 1.2 s later, and how sure it is. Lime: a small diffusion model draws many possible futures, conditioned on the target class's agility. Peach: the constant-velocity prediction standard trackers use. Synthetic tracks from a 1280 × 720 px, 30° camera; no real imagery. The tracks are toy manoeuvres, not a model of any real platform.</p>
+                <p class="demo-note" data-out="policy" aria-live="polite"></p>
+              </details>
             </div>
           </article>
         </div>

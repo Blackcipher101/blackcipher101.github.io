@@ -5,8 +5,8 @@
 // ship in assets/data/boxtrack-model.json; tools/eval_boxtrack.mjs measures that scorecard.
 // Everything here is synthetic: a 1280 x 720 px camera with a 30 deg field of view, 10 Hz boxes,
 // 0.8 s observed, 1.2 s predicted. No real sensor data is involved.
-import { View, Loop, COLORS, prefersReducedMotion } from './common.js?v=20261106m';
-import './lib/boxtrack-core.js?v=20261106m';
+import { View, Loop, COLORS, prefersReducedMotion } from './common.js?v=20261106n';
+import './lib/boxtrack-core.js?v=20261106n';
 
 const B = window.BBD;
 const MODEL_URL = new URL('../../data/boxtrack-model.json', import.meta.url);
