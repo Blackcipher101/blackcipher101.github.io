@@ -3,7 +3,7 @@
 // configuration-space (C-space) collision map for one circular obstacle, A* in C-space
 // when the straight joint-space move would hit it, and minimum-jerk time scaling of
 // every segment under joint speed and acceleration limits. No learned policy here.
-import { View, Loop, COLORS, clamp } from './common.js?v=20261106d';
+import { View, Loop, COLORS, clamp } from './common.js?v=20261106e';
 
 export const ARM = {
   base: [0.62, 0.6],               // m, world position of joint 1
