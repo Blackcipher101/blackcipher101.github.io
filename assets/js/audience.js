@@ -105,7 +105,7 @@ export const PRESETS = {
     label: 'Inspection / industrial',
     pill: 'Inspection · Reality capture · Facilities',
     headline: 'Robots that <b>inspect</b>, scan and report.',
-    lede: 'The PhiSCAN 360° LiDAR scanner at Phicode, an inspection pipeline where a detector plus a VLM drafts the report (8/8 true findings confirmed, precision 0.89), and a calibration monitor that caught every ≥ 0.2° change with 0 false alarms. Now working on TCR and Mega at Griffin Labs.',
+    lede: 'The PhiSCAN 360° LiDAR scanner at Aeroarc, an inspection pipeline where a detector plus a VLM drafts the report (8/8 true findings confirmed, precision 0.89), and a calibration monitor that caught every ≥ 0.2° change with 0 false alarms. Now working on TCR and Mega at Griffin Labs.',
     pitch: 'Reality-capture hardware, automated inspection reports and calibration health checks.',
     work: 'Inspection and calibration tooling, measured on real dive data.',
     projects: ['inspect', 'calib', 'vio', 'bench', 'klt', 'tb3'],
