@@ -23,6 +23,7 @@
   <link rel="stylesheet" href="assets/css/site.css">
   <script>document.documentElement.classList.add('js');</script>
   <script type="module" src="assets/js/site.js"></script>
+  <script type="module" src="assets/js/audience.js"></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -47,6 +48,27 @@
     <section class="s-hero" id="top" aria-label="Introduction">
       <div class="wrap">
         <div class="bento">
+          <form class="card tailor reveal" id="tailor" role="search" aria-labelledby="tailor-title" autocomplete="off">
+            <div class="tailor-ask">
+              <label class="mono tailor-label" id="tailor-title" for="tailor-input">Who's visiting?</label>
+              <div class="tailor-field">
+                <input id="tailor-input" name="who" type="text" maxlength="160" placeholder="I'm hiring for an underwater robotics startup…" aria-describedby="tailor-hint">
+                <button class="btn btn-lime" type="submit">Tailor the page</button>
+              </div>
+              <p class="tailor-hint" id="tailor-hint">Describe yourself or pick one. The page reorders itself to show what matters to you. Nothing is sent anywhere.</p>
+              <div class="tailor-chips" role="group" aria-label="Audience presets" id="tailor-chips"></div>
+            </div>
+            <div class="tailor-now" id="tailor-now" hidden>
+              <p><span class="mono">Viewing as</span> <strong id="tailor-name"></strong></p>
+              <p class="tailor-pitch" id="tailor-pitch"></p>
+              <div class="tailor-actions">
+                <button class="btn btn-ghost" type="button" id="tailor-change">Change</button>
+                <button class="btn btn-ghost" type="button" id="tailor-reset">General view</button>
+                <button class="btn btn-ghost" type="button" id="tailor-share">Copy link</button>
+              </div>
+            </div>
+            <p class="tailor-status" id="tailor-status" aria-live="polite"></p>
+          </form>
           <div class="card card-violet c-brand reveal" data-tilt>
             <svg class="mark" viewBox="0 0 120 80" role="img" aria-label="NN monogram: a zig-zag path with pose nodes">
               <polyline points="10,70 10,10 60,70 60,10 110,70 110,10" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="square"/>
@@ -59,10 +81,10 @@
           </div>
 
           <div class="card card-grad c-head reveal" data-tilt>
-            <span class="pill-label mono"><span class="dot" aria-hidden="true"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="3" fill="#fff"/></svg></span>State estimation · SLAM · Planning · Embodied AI</span>
-            <h1>I build the software that tells robots <b>where they are</b> and <b>where to go</b>.</h1>
+            <span class="pill-label mono"><span class="dot" aria-hidden="true"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="3" fill="#fff"/></svg></span><span data-aud="pill">State estimation · SLAM · Planning · Embodied AI</span></span>
+            <h1 data-aud="headline">I build the software that tells robots <b>where they are</b> and <b>where to go</b>.</h1>
             <div>
-              <p class="lede">State estimation, SLAM, planning and embodied AI, across the full robotics stack, through to deployment on real robots. Nearly every embodiment so far, from autonomous pods to quadrupeds. Now underwater.</p>
+              <p class="lede" data-aud="lede">State estimation, SLAM, planning and embodied AI, across the full robotics stack, through to deployment on real robots. Nearly every embodiment so far, from autonomous pods to quadrupeds. Now underwater.</p>
             </div>
             <div class="actions">
               <a class="btn btn-ink" href="#demos">Play the demos
@@ -238,7 +260,7 @@
           <p>Underwater perception and estimation, with results measured against ground truth. Negative results are published too.</p>
         </div>
         <div class="bento">
-          <a class="card proj proj-wide reveal" href="https://github.com/Blackcipher101/uw-vio-dvl" data-tilt>
+          <a class="card proj proj-wide reveal" data-proj="vio" href="https://github.com/Blackcipher101/uw-vio-dvl" data-tilt>
             <figure>
               <img src="assets/img/uw-vio-dvl-trajectory.webp" width="900" height="700" loading="lazy" decoding="async" alt="Plot of one trajectory during a 20 second camera blackout: the estimate without DVL wanders far off, the estimate with a simulated DVL stays close to the motion-capture ground truth">
               <figcaption>Figure: uw-vio-dvl README (one example trajectory) · © Nehal Nevle</figcaption>
@@ -249,7 +271,7 @@
               <div class="metric"><strong>3.88 m → 0.66 m</strong><span>ATE through a 20 s camera blackout, with simulated DVL</span></div>
             </div>
           </a>
-          <a class="card proj reveal" href="https://github.com/Blackcipher101/uw-gpu-klt" data-tilt>
+          <a class="card proj reveal" data-proj="klt" href="https://github.com/Blackcipher101/uw-gpu-klt" data-tilt>
             <figure>
               <img src="assets/img/uw-gpu-klt-latency.webp" width="900" height="360" loading="lazy" decoding="async" alt="Bar charts comparing CPU and GPU front-end latency per frame and per stage">
               <figcaption>Figure: uw-gpu-klt README · © Nehal Nevle</figcaption>
@@ -260,7 +282,7 @@
               <div class="metric"><strong>2.0–4.9×</strong><span>faster, no accuracy loss</span></div>
             </div>
           </a>
-          <a class="card card-cream proj reveal" href="https://github.com/Blackcipher101/uw-inspect-report" data-tilt>
+          <a class="card card-cream proj reveal" data-proj="inspect" href="https://github.com/Blackcipher101/uw-inspect-report" data-tilt>
             <figure>
               <img src="assets/img/uw-inspect-report-findings.webp" width="900" height="560" loading="lazy" decoding="async" alt="Grid of underwater camera crops with detector boxes for a tire, a window, marine growth, cracks and debris, each marked with the verifier's verdict">
               <figcaption>Figure: uw-inspect-report README · © Nehal Nevle · camera frames from the AFRL bus_outside recording</figcaption>
@@ -271,7 +293,7 @@
               <div class="metric"><strong>8/8</strong><span>true findings confirmed · precision 0.89</span></div>
             </div>
           </a>
-          <a class="card proj reveal" href="https://github.com/Blackcipher101/uw-calib-health" data-tilt>
+          <a class="card proj reveal" data-proj="calib" href="https://github.com/Blackcipher101/uw-calib-health" data-tilt>
             <figure>
               <img src="assets/img/uw-calib-health-accuracy.webp" width="900" height="446" loading="lazy" decoding="async" alt="Scatter plots of injected versus estimated stereo rotation about each axis, lying on the ideal diagonal">
               <figcaption>Figure: uw-calib-health README · © Nehal Nevle</figcaption>
@@ -282,7 +304,7 @@
               <div class="metric"><strong>≥ 0.2°</strong><span>every change detected · 0 false alarms</span></div>
             </div>
           </a>
-          <a class="card proj reveal" href="https://github.com/Blackcipher101/uw-vslam-bench" data-tilt>
+          <a class="card proj reveal" data-proj="bench" href="https://github.com/Blackcipher101/uw-vslam-bench" data-tilt>
             <figure>
               <img src="assets/img/uw-vslam-bench-risk.webp" width="900" height="481" loading="lazy" decoding="async" alt="Time series of visual SLAM drift rate and a predicted risk score that does not single out the windows before drift">
               <figcaption>Figure: uw-vslam-bench README · © Nehal Nevle</figcaption>
@@ -293,7 +315,7 @@
               <div class="metric"><strong>Benchmark</strong><span>+ negative results</span></div>
             </div>
           </a>
-          <a class="card proj reveal" href="https://github.com/Blackcipher101/rov-rl-mujoco" data-tilt>
+          <a class="card proj reveal" data-proj="rov" href="https://github.com/Blackcipher101/rov-rl-mujoco" data-tilt>
             <figure>
               <img src="assets/img/rov-rl-pid-vs-rl.webp" width="900" height="254" loading="lazy" decoding="async" alt="Side-by-side simulation frames of an ROV tracking a trajectory in a current: tuned PID on the left, RL policy on the right">
               <figcaption>Figure: rov-rl-mujoco README · © Nehal Nevle</figcaption>
@@ -304,7 +326,7 @@
               <div class="metric"><strong>0.048 m</strong><span>vs PID 0.131 m in a 0.4 m/s current (beyond training) · 100 % vs 90 % success</span></div>
             </div>
           </a>
-          <a class="card proj reveal" href="https://github.com/Blackcipher101/quadruped" data-tilt>
+          <a class="card proj reveal" data-proj="q14" href="https://github.com/Blackcipher101/quadruped" data-tilt>
             <figure>
               <img src="assets/img/quadruped-gravel.webp" width="900" height="348" loading="lazy" decoding="async" alt="Browser quadruped simulator: a robot dog trotting over loose gravel rocks, rendered with three.js">
               <figcaption>Screenshot: Q14 Dynamics Lab · © Nehal Nevle</figcaption>
@@ -315,7 +337,18 @@
               <div class="metric"><strong>1 kHz</strong><span>physics in a Web Worker · real time on flat ground</span></div>
             </div>
           </a>
-          <div class="card proj-wip reveal">
+          <a class="card proj reveal" data-proj="tb3" href="https://github.com/Blackcipher101/turtlebot_autonomy" data-tilt>
+            <figure>
+              <img src="assets/img/turtlebot-slam-rviz.webp" width="720" height="548" loading="lazy" decoding="async" alt="Occupancy grid map built by SLAM in RViz, with obstacles and the robot pose">
+              <figcaption>Screenshot: turtlebot_autonomy README · © Nehal Nevle</figcaption>
+            </figure>
+            <div class="proj-body">
+              <h3>turtlebot_autonomy</h3>
+              <p>ROS 2 Humble stack on TurtleBot3: exploration + SLAM, a custom C++ RRT* Nav2 planner plugin, Isaac Sim. Semantic navigation (Grounding DINO + CLIP) is implemented but not fully tested end to end.</p>
+              <div class="metric"><strong>RRT*</strong><span>custom Nav2 plugin in C++ · Docker image</span></div>
+            </div>
+          </a>
+          <div class="card proj-wip reveal" data-proj="wip">
             <span class="mono" style="color:var(--lime)">In progress</span>
             <div class="wip"><span>Humanoid RL in MuJoCo</span><span class="badge">In progress</span></div>
             <a class="btn btn-ghost" href="https://github.com/Blackcipher101">All repositories on GitHub</a>
@@ -334,15 +367,26 @@
           </div>
         </div>
         <ol class="xp">
-          <li class="card job xp-griffin reveal">
-            <svg class="xp-art" viewBox="0 0 120 120" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1"><circle cx="60" cy="60" r="48"/><ellipse cx="60" cy="60" rx="20" ry="48"/><path d="M12 60h96M60 12v96" stroke-dasharray="3 4"/></g><polyline points="24,84 44,70 62,74 80,52 96,40" fill="none" stroke="#d9f45b" stroke-width="2.5"/><g fill="#d9f45b"><circle cx="24" cy="84" r="3.5"/><circle cx="44" cy="70" r="3.5"/><circle cx="62" cy="74" r="3.5"/><circle cx="80" cy="52" r="3.5"/><circle cx="96" cy="40" r="5"/></g></svg>
-            <p class="when mono"><span class="live">Sep 2026 – now</span></p>
-            <h3>Autonomy Engineer</h3>
-            <p class="org">Griffin Labs · Singapore</p>
-            <p class="what">Building generalisable autonomy.</p>
+          <li class="card job xp-griffin has-art reveal" data-job="griffin">
+            <div class="art art-frames">
+              <figure class="photo frame-a">
+                <img src="assets/img/griffin-t1.webp" width="640" height="383" loading="lazy" decoding="async" alt="LionsBot T1, a mobile robot with an arm for restroom cleaning, in a shopping mall">
+                <figcaption class="mono">LionsBot T1 · Image: Griffin Labs</figcaption>
+              </figure>
+              <figure class="photo frame-b">
+                <img src="assets/img/griffin-mega.webp" width="640" height="427" loading="lazy" decoding="async" alt="Mega robotic workcell: two robot arms sorting dishes into racks">
+                <figcaption class="mono">Mega workcell · Image: Griffin Labs</figcaption>
+              </figure>
+            </div>
+            <div class="txt">
+              <p class="when mono"><span class="live">Sep 2026 – now</span></p>
+              <h3>Autonomy Engineer</h3>
+              <p class="org">Griffin Labs · Singapore</p>
+              <p class="what">Building generalisable autonomy. Working on TCR and Mega.</p>
+            </div>
           </li>
 
-          <li class="card card-lime job xp-aeroarc has-art reveal">
+          <li class="card card-lime job xp-aeroarc has-art reveal" data-job="aeroarc">
             <div class="art art-duo">
               <figure class="cut cut-vira">
                 <img src="assets/img/aeroarc-vira.webp" width="720" height="477" loading="lazy" decoding="async" alt="VIRA, a tracked electric ground robot with a cargo rail deck">
@@ -350,7 +394,7 @@
               </figure>
               <figure class="cut cut-mule">
                 <img src="assets/img/aeroarc-arcv-mule.webp" width="720" height="627" loading="lazy" decoding="async" alt="ARCV MULE, a Ghost Robotics quadruped robot with a sensor head">
-                <figcaption class="mono">ARCV MULE (Ghost Robotics quadruped) · Photo: Aeroarc</figcaption>
+                <figcaption class="mono">ARCV MULE · Photo: Aeroarc</figcaption>
               </figure>
             </div>
             <div class="txt">
@@ -361,15 +405,20 @@
             </div>
           </li>
 
-          <li class="card job xp-bytes reveal">
-            <svg class="xp-art" viewBox="0 0 120 120" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1"><path d="M10 100L110 20M10 20l100 80" stroke-dasharray="3 4"/><rect x="30" y="30" width="60" height="60" rx="6"/></g><g fill="none" stroke="#ff6b57" stroke-width="2.5"><path d="M30 60h20l10-14 10 28 10-14h10"/></g></svg>
-            <p class="when mono">Aug 2024 – Aug 2025</p>
-            <h3>Robotics &amp; AI</h3>
-            <p class="org">BYTES · Bengaluru</p>
-            <p class="what">Led tech and product.</p>
+          <li class="card job xp-bytes has-art reveal" data-job="bytes">
+            <figure class="cut cut-stereo">
+              <img src="assets/img/stereo-devkit.svg" width="600" height="480" loading="lazy" decoding="async" alt="Illustration of a compact stereo camera dev kit: one box with two cameras side by side">
+              <figcaption class="mono">Stereo camera dev kit · Illustration</figcaption>
+            </figure>
+            <div class="txt">
+              <p class="when mono">Aug 2024 – Aug 2025</p>
+              <h3>Robotics &amp; AI</h3>
+              <p class="org">BYTES · Bengaluru</p>
+              <p class="what">Led tech and product. Built a dev kit: one box, two cameras.</p>
+            </div>
           </li>
 
-          <li class="card card-warm job xp-mz has-art reveal">
+          <li class="card card-warm job xp-mz has-art reveal" data-job="mz">
             <figure class="photo">
               <img src="assets/img/zpod-zday-2023.webp" width="720" height="405" loading="lazy" decoding="async" alt="The ZPod autonomous pod parked in front of a Minus Zero zDay 2023 banner">
               <figcaption class="mono">ZPod at zDay 2023 · Photo: Minus Zero, via EVreporter</figcaption>
@@ -378,19 +427,19 @@
               <p class="when mono roles"><span>Mar 2023 – Sep 2024 · Head of Planning &amp; Prediction</span><span>Jun 2022 – Mar 2023 · Founding Engineer, Autonomy</span></p>
               <h3>Minus Zero · ZPod</h3>
               <p class="org">Bengaluru</p>
-              <p class="what">Took ZPod, India's first autonomous vehicle (launched at zDay 2023), from zero to 100k+ lines of production code.</p>
+              <p class="what" data-pt="zero">Took ZPod, India's first autonomous vehicle (launched at zDay 2023), from zero to 100k+ lines of production code.</p>
               <ul class="pts">
-                <li>Simulation pipeline and an India-specific AV simulator.</li>
-                <li>Agentic Unreal Engine pipeline to build photorealistic simulators.</li>
-                <li>Closed-loop CI/CD.</li>
-                <li>Genetic-algorithm and actor-critic PID tuning.</li>
-                <li>H-GAIL and PPO for RL driving.</li>
-                <li>NVIDIA DriveWorks.</li>
+                <li data-pt="sim">Simulation pipeline and an India-specific AV simulator.</li>
+                <li data-pt="ue">Agentic Unreal Engine pipeline to build photorealistic simulators.</li>
+                <li data-pt="ci">Closed-loop CI/CD.</li>
+                <li data-pt="ga">Genetic-algorithm and actor-critic PID tuning.</li>
+                <li data-pt="rl">H-GAIL and PPO for RL driving.</li>
+                <li data-pt="dw">NVIDIA DriveWorks.</li>
               </ul>
             </div>
           </li>
 
-          <li class="card card-cream job xp-phi has-art reveal">
+          <li class="card card-cream job xp-phi has-art reveal" data-job="phi">
             <figure class="cut cut-phi">
               <img src="assets/img/phicode-phiscan.webp" width="560" height="509" loading="lazy" decoding="async" alt="PhiSCAN, a handheld 360-degree rotating LiDAR scanner with a camera and a top handle">
               <figcaption class="mono">PhiSCAN · Photo: Phicode</figcaption>
@@ -403,19 +452,19 @@
             </div>
           </li>
 
-          <li class="card job xp-clutter reveal">
+          <li class="card job xp-clutter reveal" data-job="clutter">
             <svg class="xp-art" viewBox="0 0 120 120" aria-hidden="true"><rect x="20" y="20" width="80" height="80" fill="none" stroke="currentColor" stroke-width="1"/><g fill="currentColor" opacity=".55"><rect x="30" y="30" width="20" height="20"/><rect x="70" y="30" width="20" height="10"/><rect x="50" y="50" width="20" height="20"/><rect x="30" y="70" width="10" height="20"/><rect x="70" y="70" width="20" height="20"/></g><path d="M0 110L120 10" stroke="#7d70ff" stroke-width="1" stroke-dasharray="3 4"/></svg>
             <p class="when mono">Oct 2021 – Jun 2022</p>
             <h3>Robotics Intern</h3>
             <p class="org">Clutterbot (via In2peta Robotics)</p>
             <ul class="pts">
-              <li>YOLOv5 + SolvePnP bin localization (+5% accuracy).</li>
-              <li>FSM control and ArUco docking.</li>
-              <li>Led two interns.</li>
+              <li data-pt="yolo">YOLOv5 + SolvePnP bin localization (+5% accuracy).</li>
+              <li data-pt="fsm">FSM control and ArUco docking.</li>
+              <li data-pt="lead">Led two interns.</li>
             </ul>
           </li>
 
-          <li class="card card-violet job xp-edu reveal">
+          <li class="card card-violet job xp-edu reveal" data-job="edu">
             <p class="when mono">Education</p>
             <h3>B.Tech ELC (Robotics)</h3>
             <p class="org">Amrita Vishwa Vidyapeetham</p>

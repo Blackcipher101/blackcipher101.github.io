@@ -11,6 +11,8 @@
 | `assets/img/uw-vslam-bench-risk.webp` | https://raw.githubusercontent.com/Blackcipher101/uw-vslam-bench/main/docs/figures/health_risk_time.png | Nehal Nevle (own repository figure), resized to WebP |
 | `assets/img/rov.svg`, `favicon.svg`, the NN monogram, the pose-graph diagram, the embodiment icons and the Experience line-art | Drawn for this site | Original work |
 | `assets/img/og.jpg`, `assets/img/apple-touch-icon.png` | Screenshots of this site | Original work |
+| `assets/img/stereo-devkit.svg` | Drawn for this site (generated isometric SVG) | Original work, an illustration rather than a photo |
+| `assets/img/turtlebot-slam-rviz.webp` | https://raw.githubusercontent.com/Blackcipher101/turtlebot_autonomy/main/assets/screenshot_slam_rviz.png (cropped) | Nehal Nevle (own repository screenshot) |
 
 ## Robot and product photos (Experience section)
 
@@ -22,13 +24,16 @@ Nehal worked on these robots and products and asked for them to be shown. Each p
 | `assets/img/aeroarc-vira.webp` | Aeroarc VIRA tracked UGV | https://aeroarc.in/wp-content/uploads/Vira-Product_with-logo1-768x509.png, on https://aeroarc.in/products/ | Aeroarc |
 | `assets/img/aeroarc-arcv-mule.webp` | Aeroarc ARCV MULE quadruped (Ghost Robotics) | https://aeroarc.in/wp-content/uploads/Arc-V-Mule.png, on https://aeroarc.in/products/ | Aeroarc |
 | `assets/img/phicode-phiscan.webp` | Phicode PhiSCAN 360° rotating LiDAR scanner | https://phicode.io/static/assets/phiscan.png, on https://phicode.io/ | Phicode Pvt. Ltd. |
+| `assets/img/griffin-t1.webp` | LionsBot T1 restroom-cleaning robot | https://griffinlabs.ai/t1/t1-cover.webp (served via `/_next/image?url=%2Ft1%2Ft1-cover.webp&w=828`), on https://griffinlabs.ai/t1 | Griffin Labs Pte. Ltd. |
+| `assets/img/griffin-mega.webp` | Mega robotic workcell (dish sorting) | https://griffinlabs.ai/mega/dish-sorting.webp (via `/_next/image?url=%2Fmega%2Fdish-sorting.webp&w=828`), on https://griffinlabs.ai/mega | Griffin Labs Pte. Ltd. |
 
 Licence notes, checked 2026-11-06:
 
 - **Minus Zero:** the Terms of Use on minuszero.ai (https://www.minuszero.ai/terms-of-use) forbid copying or publicly displaying content from *their site* without written permission. The ZPod photo is not from their site. It was distributed to the press for the zDay 2023 launch and is taken from EVreporter. I found no reuse terms on EVreporter.
 - **Aeroarc:** the site footer says "© 2026 Aeroarc. All rights reserved." I found no terms page or press kit (https://aeroarc.in/media/ returns 404).
 - **Phicode:** the site footer says "© 2025 Phicode Pvt. Ltd. All rights reserved." I found no terms page.
-- **Clutterbot, BYTES, Griffin Labs:** no photos used. Those cards use original line-art.
+- **Griffin Labs:** the footer says "© 2026 Griffin Labs Pte. Ltd." I found no terms page or press kit. The T1 product page says "Coming soon".
+- **Clutterbot, BYTES:** no photos used. Clutterbot uses original line-art. BYTES shows `assets/img/stereo-devkit.svg`, an original illustration of the stereo camera dev kit, captioned as an illustration.
 
 ## Mech Drone viewer (`mech_drone/`)
 
