@@ -231,21 +231,57 @@ section { scroll-margin-top: 80px; }
 .badge { font-family: var(--mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; padding: 4px 8px; border-radius: 999px; background: var(--peach); color: var(--ink); white-space: nowrap; }
 
 /* ---------- experience ---------- */
-.xp { display: grid; gap: var(--gap); }
-.job { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 8px 32px; padding: 26px 28px; }
+/* Bento of roles. Cut-out product shots overflow the top of their cards; the extra
+   row gap leaves room for them. */
+.xp { display: grid; grid-template-columns: repeat(12, 1fr); gap: 64px var(--gap); margin: 0; padding: 40px 0 0; list-style: none; }
+.job { display: flex; flex-direction: column; gap: 8px; padding: 26px 28px; overflow: visible; }
 .job .when { color: var(--muted); }
 .job h3 { font-size: clamp(22px, 2.4vw, 30px); }
-.job .org { font-size: 15px; color: var(--muted); margin-top: 6px; }
-.job .what { grid-column: 2; color: var(--cream); }
-.job ul.pts { grid-column: 2; display: grid; gap: 8px; margin-top: 4px; }
+.job .org { font-size: 15px; color: var(--muted); }
+.job .what { color: var(--cream); margin-top: 6px; }
+.job ul.pts { display: grid; gap: 8px; margin-top: 8px; }
 .job ul.pts li { position: relative; padding-left: 20px; color: #d6d1de; }
 .job ul.pts li::before { content: ''; position: absolute; left: 0; top: .6em; width: 8px; height: 8px; border-radius: 2px; background: var(--coral); }
-.job.card-warm .when, .job.card-warm .org { color: var(--ink); }
-.job.card-warm ul.pts li { color: var(--ink); }
+.job.card-warm .when, .job.card-warm .org, .job.card-warm .what, .job.card-warm ul.pts li,
+.job.card-lime .when, .job.card-lime .org, .job.card-lime .what,
+.job.card-cream .when, .job.card-cream .org, .job.card-cream .what { color: var(--ink); }
 .job.card-warm ul.pts li::before { background: var(--ink); }
-.job.card-warm .what { color: var(--ink); }
+.job.card-violet .when, .job.card-violet .org { color: #fff; }
 .roles { display: grid; gap: 4px; }
 .roles span { display: block; }
+
+.xp-griffin { grid-column: span 4; justify-content: flex-end; min-height: 300px; }
+.xp-aeroarc { grid-column: span 8; min-height: 300px; display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); align-items: end; }
+.xp-bytes { grid-column: span 4; justify-content: flex-end; }
+.xp-mz { grid-column: span 8; grid-row: span 2; }
+.xp-phi { grid-column: span 4; display: grid; grid-template-columns: 1fr; align-content: end; min-height: 300px; }
+.xp-clutter { grid-column: span 8; }
+.xp-edu { grid-column: span 4; justify-content: flex-end; }
+
+.xp-art { position: absolute; top: 22px; right: 22px; width: 96px; height: 96px; color: rgba(244,239,228,.28); pointer-events: none; }
+.xp-griffin, .xp-bytes, .xp-clutter { position: relative; }
+.cut { margin: 0; position: relative; }
+.cut img { width: 100%; height: auto; filter: drop-shadow(0 24px 22px rgba(14, 13, 18, .28)); }
+.cut figcaption, .photo figcaption { font-size: 10.5px; letter-spacing: .04em; color: var(--ink-soft); margin-top: 4px; text-transform: none; }
+
+/* Aeroarc: two robots stand on the card and rise out of its top edge */
+.xp-aeroarc .txt { grid-column: 1; grid-row: 1; display: flex; flex-direction: column; gap: 8px; }
+.art-duo { grid-column: 2; grid-row: 1; position: relative; align-self: stretch; min-height: 240px; }
+.cut-vira { position: absolute; right: 34%; bottom: 0; width: 70%; z-index: 1; }
+.cut-mule { position: absolute; right: -6%; top: -110px; width: 62%; }
+.cut-mule figcaption { text-align: right; padding-right: 10%; }
+
+/* Minus Zero: framed photo tilted over the top edge */
+.xp-mz .photo {
+  margin: -70px 0 10px auto; width: min(560px, 78%);
+  background: var(--cream); padding: 8px 8px 6px; border-radius: 18px;
+  transform: rotate(1.6deg); box-shadow: 0 24px 40px rgba(14, 13, 18, .35);
+}
+.xp-mz .photo img { width: 100%; height: auto; border-radius: 12px; }
+.xp-mz .txt { display: flex; flex-direction: column; gap: 8px; }
+
+/* PhiSCAN: scanner cut-out pops out of the cream card */
+.cut-phi { width: 74%; margin: -120px auto 4px; }
 
 /* ---------- contact ---------- */
 .contact { grid-column: span 12; display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 24px; padding: 40px; }
@@ -269,6 +305,8 @@ footer { padding: 40px 0 48px; color: var(--muted); font-size: 14px; }
   .c-rov { grid-column: span 6; grid-row: span 2; }
   .c-stack, .c-now { grid-column: span 6; }
   .proj, .proj-wip { grid-column: span 6; }
+  .xp-griffin, .xp-bytes, .xp-phi, .xp-edu { grid-column: span 6; }
+  .xp-aeroarc, .xp-mz, .xp-clutter { grid-column: span 12; grid-row: auto; }
   .proj-wide { grid-column: span 12; }
   .demo { grid-template-columns: 1fr; }
   .demo-side { padding: 4px 6px 6px; }
@@ -283,8 +321,18 @@ footer { padding: 40px 0 48px; color: var(--muted); font-size: 14px; }
   .c-brand { min-height: 0; gap: 28px; }
   .c-rov { min-height: 360px; margin-top: 70px; }
   .c-rov img { top: -96px; width: 100%; }
-  .job { grid-template-columns: 1fr; padding: 22px; }
-  .job .what, .job ul.pts { grid-column: 1; }
+  .job { padding: 22px; }
+  .xp { gap: 56px var(--gap); padding-top: 24px; }
+  .xp > .job { grid-column: span 12; min-height: 0; }
+  .xp-aeroarc { grid-template-columns: 1fr; }
+  .art-duo { grid-column: 1; grid-row: 1; min-height: 0; display: grid; grid-template-columns: 1fr 1fr; align-items: end; gap: 6px; margin-top: -70px; }
+  .cut-vira, .cut-mule { position: static; width: 100%; }
+  .cut-mule figcaption { text-align: left; padding: 0; }
+  .xp-aeroarc .txt { grid-row: 2; }
+  .xp-mz .photo { margin: -56px auto 10px; width: 100%; transform: rotate(1deg); }
+  .cut-phi { width: 70%; margin-top: -90px; }
+  .xp-art { width: 64px; height: 64px; top: 16px; right: 16px; }
+  .xp-griffin, .xp-bytes { padding-top: 64px; }
   .contact { grid-template-columns: 1fr; padding: 26px; }
   .proj-wide figure img, .proj figure img { height: auto; aspect-ratio: auto; }
   .sec { padding-top: 56px; }
