@@ -20,7 +20,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400..700&amp;display=swap">
-  <link rel="stylesheet" href="assets/css/site.css?v=20261106g">
+  <link rel="stylesheet" href="assets/css/site.css?v=20261106h">
   <script>document.documentElement.classList.add('js');</script>
   <script type="module" src="assets/js/site.js?v=20261106g"></script>
   <script type="module" src="assets/js/audience.js?v=20261106g"></script>
@@ -305,9 +305,12 @@
 
           <!-- Demo: stand-off tracking, Double DQN vs tuned P controller -->
           <article class="card demo reveal" data-demo="standoff" aria-labelledby="standoff-title">
-            <div class="demo-stage">
-              <canvas width="1000" height="625" style="--ar: 8 / 5" aria-label="Top view of a manoeuvring beacon followed by two points, a learned Double-DQN agent and a proportional controller, each trying to hold a set distance, with a strip chart of range error below. Tap for a new run." role="img"></canvas>
-              <span class="demo-hint mono">Loading demo…</span>
+            <div class="demo-main">
+              <div class="demo-stage">
+                <canvas width="1000" height="625" style="--ar: 8 / 5" aria-label="Top view of a manoeuvring beacon followed by two points, a learned Double-DQN agent and a proportional controller, each trying to hold a set distance, with a strip chart of range error below. Tap for a new run." role="img"></canvas>
+                <span class="demo-hint mono">Loading demo…</span>
+              </div>
+              <p class="demo-msg demo-note" data-out="policy" aria-live="polite"></p>
             </div>
             <div class="demo-side">
               <span class="mono demo-tag" style="color:var(--lime)">Tracking · RL</span>
@@ -317,7 +320,6 @@
                 <button class="btn btn-lime" type="button" data-act="new">New run</button>
                 <button class="btn btn-ghost" type="button" data-act="path">Path: Smooth weave</button>
               </div>
-              <p class="demo-msg demo-note" data-out="policy" aria-live="polite"></p>
               <p class="vs-key mono"><span class="vs-a">Double DQN</span><span class="vs-b">P controller</span></p>
               <dl class="stats">
                 <div class="stat"><dt>RMS range error</dt><dd class="vs-pair"><span class="vs-a" data-out="rms-a">–</span><span class="vs-b" data-out="rms-b">–</span></dd></div>
@@ -330,9 +332,12 @@
 
           <!-- Demo: box-track prediction in a long-range camera, diffusion vs constant velocity -->
           <article class="card demo reveal" data-demo="boxtrack" aria-labelledby="boxtrack-title">
-            <div class="demo-stage">
-              <canvas width="1000" height="563" style="--ar: 16 / 9" aria-label="Zoomed crop of a synthetic long-range camera image showing a target's past bounding boxes, its true future path, a constant-velocity prediction with its uncertainty ellipse, and diffusion-model samples with their probability region. Tap for a new track." role="img"></canvas>
-              <span class="demo-hint mono">Loading demo…</span>
+            <div class="demo-main">
+              <div class="demo-stage">
+                <canvas width="1000" height="563" style="--ar: 16 / 9" aria-label="Zoomed crop of a synthetic long-range camera image showing a target's past bounding boxes, its true future path, a constant-velocity prediction with its uncertainty ellipse, and diffusion-model samples with their probability region. Tap for a new track." role="img"></canvas>
+                <span class="demo-hint mono">Loading demo…</span>
+              </div>
+              <p class="demo-msg demo-note" data-out="policy" aria-live="polite"></p>
             </div>
             <div class="demo-side">
               <span class="mono demo-tag" style="color:var(--lime)">Tracking · EO sensing</span>
@@ -345,7 +350,6 @@
                 <button class="btn btn-ghost" type="button" data-act="range">Range: 500 m</button>
                 <button class="btn btn-ghost" type="button" data-act="replay">Replay denoising</button>
               </div>
-              <p class="demo-msg demo-note" data-out="policy" aria-live="polite"></p>
               <p class="vs-key mono"><span class="vs-a">Diffusion</span><span class="vs-b">Constant velocity</span></p>
               <dl class="stats">
                 <div class="stat"><dt>Off at 1.2 s</dt><dd class="vs-pair"><span class="vs-a" data-out="err-a">–</span><span class="vs-b" data-out="err-b">–</span></dd></div>
