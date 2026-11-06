@@ -4,8 +4,8 @@
 // Simulation, controllers and network are lib/standoff-core.js (unchanged from the original
 // artifact). The agent was trained offline with tools/train_standoff.mjs; its weights, the tuned P
 // gains and the held-out test suite ship in assets/data/standoff-policy.json.
-import { View, Loop, COLORS } from './common.js?v=20261106i';
-import './lib/standoff-core.js?v=20261106i';
+import { View, Loop, COLORS } from './common.js?v=20261106j';
+import './lib/standoff-core.js?v=20261106j';
 
 const C = window.TrackCore;
 const POLICY_URL = new URL('../../data/standoff-policy.json', import.meta.url);

@@ -4,12 +4,13 @@
 // limits, a configuration-space (C-space) collision map for one circular obstacle, A* in
 // C-space when the straight joint-space move would hit it, and minimum-jerk time scaling
 // of every segment under joint speed and acceleration limits.
-// Learned (lime): a 12-32-32-2 tanh MLP trained offline with evolution strategies in numpy
+// Learned (lime): a tanh MLP (34 inputs incl. the obstacle and the IK goal poses, 2 outputs) trained offline with evolution strategies in numpy
 // (tools/train_scara.py), commanding joint velocities to a velocity-servo plant with the
 // same speed/acceleration limits. Its weights and held-out results ship in
 // assets/data/scara-policy.json; the plant and observation here mirror that script exactly.
-// The policy does not observe the obstacle: its contacts are counted, not prevented.
-import { View, Loop, COLORS, clamp } from './common.js?v=20261106i';
+// The policy observes the obstacle (it was trained with random obstacles and a contact penalty);
+// its contacts are counted in the demo, not prevented by the simulation.
+import { View, Loop, COLORS, clamp } from './common.js?v=20261106j';
 
 export const ARM = {
   base: [0.62, 0.6],               // m, world position of joint 1
@@ -167,7 +168,7 @@ export function segmentTime(a, b) {
   // min-jerk peak speed = 1.875 d/T, peak acceleration = 5.7735 d/T^2
   return Math.max(0.15, 1.875 * d / ARM.vmax, Math.sqrt(5.7735 * d / ARM.amax));
 }
-const minJerk = (t) => t * t * t * (10 - 15 * t + 6 * t * t);
+export const minJerk = (t) => t * t * t * (10 - 15 * t + 6 * t * t);
 
 /** Nearest reachable world point to (x, y) (coarse polar search around the base), or null. */
 function nearestReachable(x, y) {
@@ -192,12 +193,22 @@ export async function loadPolicy() {
   return r.json();
 }
 
+/** Distance from point (cx, cy) to segment a-b (mirrors seg_point_dist in tools/train_scara.py). */
+function segPointDist(ax, ay, bx, by, cx, cy) {
+  const vx = bx - ax, vy = by - ay;
+  const t = clamp(((cx - ax) * vx + (cy - ay) * vy) / Math.max(vx * vx + vy * vy, 1e-12), 0, 1);
+  const ux = ax + t * vx - cx, uy = ay + t * vy - cy;
+  return Math.sqrt(ux * ux + uy * uy); // not Math.hypot: matches numpy's norm bit for bit
+}
+
 /**
- * Learned arm: velocity-servo plant + MLP policy, mirroring step(), observe() and policy() in
- * tools/train_scara.py. Buffers are preallocated so the 50 Hz step does not allocate.
+ * Learned arm: velocity-servo plant + MLP policy, mirroring step(), observe() (obs_version 3: the
+ * obstacle and the two analytic IK goal poses are inputs) and policy() in tools/train_scara.py.
+ * All positions here are relative to the arm base. The network buffers are preallocated.
  */
 export class LearnedArm {
   constructor(data) {
+    if (data.obs_version !== 3 || data.arch[0] !== 34) throw new Error(`unsupported SCARA policy (obs_version ${data.obs_version})`);
     this.data = data;
     this.p = data.plant;
     this.q = new Float64Array(2);
@@ -206,18 +217,65 @@ export class LearnedArm {
     this.bufs = data.arch.map((n) => new Float64Array(n));
   }
   reset(q) { this.q.set(q); this.qd.fill(0); this.v.fill(0); }
-  /** Target (dx, dy) relative to the base, metres. Runs the policy and one plant step of p.dt. */
-  step(tx, ty) {
+  /** Surface clearance (m) of link 1 and link 2 at pose (q1, q2) to obstacle {x, y, r} (base-relative); Infinity without one. */
+  clearancesAt(q1, q2, obst) {
+    if (!obst) return [Infinity, Infinity];
+    const p = this.p;
+    const ex = p.l1 * Math.cos(q1), ey = p.l1 * Math.sin(q1);
+    const tx = ex + p.l2 * Math.cos(q1 + q2), ty = ey + p.l2 * Math.sin(q1 + q2);
+    return [segPointDist(0, 0, ex, ey, obst.x, obst.y) - obst.r - p.link_r,
+      segPointDist(ex, ey, tx, ty, obst.x, obst.y) - obst.r - p.link_r];
+  }
+  clearances(obst) { return this.clearancesAt(this.q[0], this.q[1], obst); }
+  /**
+   * Inputs 28..33: for elbow e = +1, -1 the analytic IK pose for target (tx, ty), as
+   * (feasible, (q1_goal - q1) / pi, (q2_goal - q2) / pi); feasible = reachable, within the joint
+   * limits and clear of the obstacle. Mirrors ik_batch() and ik_goal_features() in tools/train_scara.py.
+   */
+  ikGoalInputs(o, tx, ty, obst) {
+    const p = this.p, q = this.q, lim = p.q_lim;
+    const c2 = (tx * tx + ty * ty - p.l1 * p.l1 - p.l2 * p.l2) / (2 * p.l1 * p.l2);
+    let k = 28;
+    for (const e of [1, -1]) {
+      const g2 = e * Math.acos(clamp(c2, -1, 1));
+      let g1 = Math.atan2(ty, tx) - Math.atan2(p.l2 * Math.sin(g2), p.l1 + p.l2 * Math.cos(g2));
+      g1 = Math.atan2(Math.sin(g1), Math.cos(g1));
+      const cl = this.clearancesAt(g1, g2, obst);
+      const ok = Math.abs(c2) <= 1 && Math.abs(g1) <= lim[0] && Math.abs(g2) <= lim[1] && Math.min(cl[0], cl[1]) > 0;
+      o[k++] = ok ? 1 : 0;
+      o[k++] = ok ? (g1 - q[0]) / Math.PI : 0;
+      o[k++] = ok ? (g2 - q[1]) / Math.PI : 0;
+    }
+  }
+  /** Target (tx, ty) and obstacle {x, y, r} or null, both relative to the base (m). One policy + plant step of p.dt. */
+  step(tx, ty, obst) {
     const { p, q, qd, v, bufs } = this;
-    const { ee } = fk(q[0], q[1]);
-    const dx = tx - (ee[0] - ARM.base[0]), dy = ty - (ee[1] - ARM.base[1]);
-    const phi = q[0] + q[1], c = Math.cos(phi), s = Math.sin(phi);
-    const lx = c * dx + s * dy, ly = -s * dx + c * dy;
-    const o = bufs[0];
-    o[0] = Math.cos(q[0]); o[1] = Math.sin(q[0]); o[2] = Math.cos(q[1]); o[3] = Math.sin(q[1]);
-    o[4] = q[0] / Math.PI; o[5] = q[1] / Math.PI; o[6] = qd[0] / p.v_max; o[7] = qd[1] / p.v_max;
+    const q1 = q[0], q2 = q[1], phi = q1 + q2;
+    const ex = p.l1 * Math.cos(q1), ey = p.l1 * Math.sin(q1);
+    const px = ex + p.l2 * Math.cos(phi), py = ey + p.l2 * Math.sin(phi);
+    const cf = Math.cos(phi), sf = Math.sin(phi), cu = Math.cos(q1), su = Math.sin(q1);
+    const dx = tx - px, dy = ty - py;
+    const lx = cf * dx + sf * dy, ly = -sf * dx + cf * dy;
+    const o = bufs[0], lim = p.q_lim, m = p.limit_margin_rad, rel = p.obst_rel_m, reach = p.l1 + p.l2;
+    o[0] = Math.cos(q1); o[1] = Math.sin(q1); o[2] = Math.cos(q2); o[3] = Math.sin(q2);
+    o[4] = q1 / Math.PI; o[5] = q2 / Math.PI; o[6] = qd[0] / p.v_max; o[7] = qd[1] / p.v_max;
     o[8] = lx / p.obs_coarse_m; o[9] = ly / p.obs_coarse_m;
     o[10] = clamp(lx / p.obs_fine_m, -1, 1); o[11] = clamp(ly / p.obs_fine_m, -1, 1);
+    o[12] = clamp((lim[0] - q1) / m, 0, 1); o[13] = clamp((q1 + lim[0]) / m, 0, 1);
+    o[14] = clamp((lim[1] - q2) / m, 0, 1); o[15] = clamp((q2 + lim[1]) / m, 0, 1);
+    o[16] = tx / reach; o[17] = ty / reach;
+    if (obst) {
+      const fx = obst.x - px, fy = obst.y - py, ux = obst.x - ex, uy = obst.y - ey;
+      const cl = this.clearances(obst);
+      o[18] = 1; o[19] = obst.x / reach; o[20] = obst.y / reach; o[21] = obst.r / 0.1;
+      o[22] = (cf * fx + sf * fy) / rel; o[23] = (-sf * fx + cf * fy) / rel;
+      o[24] = (cu * ux + su * uy) / rel; o[25] = (-su * ux + cu * uy) / rel;
+      o[26] = clamp(cl[0] / p.clear_scale_m, -1, 1); o[27] = clamp(cl[1] / p.clear_scale_m, -1, 1);
+    } else {
+      for (let i = 18; i < 26; i++) o[i] = 0;
+      o[26] = 1; o[27] = 1;
+    }
+    this.ikGoalInputs(o, tx, ty, obst);
     const dims = this.data.arch, wts = this.data.weights;
     for (let l = 0; l < dims.length - 1; l++) {
       const w = wts[2 * l], b = wts[2 * l + 1], hin = bufs[l], hout = bufs[l + 1], nIn = dims[l], nOut = dims[l + 1];
@@ -233,7 +291,7 @@ export class LearnedArm {
       const acc = clamp((v[k] - qd[k]) / p.servo_tau_s, -p.a_max, p.a_max);
       qd[k] += acc * p.dt;
       q[k] += qd[k] * p.dt;
-      if (Math.abs(q[k]) > p.q_lim[k]) { q[k] = clamp(q[k], -p.q_lim[k], p.q_lim[k]); qd[k] = 0; }
+      if (Math.abs(q[k]) > lim[k]) { q[k] = clamp(q[k], -lim[k], lim[k]); qd[k] = 0; }
     }
   }
   tipSpeed() {
@@ -338,7 +396,7 @@ export function mount(root) {
     acc += dt;
     let n = 0;
     while (acc >= pdt && n < 4) {
-      if (target) learned.step(target[0] - ARM.base[0], target[1] - ARM.base[1]);
+      if (target) learned.step(target[0] - ARM.base[0], target[1] - ARM.base[1], obs ? { x: obs.x - ARM.base[0], y: obs.y - ARM.base[1], r: obs.r } : null);
       track(met.a, learned.q[0], learned.q[1], learned.tipSpeed(), pdt);
       acc -= pdt; n++;
     }
@@ -462,23 +520,30 @@ export function mount(root) {
   }
 
   /** Names the target sector where the policy did worst offline (sectors are bearings from the base, x axis = 0). */
-  function weakest(sectors) {
+  const SECTOR_WORDS = { '-180': 'down-left', '-90': 'down-right', 0: 'up-right', 90: 'up-left' };
+
+  /** Per-sector success on the demo-obstacle set, worst first, noting the sector that holds the obstacle. */
+  function bySector(sectors) {
     if (!sectors || !sectors.length) return '';
-    const w = sectors.reduce((a, b) => (b.success / b.trials < a.success / a.trials ? b : a));
-    if (w.success === w.trials) return '';
-    const where = { '-180': 'down and to the left of', '-90': 'down and to the right of', 0: 'up and to the right of', 90: 'up and to the left of' }[w.from_deg];
-    return `It is weakest on targets ${where} the base (${w.success}/${w.trials}), where it would need to swap elbows near a joint limit. `;
+    const ob = Math.atan2(DEFAULT_OBS.y - ARM.base[1], DEFAULT_OBS.x - ARM.base[0]) * 180 / Math.PI;
+    const list = sectors.slice().sort((x, y) => x.success / x.trials - y.success / y.trials).map((x) =>
+      `${SECTOR_WORDS[x.from_deg]} ${x.success}/${x.trials}${ob >= x.from_deg && ob < x.to_deg ? ' (the obstacle side)' : ''}`);
+    return ` By target direction from the base with this obstacle: ${list.join(', ')}.`;
   }
 
   function describe(data) {
-    const e = data.eval, tr = data.training, L = e.learned, B = e.ik_min_jerk;
-    const pct = (n) => `${Math.round(n / e.trials * 1000) / 10}%`;
+    const e = data.eval, tr = data.training, K = e.ik_astar;
+    const pct = (n, d) => `${Math.round(n / d * 1000) / 10}%`;
+    const row = (label, L, I, touch) => `${label} ${pct(L.success, L.trials)} vs ${pct(I.success, I.trials)} reached ` +
+      `(median ${L.median_s} vs ${I.median_s} s)` + (touch ? `, touched it ${pct(L.touch, L.trials)} vs ${pct(I.touch, I.trials)}` : '');
     out('policy').textContent =
-      `Lime, learned policy: ${data.params} params, trained with evolution strategies for ${tr.episodes.toLocaleString('en')} simulated episodes, seed ${tr.seed}. ` +
-      `On ${e.trials} held-out seeded targets it got within 1 cm and stopped in ${pct(L.success)} (median ${L.median_s} s); ` +
-      `peach, IK + minimum jerk: ${pct(B.success)} (median ${B.median_s} s). ` +
-      weakest(L.by_bearing) +
-      `The policy does not see the obstacle and touched it in ${Math.round(e.obstacle.learned_contact_rate * 100)}% of moves, so only the IK planner avoids it.`;
+      `Lime, learned policy: ${data.params.toLocaleString('en')} params, trained with evolution strategies for ` +
+      `${tr.episodes.toLocaleString('en')} simulated episodes, seed ${tr.seed}. Its inputs are the joint angles and speeds, the target ` +
+      `relative to the tip, the obstacle, and the two analytic IK goal poses (so it knows which way each joint may turn); it ` +
+      `outputs joint speeds and reacts to the obstacle rather than planning around it. Peach: IK + A* + minimum jerk. ` +
+      `Held-out seeded tasks, ${e.free.trials} per set (with an obstacle, only tasks that have a collision-free path), learned vs IK + A*: ` +
+      `${row('no obstacle', e.free, K.free, false)}; ${row('random obstacle', e.random, K.random, true)}; ` +
+      `${row('this obstacle', e.demo, K.demo, true)}.` + bySector(e.demo.by_bearing);
   }
 
   // pointer: tap = target; drag the obstacle to move it (a move that would overlap the IK arm is refused)

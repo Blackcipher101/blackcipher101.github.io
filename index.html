@@ -18,10 +18,10 @@
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
   <link rel="preload" href="assets/fonts/space-grotesk-latin-var.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="assets/css/site.css?v=20261106i">
+  <link rel="stylesheet" href="assets/css/site.css?v=20261106j">
   <script>document.documentElement.classList.add('js');</script>
-  <script type="module" src="assets/js/site.js?v=20261106i"></script>
-  <script type="module" src="assets/js/audience.js?v=20261106i"></script>
+  <script type="module" src="assets/js/site.js?v=20261106j"></script>
+  <script type="module" src="assets/js/audience.js?v=20261106j"></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -227,7 +227,7 @@
             <div class="demo-side">
               <span class="mono demo-tag" style="color:var(--lime)">Manipulation · RL</span>
               <h3 id="scara-title">Reach around it</h3>
-              <p>Two SCARA arms from above on one base, sent to the same target. Lime: a small neural network trained offline with evolution strategies to command joint speeds. Peach: analytic inverse kinematics with a minimum-jerk profile, and A* in configuration space (inset) when the straight move would hit the obstacle. Both obey the same joint speed and acceleration limits. Training script: <code>tools/train_scara.py</code>.</p>
+              <p>Two SCARA arms from above on one base, sent to the same target. Lime: a small neural network trained offline with evolution strategies to command joint speeds; it sees the obstacle and the analytic IK goal poses, and dodges the obstacle as it goes. Peach: analytic inverse kinematics with a minimum-jerk profile, and A* in configuration space (inset) when the straight move would hit the obstacle. Both obey the same joint speed and acceleration limits. Training script: <code>tools/train_scara.py</code>.</p>
               <div class="controls">
                 <button class="btn btn-lime" type="button" data-act="target">Random target</button>
                 <button class="btn btn-ghost" type="button" data-act="elbow" aria-pressed="false">IK elbow: left</button>
