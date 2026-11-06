@@ -1,5 +1,5 @@
 // Runs the pose-graph solve off the main thread so the page keeps animating.
-import { optimise } from './posegraph.js?v=20261106p';
+import { optimise } from './posegraph.js?v=20261106q';
 
 self.onmessage = (ev) => {
   const { id, poses, edges } = ev.data;
