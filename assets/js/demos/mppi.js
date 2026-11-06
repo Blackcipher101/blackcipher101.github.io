@@ -2,7 +2,7 @@
 // Each control tick: sample K noisy control sequences around the nominal one, roll
 // out a unicycle model, score every rollout, and update the nominal sequence with
 // the exponentially weighted average of the noise (Williams et al., 2017).
-import { View, Loop, COLORS, gauss, clamp } from './common.js?v=20261106k';
+import { View, Loop, COLORS, gauss, clamp } from './common.js?v=20261106l';
 
 const W = 16, H = 10;               // world, metres
 const K = 256;                      // samples

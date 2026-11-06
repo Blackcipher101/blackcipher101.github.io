@@ -410,6 +410,8 @@ html[data-order="play"] .nav-links a[href="#demos"] { order: 1; } html[data-orde
 /* Griffin Labs: two framed product images rising out of the card */
 .xp-griffin .txt { grid-column: 1; grid-row: 1; display: flex; flex-direction: column; gap: 8px; }
 .art-frames { grid-column: 2; grid-row: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: end; margin-top: -90px; }
+/* the frames break out 90 px above the card: reserve that space so they never cover the section header / 'Worked in' line */
+.xp-griffin.has-art { margin-top: 96px; }
 .art-frames .photo { margin: 0; background: var(--cream); padding: 7px 7px 5px; border-radius: 16px; box-shadow: 0 24px 40px rgba(0, 0, 0, .45); }
 .art-frames .photo img { width: 100%; height: auto; border-radius: 10px; }
 .frame-a { transform: rotate(-2deg) translateY(-18px); }
@@ -500,6 +502,7 @@ footer { padding: 40px 0 48px; color: var(--muted); font-size: 14px; }
   .xp-art { width: 64px; height: 64px; top: 16px; right: 16px; }
   .xp-griffin { grid-template-columns: 1fr; }
   .art-frames { grid-column: 1; grid-row: 1; margin-top: -70px; gap: 10px; }
+  .xp-griffin.has-art { margin-top: 76px; }
   .xp-griffin .txt { grid-row: 2; }
   .cut-stereo { margin-top: -80px; width: 100%; }
   .contact { grid-template-columns: 1fr; padding: 26px; }

@@ -10,7 +10,7 @@
 // assets/data/scara-policy.json; the plant and observation here mirror that script exactly.
 // The policy observes the obstacle (it was trained with random obstacles and a contact penalty);
 // its contacts are counted in the demo, not prevented by the simulation.
-import { View, Loop, COLORS, clamp, setHeadline } from './common.js?v=20261106k';
+import { View, Loop, COLORS, clamp, setHeadline } from './common.js?v=20261106l';
 
 export const ARM = {
   base: [0.62, 0.6],               // m, world position of joint 1
