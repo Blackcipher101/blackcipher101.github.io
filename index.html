@@ -18,7 +18,7 @@
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
   <link rel="preload" href="assets/fonts/space-grotesk-latin-var.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="assets/css/site.css?v=20261106n">
+  <link rel="stylesheet" href="assets/css/site.css?v=20261106o">
   <script>document.documentElement.classList.add('js');
   // Section order for the audience preset, set before first paint so nothing moves (no layout shift).
   // Same choice rule and preset -> group map as assets/js/audience.js (PRESETS[..].sections), which re-checks it.
@@ -32,12 +32,12 @@
     // hero does not change height on screen. Same URL as the module tag below, so it runs only once.
     if (g.hasOwnProperty(id)) {
       var s = document.createElement('script');
-      s.type = 'module'; s.src = 'assets/js/audience.js?v=20261106n'; s.setAttribute('blocking', 'render');
+      s.type = 'module'; s.src = 'assets/js/audience.js?v=20261106o'; s.setAttribute('blocking', 'render');
       document.head.appendChild(s);
     }
   })();</script>
-  <script type="module" src="assets/js/site.js?v=20261106n"></script>
-  <script type="module" src="assets/js/audience.js?v=20261106n"></script>
+  <script type="module" src="assets/js/site.js?v=20261106o"></script>
+  <script type="module" src="assets/js/audience.js?v=20261106o"></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -634,13 +634,13 @@
           </a>
           <a class="card proj reveal" data-proj="rov" href="https://github.com/Blackcipher101/rov-rl-mujoco" data-tilt>
             <figure>
-              <img src="assets/img/rov-rl-pid-vs-rl.webp" width="900" height="254" loading="lazy" decoding="async" alt="Side-by-side simulation frames of an ROV tracking a trajectory in a current: tuned PID on the left, RL policy on the right">
+              <img src="assets/img/rov-nav-overhead.webp" width="900" height="422" loading="lazy" decoding="async" alt="Overhead map of an ROV navigating with sonar through an obstacle field with moving obstacles: RL policy on the left, VFH+ planner on the right">
               <figcaption>Figure: rov-rl-mujoco README · © Nehal Nevle</figcaption>
             </figure>
             <div class="proj-body">
               <h3>rov-rl-mujoco</h3>
-              <p>RL controller for an ROV in MuJoCo's fluid model, against a tuned PID.</p>
-              <div class="metric"><strong>0.048 m</strong><span>vs PID 0.131 m in a 0.4 m/s current (beyond training) · 100 % vs 90 % success</span></div>
+              <p>RL for an ROV in MuJoCo: sonar-only navigation through crossing traffic, and control in strong currents, against classical baselines.</p>
+              <div class="metric"><strong>9.5× fewer collisions</strong><span>than VFH+ in crossing traffic (2 vs 19 of 80) · 1.35× faster · RL beats PID 2.7× in a 0.4 m/s current</span></div>
             </div>
           </a>
           <a class="card proj reveal" data-proj="q14" href="https://github.com/Blackcipher101/quadruped" data-tilt>
