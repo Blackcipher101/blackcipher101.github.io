@@ -18,10 +18,26 @@
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
   <link rel="preload" href="assets/fonts/space-grotesk-latin-var.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="assets/css/site.css?v=20261106j">
-  <script>document.documentElement.classList.add('js');</script>
-  <script type="module" src="assets/js/site.js?v=20261106j"></script>
-  <script type="module" src="assets/js/audience.js?v=20261106j"></script>
+  <link rel="stylesheet" href="assets/css/site.css?v=20261106k">
+  <script>document.documentElement.classList.add('js');
+  // Section order for the audience preset, set before first paint so nothing moves (no layout shift).
+  // Same choice rule and preset -> group map as assets/js/audience.js (PRESETS[..].sections), which re-checks it.
+  (function () {
+    var g = { startup: 'play', recruiter: 'proof', enterprise: 'proof', underwater: 'base', embodied: 'play', av: 'base', defence: 'base', inspection: 'base', legged: 'play' };
+    var id = null;
+    try { id = new URLSearchParams(location.search).get('for'); } catch (e) {}
+    if (!g.hasOwnProperty(id)) { try { id = localStorage.getItem('nn-audience'); } catch (e) { id = null; } }
+    document.documentElement.dataset.order = g.hasOwnProperty(id) ? g[id] : 'base';
+    // A preset also rewrites the hero copy: hold the first paint until audience.js has applied it, so the
+    // hero does not change height on screen. Same URL as the module tag below, so it runs only once.
+    if (g.hasOwnProperty(id)) {
+      var s = document.createElement('script');
+      s.type = 'module'; s.src = 'assets/js/audience.js?v=20261106k'; s.setAttribute('blocking', 'render');
+      document.head.appendChild(s);
+    }
+  })();</script>
+  <script type="module" src="assets/js/site.js?v=20261106k"></script>
+  <script type="module" src="assets/js/audience.js?v=20261106k"></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -33,9 +49,9 @@
         <span>NN</span>
       </a>
       <nav class="nav-links" aria-label="Sections">
+        <a href="#experience">Experience</a>
         <a href="#demos">Demos</a>
         <a href="#work">Open source</a>
-        <a href="#experience">Experience</a>
         <a class="nav-cta" href="#contact">Contact</a>
       </nav>
     </div>
@@ -131,12 +147,144 @@
       </div>
     </section>
 
+    <!-- ================= EXPERIENCE ================= -->
+    <section class="sec" id="experience" aria-labelledby="xp-title">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <div>
+            <span class="mono"><span class="sec-n"></span> / Experience</span>
+            <h2 id="xp-title">Where I've<br>built robots</h2>
+          </div>
+          <p class="xp-places">Worked in: Singapore · Bengaluru</p>
+        </div>
+        <ol class="xp">
+          <li id="xp-griffin" class="card job xp-griffin has-art reveal" data-job="griffin">
+            <div class="art art-frames">
+              <figure class="photo frame-a">
+                <img src="assets/img/griffin-t1.webp" width="640" height="383" loading="lazy" decoding="async" alt="LionsBot T1, a mobile robot with an arm for restroom cleaning, in a shopping mall">
+                <figcaption class="mono">TCR (LionsBot T1) · Image: Griffin Labs</figcaption>
+              </figure>
+              <figure class="photo frame-b">
+                <img src="assets/img/griffin-mega.webp" width="640" height="427" loading="lazy" decoding="async" alt="Mega robotic workcell: two robot arms sorting dishes into racks">
+                <figcaption class="mono">Mega workcell · Image: Griffin Labs</figcaption>
+              </figure>
+            </div>
+            <div class="txt">
+              <p class="when mono"><span class="live">Sep 2026 – now</span></p>
+              <h3>Autonomy Engineer</h3>
+              <p class="org">Griffin Labs · Singapore</p>
+              <p class="what">Building generalisable autonomy. Working on TCR and Mega.</p>
+            </div>
+          </li>
+
+          <li id="xp-aeroarc" class="card card-lime job xp-aeroarc has-art reveal" data-job="aeroarc">
+            <div class="art art-duo">
+              <figure class="cut cut-vira">
+                <img src="assets/img/aeroarc-vira.webp" width="720" height="477" loading="lazy" decoding="async" alt="VIRA, a tracked electric ground robot with a cargo rail deck">
+                <figcaption class="mono">VIRA · Photo: Aeroarc</figcaption>
+              </figure>
+              <figure class="cut cut-mule">
+                <img src="assets/img/aeroarc-arcv-mule.webp" width="720" height="627" loading="lazy" decoding="async" alt="ARCV MULE, a Ghost Robotics quadruped robot with a sensor head">
+                <figcaption class="mono">ARCV MULE · Photo: Aeroarc</figcaption>
+              </figure>
+            </div>
+            <div class="txt">
+              <p class="when mono">Sep 2025 – Aug 2026</p>
+              <h3>Senior Robotics Engineer</h3>
+              <p class="org">Aeroarc · Bengaluru</p>
+              <p class="what">India's defence robotics: the VIRA tracked UGV and the ARCV MULE quadruped.</p>
+            </div>
+          </li>
+
+          <li id="xp-bytes" class="card job xp-bytes has-art reveal" data-job="bytes">
+            <figure class="cut cut-stereo">
+              <img src="assets/img/stereo-devkit.svg" width="600" height="480" loading="lazy" decoding="async" alt="Illustration of a compact stereo camera dev kit: one box with two cameras side by side">
+              <figcaption class="mono">Stereo camera dev kit · Illustration</figcaption>
+            </figure>
+            <div class="txt">
+              <p class="when mono">Aug 2024 – Aug 2025</p>
+              <h3>Founding member · Robotics &amp; AI</h3>
+              <p class="org">BYTES · Bengaluru</p>
+              <p class="what" data-pt="bytes-lead">Led tech and product. Built a dev kit: one box, two cameras.</p>
+              <ul class="pts">
+                <li data-pt="raise">Raised $500K.</li>
+                <li data-pt="demo">Built the product and ran a public demo.</li>
+                <li data-pt="accel">Selected for the Entrepreneur First (EF) cohort and YC Startup School.</li>
+              </ul>
+            </div>
+          </li>
+
+          <li id="xp-mz" class="card card-warm job xp-mz has-art reveal" data-job="mz">
+            <figure class="photo">
+              <img src="assets/img/zpod-zday-2023.webp" width="720" height="405" loading="lazy" decoding="async" alt="The ZPod autonomous pod parked in front of a Minus Zero zDay 2023 banner">
+              <figcaption class="mono">ZPod at zDay 2023 · Photo: Minus Zero, via EVreporter</figcaption>
+            </figure>
+            <div class="txt">
+              <p class="when mono roles"><span>Mar 2023 – Sep 2024 · Head of Planning &amp; Prediction</span><span>Jun 2022 – Mar 2023 · Founding Engineer, Autonomy</span></p>
+              <h3>Minus Zero · ZPod</h3>
+              <p class="org">Bengaluru</p>
+              <p class="what" data-pt="zero">Took ZPod, India's first autonomous vehicle (launched at zDay 2023), from zero to 100k+ lines of production code.</p>
+              <ul class="pts">
+                <li data-pt="series">Grew with the company from pre-seed to Series A.</li>
+                <li data-pt="sim">Simulation pipeline and an India-specific AV simulator.</li>
+                <li data-pt="ue">Agentic Unreal Engine pipeline to build photorealistic simulators.</li>
+                <li data-pt="ci">Closed-loop CI/CD.</li>
+                <li data-pt="ga">Genetic-algorithm and actor-critic PID tuning.</li>
+                <li data-pt="rl">H-GAIL and PPO for RL driving.</li>
+                <li data-pt="dw">NVIDIA DriveWorks.</li>
+              </ul>
+            </div>
+          </li>
+
+          <li id="xp-phi" class="card card-cream job xp-phi has-art reveal" data-job="phi">
+            <figure class="cut cut-phi">
+              <img src="assets/img/phicode-phiscan.webp" width="560" height="509" loading="lazy" decoding="async" alt="PhiSCAN, a handheld 360-degree rotating LiDAR scanner with a camera and a top handle">
+              <figcaption class="mono">PhiSCAN · Photo: Phicode</figcaption>
+            </figure>
+            <div class="txt">
+              <p class="when mono">Also built</p>
+              <h3>PhiSCAN 3D scanner</h3>
+              <p class="org">Phicode · Bengaluru</p>
+              <p class="what">360° rotating LiDAR system that turns field scans into colourised, georeferenced point clouds.</p>
+            </div>
+          </li>
+
+          <li id="xp-clutter" class="card job xp-clutter reveal" data-job="clutter">
+            <svg class="xp-art" viewBox="0 0 120 120" aria-hidden="true"><rect x="20" y="20" width="80" height="80" fill="none" stroke="currentColor" stroke-width="1"/><g fill="currentColor" opacity=".55"><rect x="30" y="30" width="20" height="20"/><rect x="70" y="30" width="20" height="10"/><rect x="50" y="50" width="20" height="20"/><rect x="30" y="70" width="10" height="20"/><rect x="70" y="70" width="20" height="20"/></g><path d="M0 110L120 10" stroke="#7d70ff" stroke-width="1" stroke-dasharray="3 4"/></svg>
+            <p class="when mono">Oct 2021 – Jun 2022</p>
+            <h3>Robotics Intern</h3>
+            <p class="org">Clutterbot (via In2peta Robotics)</p>
+            <ul class="pts">
+              <li data-pt="yolo">YOLOv5 + SolvePnP bin localization (+5% accuracy).</li>
+              <li data-pt="fsm">FSM control and ArUco docking.</li>
+              <li data-pt="lead">Led two interns.</li>
+            </ul>
+          </li>
+
+          <li id="xp-edu" class="card card-violet job xp-edu reveal" data-job="edu">
+            <div class="edu-col">
+              <p class="when mono">Education</p>
+              <h3>B.Tech ELC (Robotics)</h3>
+              <p class="org">Amrita Vishwa Vidyapeetham</p>
+            </div>
+            <div class="edu-col">
+              <p class="when mono">Summer schools</p>
+              <ul class="pts">
+                <li data-pt="mlss">Machine Learning Summer School, Genoa, Italy</li>
+                <li data-pt="eeml">EEML (Eastern European Machine Learning Summer School), Budapest</li>
+              </ul>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
     <!-- ================= DEMOS ================= -->
     <section class="sec" id="demos" aria-labelledby="demos-title">
       <div class="wrap">
         <div class="sec-head reveal">
           <div>
-            <span class="mono">02 / Playground</span>
+            <span class="mono"><span class="sec-n"></span> / Playground</span>
             <h2 id="demos-title">Play with<br>the algorithms</h2>
           </div>
           <p>Real algorithms running in your browser, not canned animations. Each demo starts when you scroll to it and pauses when you scroll away.</p>
@@ -144,21 +292,12 @@
 
         <div class="bento">
           <!-- Demo 1: pose-graph SLAM -->
-          <article class="card demo reveal" data-demo="slam" aria-labelledby="slam-title">
+          <article class="card demo demo-tiled reveal" data-demo="slam" aria-labelledby="slam-title">
             <div class="demo-stage">
               <canvas width="1000" height="600" style="--ar: 5 / 3" aria-label="Pose-graph SLAM simulation. Drag to steer the robot." role="img"></canvas>
               <span class="demo-hint mono">Loading demo…</span>
             </div>
-            <div class="demo-side">
-              <span class="mono demo-tag" style="color:var(--lime)">SLAM</span>
-              <h3 id="slam-title">Close the loop</h3>
-              <p>Wheel odometry has a small heading bias, so the estimate (coral) drifts away from the truth (dashed). Drive back to the start: a loop-closure edge (lime) appears. Optimise runs Levenberg–Marquardt on the full 2D pose graph.</p>
-              <div class="controls">
-                <button class="btn btn-lime" type="button" data-act="play" aria-pressed="false">Drive</button>
-                <button class="btn btn-cream" type="button" data-act="optimise" disabled>Optimise</button>
-                <button class="btn btn-ghost" type="button" data-act="reset">Reset</button>
-              </div>
-              <p class="demo-msg" data-out="msg" aria-live="polite"></p>
+            <div class="demo-tiles">
               <dl class="stats">
                 <div class="stat"><dt>Keyframes</dt><dd data-out="kf">0</dd></div>
                 <div class="stat"><dt>Loop edges</dt><dd data-out="loops">0</dd></div>
@@ -166,23 +305,32 @@
                 <div class="stat"><dt>χ² · iter</dt><dd><span data-out="chi2">–</span> · <span data-out="iter">–</span></dd></div>
               </dl>
             </div>
+            <div class="demo-side">
+              <span class="mono demo-tag" style="color:var(--lime)">SLAM</span>
+              <h3 id="slam-title">Close the loop</h3>
+              <p class="demo-lede">Drive a robot with biased odometry, close a loop, and watch pose-graph optimisation pull the drift back.</p>
+              <ul class="demo-head" aria-label="Headline numbers"><li>2D pose graph</li><li>Levenberg–Marquardt</li><li>live ATE</li></ul>
+              <p class="demo-ctx"><span class="mono">From my work</span> State estimation in <a href="https://github.com/Blackcipher101/uw-vio-dvl">uw-vio-dvl</a> and <a href="https://github.com/Blackcipher101/uw-vslam-bench">uw-vslam-bench</a>.</p>
+              <div class="controls">
+                <button class="btn btn-lime" type="button" data-act="play" aria-pressed="false">Drive</button>
+                <button class="btn btn-cream" type="button" data-act="optimise" disabled>Optimise</button>
+                <button class="btn btn-ghost" type="button" data-act="reset">Reset</button>
+              </div>
+              <p class="demo-msg demo-live" data-out="msg" aria-live="polite"></p>
+              <details class="demo-more">
+                <summary>How it works · numbers</summary>
+                <p>Wheel odometry has a small heading bias, so the estimate (coral) drifts away from the truth (dashed). Drive back to the start: a loop-closure edge (lime) appears. Optimise runs Levenberg–Marquardt on the full 2D pose graph.</p>
+              </details>
+            </div>
           </article>
 
           <!-- Demo: learned cart-pole swing-up vs classical, same run -->
-          <article class="card demo reveal" data-demo="cartpole" aria-labelledby="cartpole-title">
+          <article class="card demo demo-tiled tiles-right reveal" data-demo="cartpole" aria-labelledby="cartpole-title">
             <div class="demo-stage">
               <canvas width="1000" height="875" style="--ar: 8 / 7" aria-label="Two cart-pole simulations side by side: a learned policy on top and a classical energy swing-up plus LQR controller below, started from the same state. Drag a pole to pull both, tap to flick both." role="img"></canvas>
               <span class="demo-hint mono">Loading demo…</span>
             </div>
-            <div class="demo-side">
-              <span class="mono demo-tag" style="color:var(--lime)">Embodied AI · RL</span>
-              <h3 id="cartpole-title">Swing up, stay up</h3>
-              <p>Two identical cart-poles, same start, same pushes. Top: a small neural network trained offline with evolution strategies. Bottom: the classical energy swing-up handing over to LQR. Both get at most 20 N on the cart. Push, drag or tap a pole and both feel it. Training script: <code>tools/train_pendulum.py</code>.</p>
-              <div class="controls">
-                <button class="btn btn-lime" type="button" data-act="push">Push both</button>
-                <button class="btn btn-ghost" type="button" data-act="reset">Hang down</button>
-              </div>
-              <p class="demo-msg demo-note" data-out="policy" aria-live="polite"></p>
+            <div class="demo-tiles">
               <p class="vs-key mono"><span class="vs-a">Learned (top)</span><span class="vs-b">Energy + LQR (bottom)</span></p>
               <dl class="stats">
                 <div class="stat"><dt>Swing-up time</dt><dd class="vs-pair"><span class="vs-a" data-out="swing-a">–</span><span class="vs-b" data-out="swing-b">–</span></dd></div>
@@ -191,24 +339,31 @@
                 <div class="stat"><dt>Effort ∫|F|dt</dt><dd class="vs-pair"><span class="vs-a" data-out="effort-a">–</span><span class="vs-b" data-out="effort-b">–</span></dd></div>
               </dl>
             </div>
+            <div class="demo-side">
+              <span class="mono demo-tag" style="color:var(--lime)">Embodied AI · RL</span>
+              <h3 id="cartpole-title">Swing up, stay up</h3>
+              <p class="demo-lede">Same pendulum, same start, same pushes: a learned policy (top) against energy swing-up + LQR (bottom).</p>
+              <ul class="demo-head" data-out="head" aria-label="Headline numbers"><li>swing-up 0.84 s vs 2.54 s</li><li>50/50 vs 50/50 swing-ups</li><li>push recovery 100% vs 100%</li></ul>
+              <p class="demo-ctx"><span class="mono">From my work</span> <a href="#xp-mz">H-GAIL and PPO for RL driving</a> at Minus Zero; <a href="https://github.com/Blackcipher101/humanoid-mimic-rl">humanoid-mimic-rl</a>.</p>
+              <div class="controls">
+                <button class="btn btn-lime" type="button" data-act="push">Push both</button>
+                <button class="btn btn-ghost" type="button" data-act="reset">Hang down</button>
+              </div>
+              <details class="demo-more">
+                <summary>How it works · numbers</summary>
+                <p>Two identical cart-poles, same start, same pushes. Top: a small neural network trained offline with evolution strategies. Bottom: the classical energy swing-up handing over to LQR. Both get at most 20 N on the cart. Push, drag or tap a pole and both feel it. Training script: <code>tools/train_pendulum.py</code>.</p>
+                <p class="demo-note" data-out="policy" aria-live="polite"></p>
+              </details>
+            </div>
           </article>
 
           <!-- Demo 2: MPPI -->
-          <article class="card demo reveal" data-demo="mppi" aria-labelledby="mppi-title">
+          <article class="card demo demo-tiled reveal" data-demo="mppi" aria-labelledby="mppi-title">
             <div class="demo-stage">
               <canvas width="1000" height="625" style="--ar: 8 / 5" aria-label="MPPI planner simulation. Tap to set a goal, drag to draw or move obstacles." role="img"></canvas>
               <span class="demo-hint mono">Loading demo…</span>
             </div>
-            <div class="demo-side">
-              <span class="mono demo-tag" style="color:var(--lime)">Planning</span>
-              <h3 id="mppi-title">MPPI playground</h3>
-              <p>256 noisy control sequences are rolled out over a 2.6 s horizon, 20 times a second. Each is scored for goal progress and clearance. The plan (coral) is their cost-weighted average. Lime rollouts are cheap, violet ones are expensive.</p>
-              <div class="controls">
-                <button class="btn btn-lime" type="button" data-act="goal">New goal</button>
-                <button class="btn btn-cream" type="button" data-act="scatter">Shuffle obstacles</button>
-                <button class="btn btn-ghost" type="button" data-act="reset">Reset</button>
-              </div>
-              <p class="demo-msg" data-out="msg" aria-live="polite"></p>
+            <div class="demo-tiles">
               <dl class="stats">
                 <div class="stat"><dt>Solve time</dt><dd data-out="ms">–</dd></div>
                 <div class="stat"><dt>Best cost</dt><dd data-out="cost">–</dd></div>
@@ -216,26 +371,32 @@
                 <div class="stat"><dt>Min clearance</dt><dd data-out="clear">–</dd></div>
               </dl>
             </div>
+            <div class="demo-side">
+              <span class="mono demo-tag" style="color:var(--lime)">Planning</span>
+              <h3 id="mppi-title">MPPI playground</h3>
+              <p class="demo-lede">A robot plans by rolling out hundreds of noisy futures and averaging them by cost. Tap to set a goal.</p>
+              <ul class="demo-head" aria-label="Headline numbers"><li>256 rollouts</li><li>2.6 s horizon</li><li>20 Hz</li></ul>
+              <p class="demo-ctx"><span class="mono">From my work</span> Planning &amp; prediction, which I led at <a href="#xp-mz">Minus Zero (ZPod)</a>.</p>
+              <div class="controls">
+                <button class="btn btn-lime" type="button" data-act="goal">New goal</button>
+                <button class="btn btn-cream" type="button" data-act="scatter">Shuffle obstacles</button>
+                <button class="btn btn-ghost" type="button" data-act="reset">Reset</button>
+              </div>
+              <p class="demo-msg demo-live" data-out="msg" aria-live="polite"></p>
+              <details class="demo-more">
+                <summary>How it works · numbers</summary>
+                <p>256 noisy control sequences are rolled out over a 2.6 s horizon, 20 times a second. Each is scored for goal progress and clearance. The plan (coral) is their cost-weighted average. Lime rollouts are cheap, violet ones are expensive.</p>
+              </details>
+            </div>
           </article>
 
           <!-- Demo: SCARA arm, learned reaching policy vs IK planner -->
-          <article class="card demo reveal" data-demo="scara" aria-labelledby="scara-title">
+          <article class="card demo demo-tiled reveal" data-demo="scara" aria-labelledby="scara-title">
             <div class="demo-stage">
               <canvas width="1000" height="600" style="--ar: 5 / 3" aria-label="Top view of two overlaid two-link SCARA arms on one base: a learned reaching policy and an inverse-kinematics planner. Tap to set a target for both, drag the obstacle to move it." role="img"></canvas>
               <span class="demo-hint mono">Loading demo…</span>
             </div>
-            <div class="demo-side">
-              <span class="mono demo-tag" style="color:var(--lime)">Manipulation · RL</span>
-              <h3 id="scara-title">Reach around it</h3>
-              <p>Two SCARA arms from above on one base, sent to the same target. Lime: a small neural network trained offline with evolution strategies to command joint speeds; it sees the obstacle and the analytic IK goal poses, and dodges the obstacle as it goes. Peach: analytic inverse kinematics with a minimum-jerk profile, and A* in configuration space (inset) when the straight move would hit the obstacle. Both obey the same joint speed and acceleration limits. Training script: <code>tools/train_scara.py</code>.</p>
-              <div class="controls">
-                <button class="btn btn-lime" type="button" data-act="target">Random target</button>
-                <button class="btn btn-ghost" type="button" data-act="elbow" aria-pressed="false">IK elbow: left</button>
-                <button class="btn btn-ghost" type="button" data-act="obstacle" aria-pressed="true">Obstacle</button>
-                <button class="btn btn-ghost" type="button" data-act="reset">Reset</button>
-              </div>
-              <p class="demo-msg demo-note" data-out="policy" aria-live="polite"></p>
-              <p class="demo-msg" data-out="msg" aria-live="polite"></p>
+            <div class="demo-tiles">
               <p class="vs-key mono"><span class="vs-a">Learned policy</span><span class="vs-b">IK planner · <span data-out="plan">–</span></span></p>
               <dl class="stats">
                 <div class="stat"><dt>Reach time</dt><dd class="vs-pair"><span class="vs-a" data-out="reach-a">–</span><span class="vs-b" data-out="reach-b">–</span></dd></div>
@@ -244,18 +405,47 @@
                 <div class="stat"><dt>Obstacle hits</dt><dd class="vs-pair"><span class="vs-a" data-out="hit-a">–</span><span class="vs-b" data-out="hit-b">–</span></dd></div>
               </dl>
             </div>
+            <div class="demo-side">
+              <span class="mono demo-tag" style="color:var(--lime)">Manipulation · RL</span>
+              <h3 id="scara-title">Reach around it</h3>
+              <p class="demo-lede">A learned policy (lime) and IK + A* (peach) reach for the same target. Tap to set one.</p>
+              <ul class="demo-head" data-out="head" aria-label="Headline numbers"><li>100% reach</li><li>1.56 s vs IK 1.82 s</li><li>touches 6.8% vs IK 0%</li></ul>
+              <p class="demo-ctx"><span class="mono">From my work</span> <a href="#xp-clutter">Clutterbot</a> (bin localization, FSM control); <a href="#xp-griffin">working on Mega</a> at Griffin Labs.</p>
+              <div class="controls">
+                <button class="btn btn-lime" type="button" data-act="target">Random target</button>
+                <button class="btn btn-ghost" type="button" data-act="elbow" aria-pressed="false">IK elbow: left</button>
+                <button class="btn btn-ghost" type="button" data-act="obstacle" aria-pressed="true">Obstacle</button>
+                <button class="btn btn-ghost" type="button" data-act="reset">Reset</button>
+              </div>
+              <p class="demo-msg demo-live" data-out="msg" aria-live="polite"></p>
+              <details class="demo-more">
+                <summary>How it works · numbers</summary>
+                <p>Two SCARA arms from above on one base, sent to the same target. Lime: a small neural network trained offline with evolution strategies to command joint speeds; it sees the obstacle and the analytic IK goal poses, and dodges the obstacle as it goes. Peach: analytic inverse kinematics with a minimum-jerk profile, and A* in configuration space (inset) when the straight move would hit the obstacle. Both obey the same joint speed and acceleration limits. Training script: <code>tools/train_scara.py</code>.</p>
+                <p class="demo-note" data-out="policy" aria-live="polite"></p>
+              </details>
+            </div>
           </article>
 
           <!-- Demo 3: DVL dropout -->
-          <article class="card demo reveal" data-demo="dvl" aria-labelledby="dvl-title">
+          <article class="card demo demo-tiled tiles-right reveal" data-demo="dvl" aria-labelledby="dvl-title">
             <div class="demo-stage">
               <canvas width="1000" height="733" style="--ar: 15 / 11" aria-label="Underwater dead-reckoning simulation comparing estimated and true paths." role="img"></canvas>
               <span class="demo-hint mono">Loading demo…</span>
             </div>
+            <div class="demo-tiles">
+              <dl class="stats">
+                <div class="stat"><dt>Error now</dt><dd data-out="err">–</dd></div>
+                <div class="stat"><dt>2σ bound</dt><dd data-out="sig">–</dd></div>
+                <div class="stat"><dt>Max err, dark</dt><dd data-out="max">–</dd></div>
+                <div class="stat"><dt>Sim time</dt><dd data-out="t">–</dd></div>
+              </dl>
+            </div>
             <div class="demo-side">
               <span class="mono demo-tag" style="color:var(--lime)">Underwater</span>
               <h3 id="dvl-title">Lights out</h3>
-              <p>A Kalman filter integrates a biased accelerometer and corrects it with velocity from the camera and/or a DVL. Black out the camera with and without the DVL and watch the estimate (coral) leave the true path (cream). A toy model of the idea behind <a href="https://github.com/Blackcipher101/uw-vio-dvl">uw-vio-dvl</a>.</p>
+              <p class="demo-lede">Black out the camera and watch a Kalman filter drift, with and without a DVL.</p>
+              <ul class="demo-head" aria-label="Headline numbers"><li>Kalman filter</li><li>20 s blackout</li><li>camera + DVL</li></ul>
+              <p class="demo-ctx"><span class="mono">From my work</span> The idea behind <a href="https://github.com/Blackcipher101/uw-vio-dvl">uw-vio-dvl</a>: VIO with a tightly coupled DVL.</p>
               <div class="controls">
                 <button class="btn btn-ghost" type="button" data-act="camera" aria-pressed="true">Camera</button>
                 <button class="btn btn-ghost" type="button" data-act="dvl" aria-pressed="false">DVL</button>
@@ -268,36 +458,42 @@
                 <span><i style="background:#ff6b57;height:5px"></i>camera dark</span>
                 <span><i style="background:#7d70ff"></i>2σ</span>
               </div>
-              <dl class="stats">
-                <div class="stat"><dt>Error now</dt><dd data-out="err">–</dd></div>
-                <div class="stat"><dt>2σ bound</dt><dd data-out="sig">–</dd></div>
-                <div class="stat"><dt>Max err, dark</dt><dd data-out="max">–</dd></div>
-                <div class="stat"><dt>Sim time</dt><dd data-out="t">–</dd></div>
-              </dl>
+              <details class="demo-more">
+                <summary>How it works · numbers</summary>
+                <p>A Kalman filter integrates a biased accelerometer and corrects it with velocity from the camera and/or a DVL. Black out the camera with and without the DVL and watch the estimate (coral) leave the true path (cream). A toy model of the idea behind <a href="https://github.com/Blackcipher101/uw-vio-dvl">uw-vio-dvl</a>.</p>
+              </details>
             </div>
           </article>
           <!-- Demo: sonar obstacle avoidance -->
-          <article class="card demo reveal" data-demo="sonar" aria-labelledby="sonar-title">
+          <article class="card demo demo-tiled reveal" data-demo="sonar" aria-labelledby="sonar-title">
             <div class="demo-stage">
               <canvas width="1000" height="625" style="--ar: 8 / 5" aria-label="Top view of an ROV avoiding pillars with a sonar fan. Tap to set a goal, drag pillars to move them." role="img"></canvas>
               <span class="demo-hint mono">Loading demo…</span>
             </div>
-            <div class="demo-side">
-              <span class="mono demo-tag" style="color:var(--lime)">Sonar navigation</span>
-              <h3 id="sonar-title">Feel the way</h3>
-              <p>An ROV sees only a noisy sonar fan. Echoes build a certainty grid (violet), a vector field histogram (ring) marks blocked directions in coral, and the ROV steers into the free gap closest to the goal. This is a VFH planner; the RL version of this task in <a href="https://github.com/Blackcipher101/rov-rl-mujoco">rov-rl-mujoco</a> is still training.</p>
-              <div class="controls">
-                <button class="btn btn-lime" type="button" data-act="shuffle">Shuffle pillars</button>
-                <button class="btn btn-ghost" type="button" data-act="current" aria-pressed="false">Cross-current</button>
-                <button class="btn btn-ghost" type="button" data-act="reset">Reset</button>
-              </div>
-              <p class="demo-msg">Tap to set a goal. Drag a pillar to move it. Turn on the cross-current to see what an unmodelled disturbance does.</p>
+            <div class="demo-tiles">
               <dl class="stats">
                 <div class="stat"><dt>Goals reached</dt><dd data-out="goals">0</dd></div>
                 <div class="stat"><dt>Collisions</dt><dd data-out="hits">0</dd></div>
                 <div class="stat"><dt>Min clearance</dt><dd data-out="clear">–</dd></div>
                 <div class="stat"><dt>Speed</dt><dd data-out="v">–</dd></div>
               </dl>
+            </div>
+            <div class="demo-side">
+              <span class="mono demo-tag" style="color:var(--lime)">Sonar navigation</span>
+              <h3 id="sonar-title">Feel the way</h3>
+              <p class="demo-lede">An ROV that sees only a noisy sonar fan steers to your goal with a VFH planner. Tap to set a goal.</p>
+              <ul class="demo-head" aria-label="Headline numbers"><li>VFH planner</li><li>sonar only</li><li>certainty grid</li></ul>
+              <p class="demo-ctx"><span class="mono">From my work</span> <a href="https://github.com/Blackcipher101/rov-rl-mujoco">rov-rl-mujoco</a>: an RL controller learning this task in MuJoCo.</p>
+              <div class="controls">
+                <button class="btn btn-lime" type="button" data-act="shuffle">Shuffle pillars</button>
+                <button class="btn btn-ghost" type="button" data-act="current" aria-pressed="false">Cross-current</button>
+                <button class="btn btn-ghost" type="button" data-act="reset">Reset</button>
+              </div>
+              <details class="demo-more">
+                <summary>How it works · numbers</summary>
+                <p>An ROV sees only a noisy sonar fan. Echoes build a certainty grid (violet), a vector field histogram (ring) marks blocked directions in coral, and the ROV steers into the free gap closest to the goal. This is a VFH planner; the RL version of this task in <a href="https://github.com/Blackcipher101/rov-rl-mujoco">rov-rl-mujoco</a> is still training.</p>
+                <p>Tap to set a goal. Drag a pillar to move it. Turn on the cross-current to see what an unmodelled disturbance does.</p>
+              </details>
             </div>
           </article>
 
@@ -367,7 +563,7 @@
       <div class="wrap">
         <div class="sec-head reveal">
           <div>
-            <span class="mono">03 / Open source</span>
+            <span class="mono"><span class="sec-n"></span> / Open source</span>
             <h2 id="work-title">Current<br>projects</h2>
           </div>
           <p>Underwater perception and estimation, with results measured against ground truth. Negative results are published too.</p>
@@ -457,7 +653,7 @@
             </figure>
             <div class="proj-body">
               <h3>turtlebot_autonomy</h3>
-              <p>ROS 2 Humble stack on TurtleBot3: exploration + SLAM, a custom C++ RRT* Nav2 planner plugin, Isaac Sim. Semantic navigation (Grounding DINO + CLIP) is implemented but not fully tested end to end.</p>
+              <p>ROS 2 Humble on TurtleBot3: exploration + SLAM, a custom C++ RRT* Nav2 planner plugin, Isaac Sim. Semantic navigation (Grounding DINO + CLIP): not yet tested end to end.</p>
               <div class="metric"><strong>RRT*</strong><span>custom Nav2 plugin in C++ · Docker image</span></div>
             </div>
           </a>
@@ -479,138 +675,6 @@
             <a class="btn btn-ghost" href="https://github.com/Blackcipher101">All repositories on GitHub</a>
           </div>
         </div>
-      </div>
-    </section>
-
-    <!-- ================= EXPERIENCE ================= -->
-    <section class="sec" id="experience" aria-labelledby="xp-title">
-      <div class="wrap">
-        <div class="sec-head reveal">
-          <div>
-            <span class="mono">04 / Experience</span>
-            <h2 id="xp-title">Where I've<br>built robots</h2>
-          </div>
-          <p class="xp-places">Worked in: Singapore · Bengaluru</p>
-        </div>
-        <ol class="xp">
-          <li class="card job xp-griffin has-art reveal" data-job="griffin">
-            <div class="art art-frames">
-              <figure class="photo frame-a">
-                <img src="assets/img/griffin-t1.webp" width="640" height="383" loading="lazy" decoding="async" alt="LionsBot T1, a mobile robot with an arm for restroom cleaning, in a shopping mall">
-                <figcaption class="mono">TCR (LionsBot T1) · Image: Griffin Labs</figcaption>
-              </figure>
-              <figure class="photo frame-b">
-                <img src="assets/img/griffin-mega.webp" width="640" height="427" loading="lazy" decoding="async" alt="Mega robotic workcell: two robot arms sorting dishes into racks">
-                <figcaption class="mono">Mega workcell · Image: Griffin Labs</figcaption>
-              </figure>
-            </div>
-            <div class="txt">
-              <p class="when mono"><span class="live">Sep 2026 – now</span></p>
-              <h3>Autonomy Engineer</h3>
-              <p class="org">Griffin Labs · Singapore</p>
-              <p class="what">Building generalisable autonomy. Working on TCR and Mega.</p>
-            </div>
-          </li>
-
-          <li class="card card-lime job xp-aeroarc has-art reveal" data-job="aeroarc">
-            <div class="art art-duo">
-              <figure class="cut cut-vira">
-                <img src="assets/img/aeroarc-vira.webp" width="720" height="477" loading="lazy" decoding="async" alt="VIRA, a tracked electric ground robot with a cargo rail deck">
-                <figcaption class="mono">VIRA · Photo: Aeroarc</figcaption>
-              </figure>
-              <figure class="cut cut-mule">
-                <img src="assets/img/aeroarc-arcv-mule.webp" width="720" height="627" loading="lazy" decoding="async" alt="ARCV MULE, a Ghost Robotics quadruped robot with a sensor head">
-                <figcaption class="mono">ARCV MULE · Photo: Aeroarc</figcaption>
-              </figure>
-            </div>
-            <div class="txt">
-              <p class="when mono">Sep 2025 – Aug 2026</p>
-              <h3>Senior Robotics Engineer</h3>
-              <p class="org">Aeroarc · Bengaluru</p>
-              <p class="what">India's defence robotics: the VIRA tracked UGV and the ARCV MULE quadruped.</p>
-            </div>
-          </li>
-
-          <li class="card job xp-bytes has-art reveal" data-job="bytes">
-            <figure class="cut cut-stereo">
-              <img src="assets/img/stereo-devkit.svg" width="600" height="480" loading="lazy" decoding="async" alt="Illustration of a compact stereo camera dev kit: one box with two cameras side by side">
-              <figcaption class="mono">Stereo camera dev kit · Illustration</figcaption>
-            </figure>
-            <div class="txt">
-              <p class="when mono">Aug 2024 – Aug 2025</p>
-              <h3>Founding member · Robotics &amp; AI</h3>
-              <p class="org">BYTES · Bengaluru</p>
-              <p class="what" data-pt="bytes-lead">Led tech and product. Built a dev kit: one box, two cameras.</p>
-              <ul class="pts">
-                <li data-pt="raise">Raised $500K.</li>
-                <li data-pt="demo">Built the product and ran a public demo.</li>
-                <li data-pt="accel">Selected for the Entrepreneur First (EF) cohort and YC Startup School.</li>
-              </ul>
-            </div>
-          </li>
-
-          <li class="card card-warm job xp-mz has-art reveal" data-job="mz">
-            <figure class="photo">
-              <img src="assets/img/zpod-zday-2023.webp" width="720" height="405" loading="lazy" decoding="async" alt="The ZPod autonomous pod parked in front of a Minus Zero zDay 2023 banner">
-              <figcaption class="mono">ZPod at zDay 2023 · Photo: Minus Zero, via EVreporter</figcaption>
-            </figure>
-            <div class="txt">
-              <p class="when mono roles"><span>Mar 2023 – Sep 2024 · Head of Planning &amp; Prediction</span><span>Jun 2022 – Mar 2023 · Founding Engineer, Autonomy</span></p>
-              <h3>Minus Zero · ZPod</h3>
-              <p class="org">Bengaluru</p>
-              <p class="what" data-pt="zero">Took ZPod, India's first autonomous vehicle (launched at zDay 2023), from zero to 100k+ lines of production code.</p>
-              <ul class="pts">
-                <li data-pt="series">Grew with the company from pre-seed to Series A.</li>
-                <li data-pt="sim">Simulation pipeline and an India-specific AV simulator.</li>
-                <li data-pt="ue">Agentic Unreal Engine pipeline to build photorealistic simulators.</li>
-                <li data-pt="ci">Closed-loop CI/CD.</li>
-                <li data-pt="ga">Genetic-algorithm and actor-critic PID tuning.</li>
-                <li data-pt="rl">H-GAIL and PPO for RL driving.</li>
-                <li data-pt="dw">NVIDIA DriveWorks.</li>
-              </ul>
-            </div>
-          </li>
-
-          <li class="card card-cream job xp-phi has-art reveal" data-job="phi">
-            <figure class="cut cut-phi">
-              <img src="assets/img/phicode-phiscan.webp" width="560" height="509" loading="lazy" decoding="async" alt="PhiSCAN, a handheld 360-degree rotating LiDAR scanner with a camera and a top handle">
-              <figcaption class="mono">PhiSCAN · Photo: Phicode</figcaption>
-            </figure>
-            <div class="txt">
-              <p class="when mono">Also built</p>
-              <h3>PhiSCAN 3D scanner</h3>
-              <p class="org">Phicode · Bengaluru</p>
-              <p class="what">360° rotating LiDAR system that turns field scans into colourised, georeferenced point clouds.</p>
-            </div>
-          </li>
-
-          <li class="card job xp-clutter reveal" data-job="clutter">
-            <svg class="xp-art" viewBox="0 0 120 120" aria-hidden="true"><rect x="20" y="20" width="80" height="80" fill="none" stroke="currentColor" stroke-width="1"/><g fill="currentColor" opacity=".55"><rect x="30" y="30" width="20" height="20"/><rect x="70" y="30" width="20" height="10"/><rect x="50" y="50" width="20" height="20"/><rect x="30" y="70" width="10" height="20"/><rect x="70" y="70" width="20" height="20"/></g><path d="M0 110L120 10" stroke="#7d70ff" stroke-width="1" stroke-dasharray="3 4"/></svg>
-            <p class="when mono">Oct 2021 – Jun 2022</p>
-            <h3>Robotics Intern</h3>
-            <p class="org">Clutterbot (via In2peta Robotics)</p>
-            <ul class="pts">
-              <li data-pt="yolo">YOLOv5 + SolvePnP bin localization (+5% accuracy).</li>
-              <li data-pt="fsm">FSM control and ArUco docking.</li>
-              <li data-pt="lead">Led two interns.</li>
-            </ul>
-          </li>
-
-          <li class="card card-violet job xp-edu reveal" data-job="edu">
-            <div class="edu-col">
-              <p class="when mono">Education</p>
-              <h3>B.Tech ELC (Robotics)</h3>
-              <p class="org">Amrita Vishwa Vidyapeetham</p>
-            </div>
-            <div class="edu-col">
-              <p class="when mono">Summer schools</p>
-              <ul class="pts">
-                <li data-pt="mlss">Machine Learning Summer School, Genoa, Italy</li>
-                <li data-pt="eeml">EEML (Eastern European Machine Learning Summer School), Budapest</li>
-              </ul>
-            </div>
-          </li>
-        </ol>
       </div>
     </section>
 

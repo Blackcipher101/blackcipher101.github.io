@@ -10,7 +10,7 @@
 // assets/data/scara-policy.json; the plant and observation here mirror that script exactly.
 // The policy observes the obstacle (it was trained with random obstacles and a contact penalty);
 // its contacts are counted in the demo, not prevented by the simulation.
-import { View, Loop, COLORS, clamp } from './common.js?v=20261106j';
+import { View, Loop, COLORS, clamp, setHeadline } from './common.js?v=20261106k';
 
 export const ARM = {
   base: [0.62, 0.6],               // m, world position of joint 1
@@ -544,6 +544,8 @@ export function mount(root) {
       `Held-out seeded tasks, ${e.free.trials} per set (with an obstacle, only tasks that have a collision-free path), learned vs IK + A*: ` +
       `${row('no obstacle', e.free, K.free, false)}; ${row('random obstacle', e.random, K.random, true)}; ` +
       `${row('this obstacle', e.demo, K.demo, true)}.` + bySector(e.demo.by_bearing);
+    setHeadline(root, [`${pct(e.free.success, e.free.trials)} reach`, `${e.free.median_s} s vs IK ${K.free.median_s} s`,
+      `touches ${pct(e.demo.touch, e.demo.trials)} vs IK ${pct(K.demo.touch, K.demo.trials)}`]);
   }
 
   // pointer: tap = target; drag the obstacle to move it (a move that would overlap the IK arm is refused)

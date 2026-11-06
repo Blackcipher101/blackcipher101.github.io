@@ -159,3 +159,10 @@ export function gaussFrom(rand) {
   while (u === 0) u = rand();
   return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * rand());
 }
+
+/** Replace the headline chips of a demo card (<ul data-out="head">) with the given texts. */
+export function setHeadline(root, items) {
+  const ul = root.querySelector('[data-out="head"]');
+  if (!ul) return;
+  ul.replaceChildren(...items.map((t) => { const li = document.createElement('li'); li.textContent = t; return li; }));
+}

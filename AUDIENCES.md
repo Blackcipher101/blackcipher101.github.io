@@ -12,6 +12,7 @@ The "Who's visiting?" bar re-tailors the page in the browser. It has no backend 
   - the projects intro
   - which project cards show and in what order (at most 6, most relevant first)
   - which demos show and in what order (4 of the 8, the featured one first; the general page shows all 8)
+  - the order of the Experience, Demos and Projects sections (with their 02/03/04 numbers and the nav links)
   - which experience cards get a "Relevant" badge, and which bullets are bolded
   - a one-line pitch in the "Viewing as" bar
 - **Copy rule:** all preset copy repeats claims already on the page or in the repo READMEs. Nothing is added.
@@ -31,6 +32,19 @@ The "Who's visiting?" bar re-tailors the page in the browser. It has no backend 
 | `recruiter` | Recruiter / hiring manager | the timeline in one paragraph, a skills line, contact |
 
 These nine cover the kinds of reader the work actually serves: company stage (startup, enterprise), domain (underwater, AV, defence, inspection), robot type (embodied/humanoid, legged), and role (recruiting). A domain that has no matching work behind it has no preset.
+
+## Section order
+
+| Group | Presets | Order after the hero |
+|---|---|---|
+| `base` | general page, `underwater`, `av`, `defence`, `inspection` | Experience → Demos → Projects |
+| `proof` | `recruiter`, `enterprise` | Experience → Projects → Demos |
+| `play` | `embodied`, `legged`, `startup` | Demos → Experience → Projects |
+
+Each preset names its group in `sections` in `assets/js/audience.js`. An inline script in the `<head>` of
+`index.html` picks the same group from `?for=` or storage before first paint. CSS (`html[data-order]`) then
+places and numbers the sections, so nothing moves after the page appears. `audience.js` checks that the two
+agree, moves the sections in the DOM so keyboard order matches, and animates the change when a chip is picked.
 
 ## Featured demos
 

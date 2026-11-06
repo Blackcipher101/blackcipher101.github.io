@@ -9,7 +9,7 @@
 // same angular velocity, a tap flicks both the same way, and a drag pulls each pole tip
 // toward the same point relative to its own rail.
 // theta = 0 is upright; positive theta leans the pole toward +x.
-import { View, Loop, COLORS, clamp } from './common.js?v=20261106j';
+import { View, Loop, COLORS, clamp, setHeadline } from './common.js?v=20261106k';
 
 const POLICY_URL = new URL('../../data/cartpole-policy.json', import.meta.url);
 POLICY_URL.search = new URL(import.meta.url).search;
@@ -306,6 +306,9 @@ export function mount(root) {
     out('policy').textContent =
       `Top, learned policy: ${data.params} params, trained with evolution strategies for ${tr.episodes.toLocaleString('en')} simulated episodes, seed ${tr.seed}. ` +
       `Bottom, classical energy swing-up then LQR near the top. Offline over ${e.trials} seeded swing-ups from hanging: learned ${res(e.learned)}; classical ${res(e.classical)}.`;
+    const L = e.learned, C = e.classical;
+    setHeadline(root, [`swing-up ${L.median_s} s vs ${C.median_s} s`, `${L.success}/${e.trials} vs ${C.success}/${e.trials} swing-ups`,
+      `push recovery ${Math.round(L.push_recovery * 100)}% vs ${Math.round(C.push_recovery * 100)}%`]);
   }
 
   // pointer: a drag pulls both pole tips toward the same point relative to their rails; a tap flicks

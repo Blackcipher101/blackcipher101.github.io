@@ -6,10 +6,18 @@
 // - A preset changes: hero pill/headline/lede, the projects intro, which project cards
 //   show and in what order (max 6), which demos show and in what order, and which experience cards and
 //   bullets are marked as relevant. All copy repeats claims already made on the page.
+// - Section order: `sections` picks a group (SECTION_ORDER). The inline script in index.html's <head>
+//   applies the same group before first paint (no layout shift); init() checks the two agree.
 // Rationale for the preset list and keyword sets: AUDIENCES.md.
 
 const STORAGE_KEY = 'nn-audience';
 const MAX_PROJECTS = 6;
+/** Visible order of the reorderable sections per group; CSS (html[data-order]) places and numbers them. */
+export const SECTION_ORDER = {
+  base: ['experience', 'demos', 'work'],
+  proof: ['experience', 'work', 'demos'],
+  play: ['demos', 'experience', 'work'],
+};
 const hasDom = typeof document !== 'undefined';
 const reduceMotion = hasDom && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -24,6 +32,7 @@ export const PRESETS = {
     work: 'Shipped, measured side projects across estimation, RL and simulation.',
     projects: ['vio', 'humanoid', 'rov', 'q14', 'inspect', 'klt'],
     demos: ['mppi', 'cartpole', 'scara', 'slam'],
+    sections: 'play',
     jobs: ['mz', 'bytes', 'griffin'],
     points: ['zero', 'series', 'raise', 'demo', 'accel'],
   },
@@ -36,6 +45,7 @@ export const PRESETS = {
     work: 'Benchmarked against ground truth, with the evaluation scripts in each repo.',
     projects: ['vio', 'klt', 'bench', 'calib', 'inspect', 'tb3'],
     demos: ['scara', 'slam', 'mppi', 'dvl'],
+    sections: 'proof',
     jobs: ['mz', 'griffin', 'aeroarc'],
     points: ['zero', 'series', 'ci', 'sim'],
   },
@@ -48,6 +58,7 @@ export const PRESETS = {
     work: 'Underwater perception and estimation, with results measured against ground truth. Negative results are published too.',
     projects: ['vio', 'rov', 'klt', 'calib', 'inspect', 'bench'],
     demos: ['dvl', 'sonar', 'slam', 'mppi'],
+    sections: 'base',
     jobs: [],
     points: [],
   },
@@ -60,6 +71,7 @@ export const PRESETS = {
     work: 'RL, simulation and VLM projects, each with its evaluation.',
     projects: ['humanoid', 'rov', 'q14', 'inspect', 'vio', 'tb3'],
     demos: ['cartpole', 'standoff', 'scara', 'mppi'],
+    sections: 'play',
     jobs: ['griffin', 'mz', 'aeroarc', 'edu'],
     points: ['rl', 'ue', 'sim', 'mlss', 'eeml'],
   },
@@ -72,6 +84,7 @@ export const PRESETS = {
     work: 'Planning, SLAM and estimation projects outside work.',
     projects: ['tb3', 'vio', 'klt', 'bench', 'q14', 'rov'],
     demos: ['mppi', 'slam', 'cartpole', 'dvl'],
+    sections: 'base',
     jobs: ['mz', 'bytes'],
     points: ['zero', 'sim', 'ue', 'ci', 'ga', 'rl', 'dw'],
   },
@@ -84,6 +97,7 @@ export const PRESETS = {
     work: 'Estimation that survives sensor dropout, measured against ground truth.',
     projects: ['vio', 'calib', 'klt', 'q14', 'tb3', 'bench'],
     demos: ['boxtrack', 'sonar', 'standoff', 'dvl'],
+    sections: 'base',
     jobs: ['aeroarc', 'mz'],
     points: ['sim', 'ci'],
   },
@@ -96,6 +110,7 @@ export const PRESETS = {
     work: 'Inspection and calibration tooling, measured on real dive data.',
     projects: ['inspect', 'calib', 'vio', 'bench', 'klt', 'tb3'],
     demos: ['scara', 'slam', 'sonar', 'dvl'],
+    sections: 'base',
     jobs: ['phi', 'griffin', 'clutter'],
     points: ['yolo', 'fsm'],
   },
@@ -108,6 +123,7 @@ export const PRESETS = {
     work: 'Locomotion, dynamics and RL projects.',
     projects: ['humanoid', 'q14', 'rov', 'tb3', 'vio', 'klt'],
     demos: ['cartpole', 'scara', 'mppi', 'slam'],
+    sections: 'play',
     jobs: ['aeroarc', 'mz'],
     points: ['rl', 'ga'],
   },
@@ -120,6 +136,7 @@ export const PRESETS = {
     work: 'A short list of public projects, each with measured results.',
     projects: ['vio', 'humanoid', 'rov', 'q14', 'klt', 'inspect'],
     demos: ['slam', 'cartpole', 'scara', 'mppi'],
+    sections: 'proof',
     jobs: ['griffin', 'aeroarc', 'bytes', 'mz'],
     points: ['zero', 'series', 'raise', 'accel', 'ci', 'lead', 'mlss', 'eeml'],
   },
@@ -297,7 +314,29 @@ function init() {
     // 4. experience emphasis
     $$('[data-job]').forEach((el) => el.classList.toggle('is-feature', !!p && p.jobs.includes(el.dataset.job)));
     $$('[data-pt]').forEach((el) => el.classList.toggle('is-key', !!p && p.points.includes(el.dataset.pt)));
+    // 5. section order (+ numbers and nav, via CSS)
+    setSections(p ? p.sections : 'base', animate);
     document.documentElement.dataset.audience = id || 'general';
+  }
+
+  /** Apply a section-order group: CSS places the sections; the DOM is moved to match so tab order follows. */
+  function setSections(group, animate) {
+    const ids = SECTION_ORDER[group] || SECTION_ORDER.base;
+    const secs = ids.map((k) => document.getElementById(k)).filter(Boolean);
+    const contact = document.getElementById('contact');
+    const before = new Map(secs.map((el) => [el, el.getBoundingClientRect().top]));
+    const html = document.documentElement;
+    const inOrder = secs.every((el, i) => i === 0 || secs[i - 1].compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING);
+    if (html.dataset.order === group && inOrder) return;
+    html.dataset.order = group;
+    for (const el of secs) el.parentNode.insertBefore(el, contact);
+    if (!animate) return;
+    for (const el of secs) {
+      const dy = before.get(el) - el.getBoundingClientRect().top;
+      if (Math.abs(dy) < 1) continue;
+      el.animate([{ transform: `translateY(${dy}px)`, opacity: 0.6 }, { transform: 'none', opacity: 1 }],
+        { duration: 520, easing: 'cubic-bezier(.2,.7,.2,1)' });
+    }
   }
 
   /** Move children into `order` (others hidden), animating position changes (FLIP). */
@@ -350,7 +389,11 @@ function init() {
     try { initial = localStorage.getItem(STORAGE_KEY); } catch (_) { initial = null; }
     if (initial && !PRESETS[initial]) initial = null;
   }
+  const expected = initial ? PRESETS[initial].sections : 'base';
+  if (document.documentElement.dataset.order !== expected) {
+    console.warn(`[audience] <head> chose section order "${document.documentElement.dataset.order}", expected "${expected}"; correcting`);
+  }
   if (initial) choose(initial, { source: 'load', animate: false });
-  else showAsk(true);
+  else { setSections('base', false); showAsk(true); }
 
 }

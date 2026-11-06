@@ -233,6 +233,20 @@ ul { margin: 0; padding: 0; list-style: none; }
 
 /* ---------- sections ---------- */
 section { scroll-margin-top: 80px; }
+/* Section order per audience group (html[data-order], set by an inline <head> script before first paint,
+   re-applied by audience.js). base = Experience, Demos, Projects (the HTML order); proof = Experience,
+   Projects, Demos; play = Demos, Experience, Projects. Section numbers and nav links follow. */
+main { display: flex; flex-direction: column; }
+#top { order: 0; } #experience { order: 1; } #demos { order: 2; } #work { order: 3; } #contact { order: 9; }
+html[data-order="proof"] #work { order: 2; } html[data-order="proof"] #demos { order: 3; }
+html[data-order="play"] #demos { order: 1; } html[data-order="play"] #experience { order: 2; }
+#experience .sec-n::before { content: "02"; } #demos .sec-n::before { content: "03"; } #work .sec-n::before { content: "04"; }
+html[data-order="proof"] #work .sec-n::before { content: "03"; } html[data-order="proof"] #demos .sec-n::before { content: "04"; }
+html[data-order="play"] #demos .sec-n::before { content: "02"; } html[data-order="play"] #experience .sec-n::before { content: "03"; }
+.nav-links a[href="#experience"] { order: 1; } .nav-links a[href="#demos"] { order: 2; } .nav-links a[href="#work"] { order: 3; } .nav-links .nav-cta { order: 9; }
+html[data-order="proof"] .nav-links a[href="#work"] { order: 2; } html[data-order="proof"] .nav-links a[href="#demos"] { order: 3; }
+html[data-order="play"] .nav-links a[href="#demos"] { order: 1; } html[data-order="play"] .nav-links a[href="#experience"] { order: 2; }
+.job { scroll-margin-top: 90px; }
 .sec { padding: 72px 0 0; }
 .sec-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 16px 32px; margin-bottom: 22px; }
 .sec-head h2 { font-size: clamp(34px, 5vw, 64px); }
@@ -252,6 +266,40 @@ section { scroll-margin-top: 80px; }
 .demo-msg { min-height: 3em; color: var(--cream) !important; }
 .demo-note { font-size: 13px !important; }
 .demo-side code { font-family: var(--mono); font-size: .9em; }
+/* compact demo cards: one-line lede, headline chips, a "from my work" line, then controls and live
+   tiles; the method, numbers and caveats sit in a closed <details> so the column stays canvas-high */
+.demo-side { gap: 12px; }
+.demo-side .demo-lede { color: var(--cream); font-size: 15px; line-height: 1.45; }
+.demo-head { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.demo-head li { font-family: var(--mono); font-size: 12px; line-height: 1.2; padding: 5px 9px; border-radius: 999px;
+  border: 1px solid rgba(217, 244, 91, .45); color: var(--lime); font-variant-numeric: tabular-nums; }
+.demo-side .demo-ctx { font-size: 13px; line-height: 1.45; }
+.demo-ctx .mono { color: var(--peach); font-size: 11px; margin-right: 6px; }
+.demo-ctx a { color: var(--cream); text-decoration: underline; text-decoration-color: rgba(244, 239, 228, .35); text-underline-offset: 3px; }
+.demo-ctx a:hover { text-decoration-color: var(--lime); }
+.demo-side .demo-live { min-height: 2.9em; font-size: 13px; line-height: 1.45; }
+.demo-more { border-top: 1px solid var(--line-dark); padding-top: 6px; }
+.demo-more summary { display: flex; align-items: center; gap: 8px; min-height: 36px; cursor: pointer; list-style: none;
+  font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.demo-more summary::-webkit-details-marker { display: none; }
+.demo-more summary::before { content: "+"; display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 50%;
+  border: 1px solid currentColor; font-size: 14px; line-height: 1; }
+.demo-more[open] summary::before { content: "–"; }
+.demo-more summary:hover, .demo-more[open] summary { color: var(--cream); }
+.demo-more > p { margin-top: 8px; font-size: 14px; }
+/* tiled cards: live tiles under the canvas (left column), text + controls on the right */
+.demo-tiled { grid-template-rows: auto 1fr; align-items: start; }
+.demo-tiled > .demo-stage { grid-column: 1; grid-row: 1; }
+.demo-tiled > .demo-tiles { grid-column: 1; grid-row: 2; display: grid; gap: 8px; padding: 0 2px 2px; }
+.demo-tiled > .demo-side { grid-column: 2; grid-row: 1 / span 2; }
+.demo-tiles .stats { grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 0; }
+.demo-tiles .vs-key { margin-bottom: 0; }
+/* tall canvases (cart-pole, DVL): the tiles fit under the text in the right column instead */
+.demo-tiled.tiles-right { grid-template-rows: auto 1fr; }
+.demo-tiled.tiles-right > .demo-stage { grid-row: 1 / span 2; }
+.demo-tiled.tiles-right > .demo-side { grid-column: 2; grid-row: 1; }
+.demo-tiled.tiles-right > .demo-tiles { grid-column: 2; grid-row: 2; align-self: end; padding: 0 10px 10px 0; }
+.tiles-right .demo-tiles .stats { grid-template-columns: 1fr 1fr; }
 /* Demo numbers follow the visible order, which audience presets change. */
 #demos .bento { counter-reset: demo; }
 #demos .demo:not([hidden]) { counter-increment: demo; }
@@ -414,6 +462,13 @@ footer { padding: 40px 0 48px; color: var(--muted); font-size: 14px; }
   .proj-wide { grid-column: span 12; }
   .demo { grid-template-columns: 1fr; }
   .demo-side { padding: 4px 6px 6px; }
+  .demo-tiled { grid-template-rows: none; }
+  .demo-tiled > .demo-side { grid-column: 1; grid-row: 2; }
+  .demo-tiled > .demo-tiles { grid-row: 3; padding: 0 6px 6px; }
+  .demo-tiled.tiles-right { grid-template-rows: none; }
+  .demo-tiled.tiles-right > .demo-stage { grid-row: 1; }
+  .demo-tiled.tiles-right > .demo-side { grid-column: 1; grid-row: 2; }
+  .demo-tiled.tiles-right > .demo-tiles { grid-column: 1; grid-row: 3; padding: 0 6px 6px; }
 }
 @media (max-width: 760px) {
   .xp-edu { grid-template-columns: minmax(0, 1fr); }
@@ -427,6 +482,7 @@ footer { padding: 40px 0 48px; color: var(--muted); font-size: 14px; }
   .card { padding: 22px; }
   .c-photo { padding: 22px 22px 60px; min-height: 0; }
   .demo { padding: 8px; gap: 14px; }
+  .demo-tiles .stats { grid-template-columns: 1fr 1fr; }
   .demo-stage { border-radius: 14px; }
   .c-brand { min-height: 0; gap: 28px; }
   .c-rov { min-height: 360px; margin-top: 70px; }
