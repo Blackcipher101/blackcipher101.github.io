@@ -37,12 +37,12 @@ These nine cover the kinds of reader the work actually serves: company stage (st
 | id | Demos, in order | Why the first one |
 |---|---|---|
 | `startup` | MPPI, cart-pole RL, SCARA, SLAM | planning was the ZPod job; then breadth |
-| `enterprise` | SCARA, SLAM, MPPI, DVL | deterministic, limit-aware motion planning |
+| `enterprise` | SCARA, SLAM, MPPI, DVL | deterministic, limit-aware motion planning (IK + A*), measured against a learned policy |
 | `underwater` | DVL, sonar VFH, SLAM, MPPI | the idea behind uw-vio-dvl |
-| `embodied` | cart-pole RL, SCARA, MPPI, SLAM | a learned policy trained by `tools/train_pendulum.py` |
+| `embodied` | cart-pole RL, SCARA, MPPI, SLAM | a learned policy (`tools/train_pendulum.py`) racing LQR in the same run; then a learned SCARA reaching policy (`tools/train_scara.py`) |
 | `av` | MPPI, SLAM, cart-pole RL, DVL | planning & prediction at Minus Zero |
 | `defence` | sonar VFH, DVL, MPPI, SLAM | navigating with degraded sensing |
-| `inspection` | SCARA, SLAM, sonar VFH, DVL | manipulation for workcells such as Mega |
+| `inspection` | SCARA, SLAM, sonar VFH, DVL | manipulation for workcells such as Mega: learned reaching vs an IK planner |
 | `legged` | cart-pole RL, SCARA, MPPI, SLAM | balance and recovery from pushes |
 | `recruiter` | SLAM, cart-pole RL, SCARA, MPPI | a mix across estimation, learning, manipulation, planning |
 

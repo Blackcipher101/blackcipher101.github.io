@@ -171,13 +171,16 @@ ul { margin: 0; padding: 0; list-style: none; }
 .pill-label .dot svg { width: 14px; height: 14px; }
 
 .c-diagram { grid-column: span 4; grid-row: span 2; margin: 0; display: flex; flex-direction: column; gap: 14px; padding: 18px; }
-/* hero photo card (replaces the diagram slot): full-bleed photo, caption chip */
-.c-photo { grid-column: span 4; grid-row: span 2; margin: 0; padding: 0; position: relative; overflow: hidden; background: var(--coral, #ff6b57); min-height: 360px; }
-.c-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; }
-.c-photo figcaption { position: absolute; left: 14px; bottom: 14px; display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px;
-  border-radius: 999px; background: rgba(14, 13, 18, .82); color: var(--cream); font-size: 12px; letter-spacing: .06em; text-transform: uppercase;
-  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
-.c-photo figcaption .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--lime); }
+/* hero photo card: a framed print on a dark card (not full-bleed) */
+.c-photo { grid-column: span 4; grid-row: span 2; margin: 0; padding: 28px 28px 64px; position: relative; overflow: hidden;
+  background: radial-gradient(120% 90% at 20% 0%, #232131 0%, var(--card-dark, #15141b) 60%); display: grid; place-items: center; min-height: 360px; }
+.c-photo img { display: block; width: 100%; max-width: 330px; height: auto; aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 40%;
+  border: 9px solid var(--cream); border-bottom-width: 9px; border-radius: 14px; box-shadow: 0 26px 46px rgba(0, 0, 0, .55), 0 2px 0 rgba(255,255,255,.04) inset;
+  transform: rotate(-2.2deg); transition: transform .6s var(--ease); }
+.c-photo:hover img { transform: rotate(-.6deg) scale(1.015); }
+.c-photo figcaption { position: absolute; left: 18px; bottom: 18px; display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px;
+  border-radius: 999px; background: var(--lime); color: var(--ink); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; }
+.c-photo figcaption .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ink); }
 .c-diagram svg { width: 100%; height: auto; flex: 1; }
 .c-diagram figcaption { color: var(--ink-soft); }
 
@@ -247,6 +250,12 @@ section { scroll-margin-top: 80px; }
 .stat { background: var(--card-dark-2); border-radius: 12px; padding: 10px 12px; }
 .stat dt { font-family: var(--mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
 .stat dd { margin: 2px 0 0; font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums; }
+/* two controllers in one tile: series A (lime) and B (peach), keyed by .vs-key */
+.stat dd.vs-pair { display: flex; flex-wrap: wrap; gap: 0 10px; font-size: 16px; }
+.vs-a { color: var(--lime); }
+.vs-b { color: var(--peach); }
+.vs-key { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 11px; margin-bottom: -6px; }
+.vs-key > span::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: currentColor; margin-right: 6px; vertical-align: 1px; }
 .legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12px; color: var(--muted); }
 .legend i { display: inline-block; width: 14px; height: 3px; border-radius: 2px; vertical-align: middle; margin-right: 6px; }
 .demo-fallback { position: absolute; inset: 0; display: grid; place-items: center; padding: 24px; text-align: center; color: var(--muted); background: #17151d; }
@@ -382,7 +391,7 @@ footer { padding: 40px 0 48px; color: var(--muted); font-size: 14px; }
   .c-brand { grid-column: span 5; }
   .c-head { grid-column: span 7; }
   .c-diagram, .c-photo { grid-column: span 6; grid-row: auto; }
-  .c-photo { min-height: 0; aspect-ratio: 4 / 5; }
+  .c-photo { min-height: 0; }
   .c-rov { grid-column: span 6; grid-row: span 2; }
   .c-stack, .c-now { grid-column: span 6; }
   .proj, .proj-wip { grid-column: span 6; }
@@ -402,7 +411,7 @@ footer { padding: 40px 0 48px; color: var(--muted); font-size: 14px; }
   .nav-links a:not(.nav-cta) { display: none; }
   .c-brand, .c-head, .c-diagram, .c-photo, .c-rov, .c-stack, .c-now, .proj, .proj-wide, .proj-wip { grid-column: span 12; grid-row: auto; }
   .card { padding: 22px; }
-  .c-photo { padding: 0; min-height: 0; aspect-ratio: 4 / 5; }
+  .c-photo { padding: 22px 22px 60px; min-height: 0; }
   .demo { padding: 8px; gap: 14px; }
   .demo-stage { border-radius: 14px; }
   .c-brand { min-height: 0; gap: 28px; }

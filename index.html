@@ -20,10 +20,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400..700&amp;display=swap">
-  <link rel="stylesheet" href="assets/css/site.css?v=20261106e">
+  <link rel="stylesheet" href="assets/css/site.css?v=20261106f">
   <script>document.documentElement.classList.add('js');</script>
-  <script type="module" src="assets/js/site.js?v=20261106e"></script>
-  <script type="module" src="assets/js/audience.js?v=20261106e"></script>
+  <script type="module" src="assets/js/site.js?v=20261106f"></script>
+  <script type="module" src="assets/js/audience.js?v=20261106f"></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -94,8 +94,8 @@
           </div>
 
           <figure class="card c-photo reveal" data-tilt>
-            <img src="assets/img/nehal-yc-startup-school.webp" srcset="assets/img/nehal-yc-startup-school-sm.webp 396w, assets/img/nehal-yc-startup-school.webp 660w" sizes="(max-width: 700px) 100vw, 400px" width="660" height="800" fetchpriority="high" decoding="async" alt="Nehal Nevle standing next to the Y Combinator Startup School India welcome sign">
-            <figcaption class="mono"><span class="dot" aria-hidden="true"></span>YC Startup School · India</figcaption>
+            <img src="assets/img/nehal-lab.webp" srcset="assets/img/nehal-lab-sm.webp 384w, assets/img/nehal-lab.webp 640w" sizes="(max-width: 700px) 100vw, 400px" width="640" height="800" fetchpriority="high" decoding="async" alt="Nehal Nevle at the bench in a robotics lab, wiring an electronics board, with robots behind him">
+            <figcaption class="mono"><span class="dot" aria-hidden="true"></span>In the lab</figcaption>
           </figure>
 
           <div class="card card-lime c-rov reveal">
@@ -170,27 +170,27 @@
             </div>
           </article>
 
-          <!-- Demo: learned cart-pole swing-up -->
+          <!-- Demo: learned cart-pole swing-up vs classical, same run -->
           <article class="card demo reveal" data-demo="cartpole" aria-labelledby="cartpole-title">
             <div class="demo-stage">
-              <canvas width="1000" height="500" style="--ar: 2 / 1" aria-label="Cart-pole simulation balanced by a learned policy. Drag the pole to swing it, tap to flick it." role="img"></canvas>
+              <canvas width="1000" height="875" style="--ar: 8 / 7" aria-label="Two cart-pole simulations side by side: a learned policy on top and a classical energy swing-up plus LQR controller below, started from the same state. Drag a pole to pull both, tap to flick both." role="img"></canvas>
               <span class="demo-hint mono">Loading demo…</span>
             </div>
             <div class="demo-side">
               <span class="mono demo-tag" style="color:var(--lime)">Embodied AI · RL</span>
               <h3 id="cartpole-title">Swing up, stay up</h3>
-              <p>A small neural network, trained offline with evolution strategies, swings the pole up from hanging and balances it with at most 20 N on the cart. Drag the pole or tap to flick it, and watch it recover. Switch to the classical energy + LQR controller to compare. Training script: <code>tools/train_pendulum.py</code>.</p>
+              <p>Two identical cart-poles, same start, same pushes. Top: a small neural network trained offline with evolution strategies. Bottom: the classical energy swing-up handing over to LQR. Both get at most 20 N on the cart. Push, drag or tap a pole and both feel it. Training script: <code>tools/train_pendulum.py</code>.</p>
               <div class="controls">
-                <button class="btn btn-lime" type="button" data-act="push">Push</button>
-                <button class="btn btn-ghost" type="button" data-act="mode" aria-pressed="false">Switch to LQR</button>
+                <button class="btn btn-lime" type="button" data-act="push">Push both</button>
                 <button class="btn btn-ghost" type="button" data-act="reset">Hang down</button>
               </div>
               <p class="demo-msg demo-note" data-out="policy" aria-live="polite"></p>
+              <p class="vs-key mono"><span class="vs-a">Learned (top)</span><span class="vs-b">Energy + LQR (bottom)</span></p>
               <dl class="stats">
-                <div class="stat"><dt>Upright for</dt><dd data-out="up">–</dd></div>
-                <div class="stat"><dt>Swing-up time</dt><dd data-out="swing">–</dd></div>
-                <div class="stat"><dt>Cart force</dt><dd data-out="f">–</dd></div>
-                <div class="stat"><dt>Pole angle</dt><dd data-out="ang">–</dd></div>
+                <div class="stat"><dt>Swing-up time</dt><dd class="vs-pair"><span class="vs-a" data-out="swing-a">–</span><span class="vs-b" data-out="swing-b">–</span></dd></div>
+                <div class="stat"><dt>Upright for</dt><dd class="vs-pair"><span class="vs-a" data-out="up-a">–</span><span class="vs-b" data-out="up-b">–</span></dd></div>
+                <div class="stat"><dt>Peak cart force</dt><dd class="vs-pair"><span class="vs-a" data-out="peak-a">–</span><span class="vs-b" data-out="peak-b">–</span></dd></div>
+                <div class="stat"><dt>Effort ∫|F|dt</dt><dd class="vs-pair"><span class="vs-a" data-out="effort-a">–</span><span class="vs-b" data-out="effort-b">–</span></dd></div>
               </dl>
             </div>
           </article>
@@ -220,28 +220,30 @@
             </div>
           </article>
 
-          <!-- Demo: SCARA arm -->
+          <!-- Demo: SCARA arm, learned reaching policy vs IK planner -->
           <article class="card demo reveal" data-demo="scara" aria-labelledby="scara-title">
             <div class="demo-stage">
-              <canvas width="1000" height="600" style="--ar: 5 / 3" aria-label="Top view of a two-link SCARA arm. Tap to set a target, drag the obstacle to move it." role="img"></canvas>
+              <canvas width="1000" height="600" style="--ar: 5 / 3" aria-label="Top view of two overlaid two-link SCARA arms on one base: a learned reaching policy and an inverse-kinematics planner. Tap to set a target for both, drag the obstacle to move it." role="img"></canvas>
               <span class="demo-hint mono">Loading demo…</span>
             </div>
             <div class="demo-side">
-              <span class="mono demo-tag" style="color:var(--lime)">Manipulation</span>
+              <span class="mono demo-tag" style="color:var(--lime)">Manipulation · RL</span>
               <h3 id="scara-title">Reach around it</h3>
-              <p>A two-link SCARA arm from above. Analytic inverse kinematics picks the elbow pose within the joint limits, and every move follows a minimum-jerk profile. If the straight joint-space move would hit the obstacle, A* routes around it in configuration space (inset: blocked poses in coral). Shaded: the reachable workspace.</p>
+              <p>Two SCARA arms from above on one base, sent to the same target. Lime: a small neural network trained offline with evolution strategies to command joint speeds. Peach: analytic inverse kinematics with a minimum-jerk profile, and A* in configuration space (inset) when the straight move would hit the obstacle. Both obey the same joint speed and acceleration limits. Training script: <code>tools/train_scara.py</code>.</p>
               <div class="controls">
                 <button class="btn btn-lime" type="button" data-act="target">Random target</button>
-                <button class="btn btn-ghost" type="button" data-act="elbow" aria-pressed="false">Elbow: left</button>
+                <button class="btn btn-ghost" type="button" data-act="elbow" aria-pressed="false">IK elbow: left</button>
                 <button class="btn btn-ghost" type="button" data-act="obstacle" aria-pressed="true">Obstacle</button>
                 <button class="btn btn-ghost" type="button" data-act="reset">Reset</button>
               </div>
+              <p class="demo-msg demo-note" data-out="policy" aria-live="polite"></p>
               <p class="demo-msg" data-out="msg" aria-live="polite"></p>
+              <p class="vs-key mono"><span class="vs-a">Learned policy</span><span class="vs-b">IK planner · <span data-out="plan">–</span></span></p>
               <dl class="stats">
-                <div class="stat"><dt>Tip error</dt><dd data-out="err">–</dd></div>
-                <div class="stat"><dt>Joints q1 · q2</dt><dd data-out="q">–</dd></div>
-                <div class="stat"><dt>Plan</dt><dd data-out="plan">–</dd></div>
-                <div class="stat"><dt>Move time</dt><dd data-out="t">–</dd></div>
+                <div class="stat"><dt>Reach time</dt><dd class="vs-pair"><span class="vs-a" data-out="reach-a">–</span><span class="vs-b" data-out="reach-b">–</span></dd></div>
+                <div class="stat"><dt>Tip error</dt><dd class="vs-pair"><span class="vs-a" data-out="err-a">–</span><span class="vs-b" data-out="err-b">–</span></dd></div>
+                <div class="stat"><dt>Tip path</dt><dd class="vs-pair"><span class="vs-a" data-out="path-a">–</span><span class="vs-b" data-out="path-b">–</span></dd></div>
+                <div class="stat"><dt>Obstacle hits</dt><dd class="vs-pair"><span class="vs-a" data-out="hit-a">–</span><span class="vs-b" data-out="hit-b">–</span></dd></div>
               </dl>
             </div>
           </article>

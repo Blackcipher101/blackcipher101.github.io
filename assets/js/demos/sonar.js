@@ -4,7 +4,7 @@
 // Field Histogram is built from the grid cells near the ROV, each cell spread over the
 // sectors its enlarged footprint covers (the VFH+ refinement), and the ROV steers to the
 // free valley that best trades goal direction against turning. Planner only, no learning.
-import { View, Loop, COLORS, clamp, mulberry32, gaussFrom } from './common.js?v=20261106e';
+import { View, Loop, COLORS, clamp, mulberry32, gaussFrom } from './common.js?v=20261106f';
 
 export const P = {
   W: 16, H: 10,                 // world, m
