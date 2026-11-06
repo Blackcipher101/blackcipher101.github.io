@@ -9,7 +9,7 @@
 // same speed/acceleration limits. Its weights and held-out results ship in
 // assets/data/scara-policy.json; the plant and observation here mirror that script exactly.
 // The policy does not observe the obstacle: its contacts are counted, not prevented.
-import { View, Loop, COLORS, clamp } from './common.js?v=20261106f';
+import { View, Loop, COLORS, clamp } from './common.js?v=20261106f2';
 
 export const ARM = {
   base: [0.62, 0.6],               // m, world position of joint 1

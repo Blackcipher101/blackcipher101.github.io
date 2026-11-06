@@ -138,6 +138,10 @@ ul { margin: 0; padding: 0; list-style: none; }
   -webkit-mask-image: linear-gradient(90deg, #000 92%, transparent); mask-image: linear-gradient(90deg, #000 92%, transparent); }
 .tailor-chips::-webkit-scrollbar { display: none; }
 .tailor-chips .chip-btn { flex: none; }
+/* wide screens: wrap so every chip is visible (a single masked row hid the last chips with no visible scrollbar) */
+@media (min-width: 900px) {
+  .tailor-chips { flex-wrap: wrap; overflow: visible; -webkit-mask-image: none; mask-image: none; }
+}
 .chip-btn {
   font: 500 13.5px/1 var(--font); color: var(--cream); background: var(--card-dark-2);
   border: 1px solid var(--line-dark); border-radius: 999px; padding: 9px 13px; cursor: pointer;

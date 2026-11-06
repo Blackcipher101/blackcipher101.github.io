@@ -205,8 +205,11 @@ function init() {
     when.prepend(b);
   });
 
-  // Chips
-  for (const [id, p] of Object.entries(PRESETS)) {
+  // Chips. Recruiters are a key audience: their chip goes second so it is visible without scrolling on phones.
+  const presetIds = Object.keys(PRESETS);
+  const chipOrder = [presetIds[0], 'recruiter', ...presetIds.slice(1).filter((id) => id !== 'recruiter')];
+  for (const id of chipOrder) {
+    const p = PRESETS[id];
     const c = document.createElement('button');
     c.type = 'button';
     c.className = 'chip-btn';
