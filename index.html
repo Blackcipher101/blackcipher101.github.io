@@ -1,1634 +1,386 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portfolio</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-      color: #fff;
-      overflow-x: hidden;
-      scroll-behavior: smooth;
-      cursor: none;
-    }
-
-    /* Smooth scroll for webkit browsers */
-    ::-webkit-scrollbar {
-      width: 8px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: rgba(22, 33, 62, 0.5);
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: linear-gradient(135deg, #9B5DE0 0%, #D78FEE 100%);
-      border-radius: 10px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background: linear-gradient(135deg, #D78FEE 0%, #FDCFFA 100%);
-    }
-
-    header {
-      position: relative;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-
-    #drone-canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 2;
-    }
-
-    #physics-canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1;
-    }
-
-    .header-content {
-      position: relative;
-      z-index: 3;
-      text-align: center;
-      padding: 2rem;
-      max-width: 800px;
-      opacity: 0;
-      transition: opacity 0.5s ease;
-    }
-
-    .header-content.visible {
-      opacity: 1;
-    }
-
-    .gradient-text {
-      font-size: clamp(3rem, 8vw, 6rem);
-      font-weight: 800;
-      margin-bottom: 1rem;
-      line-height: 1.2;
-      animation: fadeInUp 1s ease-out;
-      min-height: 1.2em;
-    }
-
-    #typewriter {
-      background: linear-gradient(135deg, #4E56C0 0%, #9B5DE0 35%, #D78FEE 70%, #FDCFFA 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    #typewriter.white-text {
-      background: none;
-      -webkit-text-fill-color: #ffffff;
-      color: #ffffff;
-    }
-
-    .cursor {
-      color: #FDCFFA;
-      animation: blink 1s infinite;
-      font-weight: 300;
-    }
-
-    @keyframes blink {
-      0%, 50% {
-        opacity: 1;
-      }
-      51%, 100% {
-        opacity: 0;
-      }
-    }
-
-    .subtitle {
-      font-size: clamp(1.2rem, 3vw, 1.8rem);
-      color: #ffffff;
-      margin-bottom: 2rem;
-      font-weight: 400;
-      animation: fadeInUp 1s ease-out 0.2s backwards;
-      min-height: 1.5em;
-      opacity: 0;
-      transition: opacity 0.6s ease;
-    }
-
-    .subtitle.visible {
-      opacity: 1;
-    }
-
-    .cta-buttons {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      flex-wrap: wrap;
-      animation: fadeInUp 1s ease-out 0.4s backwards;
-      opacity: 0;
-      transition: opacity 0.6s ease 0.3s;
-    }
-
-    .cta-buttons.visible {
-      opacity: 1;
-    }
-
-    .btn {
-      padding: 1rem 2rem;
-      border: none;
-      border-radius: 50px;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-decoration: none;
-      display: inline-block;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .btn::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 0;
-      height: 0;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.2);
-      transform: translate(-50%, -50%);
-      transition: width 0.6s, height 0.6s;
-    }
-
-    .btn:hover::before {
-      width: 300px;
-      height: 300px;
-    }
-
-    .btn span {
-      position: relative;
-      z-index: 1;
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, #9B5DE0 0%, #D78FEE 100%);
-      color: #fff;
-      box-shadow: 0 8px 25px rgba(155, 93, 224, 0.4);
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 35px rgba(155, 93, 224, 0.6);
-    }
-
-    .btn-secondary {
-      background: rgba(255, 255, 255, 0.1);
-      color: #fff;
-      border: 2px solid rgba(253, 207, 250, 0.5);
-      backdrop-filter: blur(10px);
-    }
-
-    .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.2);
-      border-color: rgba(253, 207, 250, 0.8);
-      transform: translateY(-3px);
-    }
-
-    .floating-shapes {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    .shape {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(60px);
-      opacity: 0.3;
-      animation: float 20s infinite ease-in-out;
-    }
-
-    .shape1 {
-      width: 300px;
-      height: 300px;
-      background: #4E56C0;
-      top: 10%;
-      left: 10%;
-      animation-delay: 0s;
-    }
-
-    .shape2 {
-      width: 400px;
-      height: 400px;
-      background: #9B5DE0;
-      top: 50%;
-      right: 10%;
-      animation-delay: -7s;
-    }
-
-    .shape3 {
-      width: 250px;
-      height: 250px;
-      background: #D78FEE;
-      bottom: 10%;
-      left: 30%;
-      animation-delay: -14s;
-    }
-
-    @keyframes float {
-      0%, 100% {
-        transform: translate(0, 0) scale(1);
-      }
-      33% {
-        transform: translate(30px, -30px) scale(1.1);
-      }
-      66% {
-        transform: translate(-20px, 20px) scale(0.9);
-      }
-    }
-
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .scroll-indicator {
-      position: absolute;
-      bottom: 2rem;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 2;
-      animation: bounce 2s infinite;
-      opacity: 0;
-      transition: opacity 0.6s ease 0.6s;
-    }
-
-    .scroll-indicator.visible {
-      opacity: 1;
-    }
-
-    .scroll-indicator svg {
-      width: 30px;
-      height: 30px;
-      opacity: 0.6;
-    }
-
-    @keyframes bounce {
-      0%, 20%, 50%, 80%, 100% {
-        transform: translateX(-50%) translateY(0);
-      }
-      40% {
-        transform: translateX(-50%) translateY(-10px);
-      }
-      60% {
-        transform: translateX(-50%) translateY(-5px);
-      }
-    }
-
-    /* Journey Section */
-    .journey-section {
-      position: relative;
-      min-height: 400vh;
-      padding: 100px 0;
-      background: linear-gradient(180deg, #16213e 0%, #1a1a2e 50%, #16213e 100%);
-    }
-
-    .journey-container {
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-
-    .journey-card {
-      position: absolute;
-      width: 90%;
-      max-width: 700px;
-      height: 500px;
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 30px;
-      padding: 60px 50px;
-      transform-style: preserve-3d;
-      transform: translateY(100vh) scale(0.8) rotateX(-15deg);
-      opacity: 0;
-      transition: none;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-      cursor: default;
-    }
-
-    .journey-card:hover {
-      border: 1px solid rgba(253, 207, 250, 0.3);
-      box-shadow: 0 25px 70px rgba(155, 93, 224, 0.4);
-    }
-
-    .journey-card.active {
-      transform: translateY(0) scale(1) rotateX(0deg);
-      opacity: 1;
-    }
-
-    .journey-card.exit {
-      transform: translateY(-100vh) scale(0.8) rotateX(15deg);
-      opacity: 0;
-    }
-
-    .card-number {
-      position: absolute;
-      top: 30px;
-      right: 40px;
-      font-size: 80px;
-      font-weight: 800;
-      background: linear-gradient(135deg, #4E56C0 0%, #9B5DE0 50%, #D78FEE 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      opacity: 0.15;
-    }
-
-    .card-title {
-      font-size: clamp(1.8rem, 4vw, 2.5rem);
-      font-weight: 700;
-      margin-bottom: 15px;
-      background: linear-gradient(135deg, #FDCFFA 0%, #D78FEE 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .card-subtitle {
-      font-size: clamp(1rem, 2vw, 1.2rem);
-      color: rgba(155, 93, 224, 0.9);
-      margin-bottom: 10px;
-      font-weight: 600;
-    }
-
-    .card-date {
-      font-size: 0.9rem;
-      color: rgba(255, 255, 255, 0.5);
-      margin-bottom: 30px;
-      font-weight: 400;
-    }
-
-    .card-description {
-      font-size: clamp(0.95rem, 1.5vw, 1.1rem);
-      line-height: 1.8;
-      color: rgba(255, 255, 255, 0.8);
-    }
-
-    .card-highlight {
-      display: inline-block;
-      padding: 4px 12px;
-      background: rgba(155, 93, 224, 0.2);
-      border-radius: 20px;
-      font-size: 0.85rem;
-      color: #D78FEE;
-      margin: 10px 5px 0 0;
-      border: 1px solid rgba(155, 93, 224, 0.3);
-    }
-
-    /* Custom Cursor */
-    .custom-cursor {
-      position: fixed;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: radial-gradient(circle, #FDCFFA 0%, #D78FEE 50%, transparent 70%);
-      pointer-events: none;
-      z-index: 10000;
-      mix-blend-mode: screen;
-      transform: translate(-50%, -50%);
-      transition: width 0.2s, height 0.2s;
-      box-shadow: 0 0 20px #FDCFFA, 0 0 40px #D78FEE, 0 0 60px #9B5DE0;
-    }
-
-    .custom-cursor.hover {
-      width: 40px;
-      height: 40px;
-    }
-
-    .cursor-trail {
-      position: fixed;
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: radial-gradient(circle, #9B5DE0 0%, transparent 70%);
-      pointer-events: none;
-      z-index: 9999;
-      mix-blend-mode: screen;
-      transform: translate(-50%, -50%);
-      opacity: 0.6;
-    }
-
-    /* Achievements Section */
-    .achievements-section {
-      min-height: 100vh;
-      padding: 100px 20px;
-      background: linear-gradient(180deg, #16213e 0%, #1a1a2e 100%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .section-title {
-      font-size: clamp(2.5rem, 6vw, 4rem);
-      font-weight: 800;
-      text-align: center;
-      margin-bottom: 60px;
-      background: linear-gradient(135deg, #4E56C0 0%, #9B5DE0 35%, #D78FEE 70%, #FDCFFA 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .flip-cards-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 40px;
-      max-width: 1200px;
-      width: 100%;
-      perspective: 1000px;
-    }
-
-    .flip-card {
-      height: 400px;
-      position: relative;
-      transform-style: preserve-3d;
-      transition: transform 0.8s cubic-bezier(0.4, 0.0, 0.2, 1);
-      cursor: pointer;
-    }
-
-    .flip-card.flipped {
-      transform: rotateY(180deg);
-    }
-
-    .flip-card-front,
-    .flip-card-back {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      backface-visibility: hidden;
-      border-radius: 30px;
-      padding: 40px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-    }
-
-    .flip-card-front {
-      background: linear-gradient(135deg, rgba(78, 86, 192, 0.2) 0%, rgba(155, 93, 224, 0.2) 100%);
-      backdrop-filter: blur(20px);
-      border: 2px solid rgba(155, 93, 224, 0.3);
-    }
-
-    .flip-card-back {
-      background: linear-gradient(135deg, rgba(155, 93, 224, 0.3) 0%, rgba(215, 143, 238, 0.3) 100%);
-      backdrop-filter: blur(20px);
-      border: 2px solid rgba(253, 207, 250, 0.4);
-      transform: rotateY(180deg);
-    }
-
-    .achievement-icon {
-      font-size: 80px;
-      margin-bottom: 20px;
-      filter: drop-shadow(0 0 20px rgba(253, 207, 250, 0.5));
-    }
-
-    .achievement-title {
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: #FDCFFA;
-      margin-bottom: 10px;
-    }
-
-    .achievement-category {
-      font-size: 1rem;
-      color: rgba(155, 93, 224, 0.9);
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-    }
-
-    .achievement-description {
-      font-size: 1.1rem;
-      line-height: 1.8;
-      color: rgba(255, 255, 255, 0.9);
-      margin-bottom: 20px;
-    }
-
-    .achievement-metric {
-      font-size: 3rem;
-      font-weight: 800;
-      background: linear-gradient(135deg, #FDCFFA 0%, #D78FEE 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 10px;
-    }
-
-    .achievement-label {
-      font-size: 0.9rem;
-      color: rgba(255, 255, 255, 0.7);
-      font-weight: 500;
-    }
-
-    /* Contact Section */
-    .contact-section {
-      min-height: 100vh;
-      padding: 100px 20px;
-      background: linear-gradient(180deg, #1a1a2e 0%, #0f1419 100%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .contact-bg-shape {
-      position: absolute;
-      width: 500px;
-      height: 500px;
-      border-radius: 50%;
-      filter: blur(100px);
-      opacity: 0.15;
-      pointer-events: none;
-    }
-
-    .contact-bg-shape:nth-child(1) {
-      top: -100px;
-      left: -100px;
-      background: #4E56C0;
-    }
-
-    .contact-bg-shape:nth-child(2) {
-      bottom: -100px;
-      right: -100px;
-      background: #D78FEE;
-    }
-
-    .contact-container {
-      max-width: 900px;
-      width: 100%;
-      position: relative;
-      z-index: 1;
-    }
-
-    .contact-header {
-      text-align: center;
-      margin-bottom: 60px;
-    }
-
-    .contact-title {
-      font-size: clamp(2.5rem, 6vw, 4rem);
-      font-weight: 800;
-      margin-bottom: 20px;
-      background: linear-gradient(135deg, #FDCFFA 0%, #D78FEE 50%, #9B5DE0 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .contact-subtitle {
-      font-size: clamp(1rem, 2vw, 1.3rem);
-      color: rgba(255, 255, 255, 0.7);
-      line-height: 1.6;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 30px;
-      margin-bottom: 50px;
-    }
-
-    .contact-card {
-      background: rgba(255, 255, 255, 0.03);
-      backdrop-filter: blur(20px);
-      border: 2px solid rgba(155, 93, 224, 0.2);
-      border-radius: 25px;
-      padding: 35px 30px;
-      text-align: center;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .contact-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(253, 207, 250, 0.1), transparent);
-      transition: left 0.6s;
-    }
-
-    .contact-card:hover::before {
-      left: 100%;
-    }
-
-    .contact-card:hover {
-      transform: translateY(-8px);
-      border-color: rgba(253, 207, 250, 0.4);
-      box-shadow: 0 20px 40px rgba(155, 93, 224, 0.2);
-    }
-
-    .contact-icon {
-      font-size: 50px;
-      margin-bottom: 20px;
-      display: inline-block;
-      filter: drop-shadow(0 0 15px rgba(253, 207, 250, 0.4));
-      transition: transform 0.3s;
-    }
-
-    .contact-card:hover .contact-icon {
-      transform: scale(1.1) rotateY(360deg);
-    }
-
-    .contact-card-title {
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: #FDCFFA;
-      margin-bottom: 10px;
-    }
-
-    .contact-card-text {
-      font-size: 1rem;
-      color: rgba(255, 255, 255, 0.7);
-      margin-bottom: 20px;
-      line-height: 1.5;
-    }
-
-    .contact-link {
-      display: inline-block;
-      padding: 12px 30px;
-      background: linear-gradient(135deg, rgba(155, 93, 224, 0.2) 0%, rgba(215, 143, 238, 0.2) 100%);
-      border: 2px solid rgba(155, 93, 224, 0.4);
-      border-radius: 50px;
-      color: #FDCFFA;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.95rem;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .contact-link::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 0;
-      height: 0;
-      border-radius: 50%;
-      background: rgba(253, 207, 250, 0.2);
-      transform: translate(-50%, -50%);
-      transition: width 0.4s, height 0.4s;
-    }
-
-    .contact-link:hover::before {
-      width: 300px;
-      height: 300px;
-    }
-
-    .contact-link:hover {
-      border-color: rgba(253, 207, 250, 0.6);
-      transform: scale(1.05);
-    }
-
-    .contact-link span {
-      position: relative;
-      z-index: 1;
-    }
-
-    .social-links {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      margin-top: 50px;
-      flex-wrap: wrap;
-    }
-
-    .social-icon {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.03);
-      border: 2px solid rgba(155, 93, 224, 0.3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 28px;
-      transition: all 0.3s ease;
-      text-decoration: none;
-      backdrop-filter: blur(10px);
-    }
-
-    .social-icon:hover {
-      background: linear-gradient(135deg, rgba(155, 93, 224, 0.3) 0%, rgba(215, 143, 238, 0.3) 100%);
-      border-color: rgba(253, 207, 250, 0.5);
-      transform: translateY(-5px) rotate(5deg);
-      box-shadow: 0 10px 25px rgba(155, 93, 224, 0.3);
-    }
-
-    .footer {
-      text-align: center;
-      margin-top: 60px;
-      padding-top: 40px;
-      border-top: 1px solid rgba(155, 93, 224, 0.2);
-    }
-
-    .footer-text {
-      color: rgba(255, 255, 255, 0.5);
-      font-size: 0.95rem;
-      line-height: 1.8;
-    }
-
-    .footer-text span {
-      color: #FDCFFA;
-      font-weight: 600;
-    }
-
-    @media (max-width: 768px) {
-      .cta-buttons {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .btn {
-        width: 100%;
-        max-width: 280px;
-      }
-
-      .journey-card {
-        height: auto;
-        min-height: 400px;
-        padding: 40px 30px;
-      }
-
-      .card-number {
-        font-size: 60px;
-        top: 20px;
-        right: 25px;
-      }
-
-      .flip-cards-grid {
-        grid-template-columns: 1fr;
-        gap: 30px;
-      }
-
-      .flip-card {
-        height: 350px;
-      }
-
-      .contact-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .social-icon {
-        width: 50px;
-        height: 50px;
-        font-size: 24px;
-      }
-    }
-  </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nehal Nevle · Robotics Engineer</title>
+  <meta name="description" content="Nehal Nevle builds the software that tells robots where they are and where to go: state estimation, SLAM and planning across the full robotics stack. Play with live pose-graph SLAM, MPPI and DVL demos.">
+  <meta name="theme-color" content="#0b0a0f">
+  <link rel="canonical" href="https://blackcipher101.github.io/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Nehal Nevle · Robotics Engineer">
+  <meta property="og:description" content="State estimation, SLAM and planning across the full robotics stack. Interactive demos inside.">
+  <meta property="og:url" content="https://blackcipher101.github.io/">
+  <meta property="og:image" content="https://blackcipher101.github.io/assets/img/og.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400..700&amp;display=swap">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <script>document.documentElement.classList.add('js');</script>
+  <script type="module" src="assets/js/site.js"></script>
 </head>
 <body>
-  <!-- Custom Cursor Elements -->
-  <div class="custom-cursor"></div>
+  <a class="skip" href="#main">Skip to content</a>
 
-  <header>
-    <div class="floating-shapes">
-      <div class="shape shape1"></div>
-      <div class="shape shape2"></div>
-      <div class="shape shape3"></div>
-    </div>
-
-    <canvas id="drone-canvas"></canvas>
-    <canvas id="physics-canvas"></canvas>
-
-    <div class="header-content">
-      <h1 class="gradient-text"><span id="typewriter"></span><span class="cursor">|</span></h1>
-      <p class="subtitle" id="subtitle">Navigation & Motion Planning Engineer | Sensor Fusion Expert</p>
-      <div class="cta-buttons">
-        <a href="#journey" class="btn btn-primary"><span>View My Journey</span></a>
-        <a href="#contact" class="btn btn-secondary"><span>Get In Touch</span></a>
-      </div>
-    </div>
-
-    <div class="scroll-indicator">
-      <svg fill="currentColor" viewBox="0 0 24 24">
-        <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
-      </svg>
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a class="nav-brand" href="#top" aria-label="Nehal Nevle, home">
+        <svg viewBox="0 0 64 64" aria-hidden="true"><polyline points="14,46 14,18 32,46 32,18 50,46 50,18" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="square"/><circle cx="50" cy="18" r="5" fill="#d9f45b"/></svg>
+        <span>NN</span>
+      </a>
+      <nav class="nav-links" aria-label="Sections">
+        <a href="#demos">Demos</a>
+        <a href="#work">Open source</a>
+        <a href="#experience">Experience</a>
+        <a class="nav-cta" href="#contact">Contact</a>
+      </nav>
     </div>
   </header>
 
-  <!-- Journey Section -->
-  <section class="journey-section" id="journey">
-    <div class="journey-container">
-      <div class="journey-card" data-card="0">
-        <div class="card-number">01</div>
-        <h2 class="card-title">Hardware Security Engineer</h2>
-        <p class="card-subtitle">Traboda</p>
-        <p class="card-date">Nov 2020 - Mar 2021</p>
-        <p class="card-description">
-          Designed and implemented secure components for embedded systems, focusing on authentication, encrypted communication, and tamper resistance. Developed lightweight C++ code for microcontrollers and sensor boards, employing AES encryption, HMAC authentication, and memory protection techniques.
-        </p>
-        <span class="card-highlight">C++</span>
-        <span class="card-highlight">Embedded Security</span>
-        <span class="card-highlight">AES Encryption</span>
-      </div>
+  <main id="main">
+    <!-- ================= HERO BENTO ================= -->
+    <section class="s-hero" id="top" aria-label="Introduction">
+      <div class="wrap">
+        <div class="bento">
+          <div class="card card-violet c-brand reveal" data-tilt>
+            <svg class="mark" viewBox="0 0 120 80" role="img" aria-label="NN monogram: a zig-zag path with pose nodes">
+              <polyline points="10,70 10,10 60,70 60,10 110,70 110,10" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="square"/>
+              <g fill="#d9f45b"><circle cx="10" cy="70" r="5"/><circle cx="60" cy="70" r="5"/><circle cx="110" cy="10" r="7"/></g>
+            </svg>
+            <div>
+              <p class="mono">Robotics engineer</p>
+              <p class="name">Nehal<br>Nevle</p>
+            </div>
+          </div>
 
-      <div class="journey-card" data-card="1">
-        <div class="card-number">02</div>
-        <h2 class="card-title">Perception & Localization Intern</h2>
-        <p class="card-subtitle">Clutterbot</p>
-        <p class="card-date">Sept 2021 - Apr 2022</p>
-        <p class="card-description">
-          Contributed to the perception, localization, and motion planning pipeline. Fused stereo cameras and odometers to compute vehicle pose with 5% localization error. Integrated signals into closed-loop control for manipulator and base movement.
-        </p>
-        <span class="card-highlight">C++</span>
-        <span class="card-highlight">Sensor Fusion</span>
-        <span class="card-highlight">Localization</span>
-      </div>
+          <div class="card card-grad c-head reveal" data-tilt>
+            <span class="pill-label mono"><span class="dot" aria-hidden="true"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="3" fill="#fff"/></svg></span>State estimation · SLAM · Planning</span>
+            <h1>I build the software that tells robots <b>where they are</b> and <b>where to go</b>.</h1>
+            <div>
+              <p class="lede">State estimation, SLAM and planning, across the full robotics stack. Nearly every embodiment so far, from autonomous pods to quadrupeds. Now underwater.</p>
+            </div>
+            <div class="actions">
+              <a class="btn btn-ink" href="#demos">Play the demos
+                <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2"/></svg></a>
+              <a class="btn btn-ghost" href="#contact">Get in touch</a>
+            </div>
+          </div>
 
-      <div class="journey-card" data-card="2">
-        <div class="card-number">03</div>
-        <h2 class="card-title">Founding Research Engineer</h2>
-        <p class="card-subtitle">Minus Zero</p>
-        <p class="card-date">June 2022 - Sept 2022</p>
-        <p class="card-description">
-          Core autonomy engineer developing and integrating localization, path planning, and trajectory control components in C++. Built custom drivers for GMSL cameras and Velodyne LiDAR signals. Implemented fallback strategies for sensor dropout and multithreading optimizations.
-        </p>
-        <span class="card-highlight">C++</span>
-        <span class="card-highlight">Path Planning</span>
-        <span class="card-highlight">LiDAR</span>
-      </div>
+          <figure class="card card-cream c-diagram reveal" data-tilt>
+            <svg viewBox="0 0 400 320" role="img" aria-label="Construction-line drawing of a pose graph: a drifting trajectory of pose nodes and a loop-closure edge back to the start">
+              <defs>
+                <linearGradient id="dg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5b4ee6"/><stop offset="1" stop-color="#5b4ee6" stop-opacity="0"/></linearGradient>
+              </defs>
+              <g stroke="#0e0d12" stroke-width=".8" opacity=".55" fill="none">
+                <path d="M0 250 L400 70 M0 90 L400 260 M120 0 L170 320 M300 0 L250 320 M0 170 H400 M210 0 V320"/>
+                <circle cx="210" cy="170" r="92"/>
+                <circle cx="210" cy="170" r="38"/>
+                <path d="M60 0 L60 320 M350 0 V320" stroke-dasharray="3 5"/>
+              </g>
+              <path d="M210 78 L302 170 L210 262 Z" fill="url(#dg)" opacity=".85"/>
+              <polyline points="96,226 132,252 176,262 222,256 266,236 300,204 316,166 310,126 288,96 252,78 210,74 168,84 134,106 110,138 98,176 100,212" fill="none" stroke="#0e0d12" stroke-width="2"/>
+              <path d="M100 212 Q 90 222 96 226" fill="none" stroke="#ff6b57" stroke-width="3" stroke-dasharray="4 4"/>
+              <g fill="#0e0d12">
+                <circle cx="132" cy="252" r="4"/><circle cx="176" cy="262" r="4"/><circle cx="222" cy="256" r="4"/><circle cx="266" cy="236" r="4"/><circle cx="300" cy="204" r="4"/><circle cx="316" cy="166" r="4"/><circle cx="310" cy="126" r="4"/><circle cx="288" cy="96" r="4"/><circle cx="252" cy="78" r="4"/><circle cx="210" cy="74" r="4"/><circle cx="168" cy="84" r="4"/><circle cx="134" cy="106" r="4"/><circle cx="110" cy="138" r="4"/><circle cx="98" cy="176" r="4"/>
+              </g>
+              <circle cx="96" cy="226" r="7" fill="#d9f45b" stroke="#0e0d12" stroke-width="2"/>
+              <circle cx="100" cy="212" r="6" fill="#ff6b57" stroke="#0e0d12" stroke-width="2"/>
+              <text x="18" y="300" font-family="ui-monospace, Menlo, monospace" font-size="11" fill="#0e0d12" letter-spacing="1">MINIMISE  χ² = Σ eᵀ Ω e</text>
+            </svg>
+            <figcaption class="mono">Fig. 01: a pose graph closing its loop</figcaption>
+          </figure>
 
-      <div class="journey-card" data-card="3">
-        <div class="card-number">04</div>
-        <h2 class="card-title">Head of Planning and Prediction</h2>
-        <p class="card-subtitle">Minus Zero</p>
-        <p class="card-date">Sept 2023 - Sept 2024</p>
-        <p class="card-description">
-          Led ZPod's navigation and motion planning stack, developing and maintaining 50k+ lines of production C++ code. Built scalable path planners and trajectory optimizers for city-scale autonomous driving. Designed custom IMU processing pipeline, fallback strategies, multithreading, and low-latency architecture.
-        </p>
-        <span class="card-highlight">Motion Planning</span>
-        <span class="card-highlight">Production C++</span>
-        <span class="card-highlight">Autonomous Driving</span>
-      </div>
+          <div class="card card-lime c-rov reveal">
+            <img src="assets/img/rov.svg" width="580" height="650" alt="Original illustration of an underwater ROV with thrusters, a camera dome, a tether and Doppler velocity log beams" fetchpriority="high">
+            <span class="mono">Now</span>
+            <h2>Underwater autonomy</h2>
+            <p>Visual-inertial odometry, DVL fusion and inspection tooling for robots that cannot see GPS.</p>
+          </div>
 
-      <div class="journey-card" data-card="4">
-        <div class="card-number">05</div>
-        <h2 class="card-title">Founding Member</h2>
-        <p class="card-subtitle">Bytes</p>
-        <p class="card-date">Sept 2023 - Present</p>
-        <p class="card-description">
-          Leading a team developing production-grade navigation and motion planning stack for 2-wheelers. Built high-fidelity state estimation modules by fusing signals from stereo cameras, LiDAR, IMU, and GPS. Implemented fallback strategies for vision-only scenarios and actor-critic methods alongside classical path planners. Added 20k+ lines of C++ code to the codebase.
-        </p>
-        <span class="card-highlight">Sensor Fusion</span>
-        <span class="card-highlight">Navigation</span>
-        <span class="card-highlight">eCAL</span>
-      </div>
-    </div>
-  </section>
+          <div class="card card-warm c-stack reveal" data-tilt>
+            <span class="mono">The whole stack</span>
+            <h2>Perception to planning. <b>Every body.</b></h2>
+            <p>Estimation and mapping, prediction and planning, simulation and CI, on the robot and in the loop.</p>
+          </div>
 
-  <!-- Achievements Section -->
-  <section class="achievements-section">
-    <h2 class="section-title">Key Achievements</h2>
-    
-    <div class="flip-cards-grid">
-      <div class="flip-card">
-        <div class="flip-card-front">
-          <div class="achievement-icon">💻</div>
-          <h3 class="achievement-title">Code Contribution</h3>
-          <p class="achievement-category">Development</p>
+          <div class="card c-now reveal" data-tilt>
+            <span class="mono live">Currently</span>
+            <p class="role">Autonomy Engineer</p>
+            <p>Griffin Labs, Singapore. Building generalisable autonomy.</p>
+            <p class="mono muted">Sep 2026 – now</p>
+          </div>
         </div>
-        <div class="flip-card-back">
-          <div class="achievement-metric">70k+</div>
-          <p class="achievement-label">Lines of Production C++</p>
-          <p class="achievement-description">
-            Developed and maintained over 70,000 lines of production-grade C++ code across navigation and motion planning systems.
-          </p>
-        </div>
+
+        <ul class="strip reveal" aria-label="Robot embodiments worked on">
+          <li class="tag mono">Embodiments</li>
+          <li class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 15v-4l3-5h12l3 5v4z"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>Autonomous cars &amp; pods</li>
+          <li class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="5" cy="16" r="3"/><circle cx="19" cy="16" r="3"/><path d="M5 16l5-7h5l4 7M10 9l3 7"/></svg>Two-wheelers</li>
+          <li class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="5" y="8" width="12" height="4" rx="1"/><path d="M17 9l3-2M6 12l-1 6M9 12l1 6M14 12l-1 6M17 12l1 6"/></svg>Quadrupeds</li>
+          <li class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 19l6-10 4 6 3-4 7 8z"/></svg>Outdoor autonomy</li>
+          <li class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></svg>Defence robotics</li>
+          <li class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="10" cy="10" r="6"/><path d="M15 15l6 6M7 10h6"/></svg>Inspection robots &amp; scanners</li>
+          <li class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 20h8M8 20v-4l4-6 6 2M18 12l2-3M18 12l2 3"/><circle cx="12" cy="10" r="1.5"/></svg>Manipulators &amp; AMRs</li>
+          <li class="chip chip-now"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 13c0-2.5 3-4 8-4h4c3 0 6 1.5 6 4s-3 4-6 4h-4c-5 0-8-1.5-8-4z"/><path d="M12 9V6h3"/></svg>Underwater, now</li>
+        </ul>
       </div>
+    </section>
 
-      <div class="flip-card">
-        <div class="flip-card-front">
-          <div class="achievement-icon">🎯</div>
-          <h3 class="achievement-title">Localization Accuracy</h3>
-          <p class="achievement-category">Sensor Fusion</p>
+    <!-- ================= DEMOS ================= -->
+    <section class="sec" id="demos" aria-labelledby="demos-title">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <div>
+            <span class="mono">02 / Playground</span>
+            <h2 id="demos-title">Play with<br>the algorithms</h2>
+          </div>
+          <p>Real algorithms running in your browser, not canned animations. Each demo starts when you scroll to it and pauses when you scroll away.</p>
         </div>
-        <div class="flip-card-back">
-          <div class="achievement-metric">95%+</div>
-          <p class="achievement-label">Precision Achieved</p>
-          <p class="achievement-description">
-            Achieved 95%+ localization accuracy by fusing stereo cameras, LiDAR, IMU, and GPS signals for autonomous navigation systems.
-          </p>
+
+        <div class="bento">
+          <!-- Demo 1: pose-graph SLAM -->
+          <article class="card demo reveal" data-demo="slam" aria-labelledby="slam-title">
+            <div class="demo-stage">
+              <canvas width="1000" height="600" style="--ar: 5 / 3" aria-label="Pose-graph SLAM simulation. Drag to steer the robot." role="img"></canvas>
+              <span class="demo-hint mono">Loading demo…</span>
+            </div>
+            <div class="demo-side">
+              <span class="mono" style="color:var(--lime)">Demo 01 · SLAM</span>
+              <h3 id="slam-title">Close the loop</h3>
+              <p>Wheel odometry has a small heading bias, so the estimate (coral) drifts away from the truth (dashed). Drive back to the start: a loop-closure edge (lime) appears. Optimise runs Levenberg–Marquardt on the full 2D pose graph.</p>
+              <div class="controls">
+                <button class="btn btn-lime" type="button" data-act="play" aria-pressed="false">Drive</button>
+                <button class="btn btn-cream" type="button" data-act="optimise" disabled>Optimise</button>
+                <button class="btn btn-ghost" type="button" data-act="reset">Reset</button>
+              </div>
+              <p class="demo-msg" data-out="msg" aria-live="polite"></p>
+              <dl class="stats">
+                <div class="stat"><dt>Keyframes</dt><dd data-out="kf">0</dd></div>
+                <div class="stat"><dt>Loop edges</dt><dd data-out="loops">0</dd></div>
+                <div class="stat"><dt>ATE (RMS)</dt><dd data-out="ate">–</dd></div>
+                <div class="stat"><dt>χ² · iter</dt><dd><span data-out="chi2">–</span> · <span data-out="iter">–</span></dd></div>
+              </dl>
+            </div>
+          </article>
+
+          <!-- Demo 2: MPPI -->
+          <article class="card demo reveal" data-demo="mppi" aria-labelledby="mppi-title">
+            <div class="demo-stage">
+              <canvas width="1000" height="625" style="--ar: 8 / 5" aria-label="MPPI planner simulation. Tap to set a goal, drag to draw or move obstacles." role="img"></canvas>
+              <span class="demo-hint mono">Loading demo…</span>
+            </div>
+            <div class="demo-side">
+              <span class="mono" style="color:var(--lime)">Demo 02 · Planning</span>
+              <h3 id="mppi-title">MPPI playground</h3>
+              <p>256 noisy control sequences are rolled out over a 2.6 s horizon, 20 times a second. Each is scored for goal progress and clearance. The plan (coral) is their cost-weighted average. Lime rollouts are cheap, violet ones are expensive.</p>
+              <div class="controls">
+                <button class="btn btn-lime" type="button" data-act="goal">New goal</button>
+                <button class="btn btn-cream" type="button" data-act="scatter">Shuffle obstacles</button>
+                <button class="btn btn-ghost" type="button" data-act="reset">Reset</button>
+              </div>
+              <p class="demo-msg" data-out="msg" aria-live="polite"></p>
+              <dl class="stats">
+                <div class="stat"><dt>Solve time</dt><dd data-out="ms">–</dd></div>
+                <div class="stat"><dt>Best cost</dt><dd data-out="cost">–</dd></div>
+                <div class="stat"><dt>Speed cmd</dt><dd data-out="v">–</dd></div>
+                <div class="stat"><dt>Min clearance</dt><dd data-out="clear">–</dd></div>
+              </dl>
+            </div>
+          </article>
+
+          <!-- Demo 3: DVL dropout -->
+          <article class="card demo reveal" data-demo="dvl" aria-labelledby="dvl-title">
+            <div class="demo-stage">
+              <canvas width="1000" height="733" style="--ar: 15 / 11" aria-label="Underwater dead-reckoning simulation comparing estimated and true paths." role="img"></canvas>
+              <span class="demo-hint mono">Loading demo…</span>
+            </div>
+            <div class="demo-side">
+              <span class="mono" style="color:var(--lime)">Demo 03 · Underwater</span>
+              <h3 id="dvl-title">Lights out</h3>
+              <p>A Kalman filter integrates a biased accelerometer and corrects it with velocity from the camera and/or a DVL. Black out the camera with and without the DVL and watch the estimate (coral) leave the true path (cream). A toy model of the idea behind <a href="https://github.com/Blackcipher101/uw-vio-dvl">uw-vio-dvl</a>.</p>
+              <div class="controls">
+                <button class="btn btn-ghost" type="button" data-act="camera" aria-pressed="true">Camera</button>
+                <button class="btn btn-ghost" type="button" data-act="dvl" aria-pressed="false">DVL</button>
+                <button class="btn btn-cream" type="button" data-act="blackout">20 s blackout</button>
+                <button class="btn btn-ghost" type="button" data-act="reset">Reset</button>
+              </div>
+              <div class="legend" aria-hidden="true">
+                <span><i style="background:#f4efe4"></i>truth</span>
+                <span><i style="background:#ffb48a"></i>estimate</span>
+                <span><i style="background:#ff6b57;height:5px"></i>camera dark</span>
+                <span><i style="background:#7d70ff"></i>2σ</span>
+              </div>
+              <dl class="stats">
+                <div class="stat"><dt>Error now</dt><dd data-out="err">–</dd></div>
+                <div class="stat"><dt>2σ bound</dt><dd data-out="sig">–</dd></div>
+                <div class="stat"><dt>Max err, dark</dt><dd data-out="max">–</dd></div>
+                <div class="stat"><dt>Sim time</dt><dd data-out="t">–</dd></div>
+              </dl>
+            </div>
+          </article>
         </div>
+        <noscript><p class="sec-head">The demos need JavaScript. Everything else on this page works without it.</p></noscript>
       </div>
+    </section>
 
-      <div class="flip-card">
-        <div class="flip-card-front">
-          <div class="achievement-icon">🚗</div>
-          <h3 class="achievement-title">Autonomous Systems</h3>
-          <p class="achievement-category">Leadership</p>
+    <!-- ================= OPEN SOURCE ================= -->
+    <section class="sec" id="work" aria-labelledby="work-title">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <div>
+            <span class="mono">03 / Open source</span>
+            <h2 id="work-title">Current<br>projects</h2>
+          </div>
+          <p>Underwater perception and estimation, with results measured against ground truth. Negative results are published too.</p>
         </div>
-        <div class="flip-card-back">
-          <div class="achievement-metric">3+</div>
-          <p class="achievement-label">Navigation Stacks Built</p>
-          <p class="achievement-description">
-            Led development of production-grade navigation and motion planning stacks for autonomous vehicles and 2-wheelers.
-          </p>
-        </div>
-      </div>
-
-      <div class="flip-card">
-        <div class="flip-card-front">
-          <div class="achievement-icon">🔧</div>
-          <h3 class="achievement-title">Tech Stack Mastery</h3>
-          <p class="achievement-category">Optimization</p>
-        </div>
-        <div class="flip-card-back">
-          <div class="achievement-metric">C++</div>
-          <p class="achievement-label">Core Expertise</p>
-          <p class="achievement-description">
-            Expert in low-latency C++, multithreading, ROS 2, eCAL, and real-time sensor processing for resource-constrained systems.
-          </p>
-        </div>
-      </div>
-
-      <div class="flip-card">
-        <div class="flip-card-front">
-          <div class="achievement-icon">🎓</div>
-          <h3 class="achievement-title">Education</h3>
-          <p class="achievement-category">Excellence</p>
-        </div>
-        <div class="flip-card-back">
-          <div class="achievement-metric">8.32</div>
-          <p class="achievement-label">GPA / 10.0</p>
-          <p class="achievement-description">
-            B.Tech in Electrical and Computer Engineering from Amrita Vishwa Vidyapeetham, specializing in robotics and autonomous systems.
-          </p>
-        </div>
-      </div>
-
-      <div class="flip-card">
-        <div class="flip-card-front">
-          <div class="achievement-icon">🛠️</div>
-          <h3 class="achievement-title">Key Projects</h3>
-          <p class="achievement-category">Innovation</p>
-        </div>
-        <div class="flip-card-back">
-          <div class="achievement-metric">5+</div>
-          <p class="achievement-label">Major Projects</p>
-          <p class="achievement-description">
-            Built autonomous AMRs with sonar, path planning stacks with A*, sensor fusion pipelines, and ROS-Gazebo integrations.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Contact Section -->
-  <section class="contact-section">
-    <div class="contact-bg-shape"></div>
-    <div class="contact-bg-shape"></div>
-
-    <div class="contact-container">
-      <div class="contact-header">
-        <h2 class="contact-title">Let's Connect</h2>
-        <p class="contact-subtitle">
-          I'm always excited to collaborate on robotics and autonomous systems projects, discuss sensor fusion and motion planning, or explore new opportunities. Feel free to reach out!
-        </p>
-      </div>
-
-      <div class="contact-grid">
-        <div class="contact-card">
-          <div class="contact-icon">📧</div>
-          <h3 class="contact-card-title">Email Me</h3>
-          <p class="contact-card-text">Drop me a line anytime</p>
-          <a href="mailto:nehalnevle@gmail.com" class="contact-link">
-            <span>nehalnevle@gmail.com</span>
+        <div class="bento">
+          <a class="card proj proj-wide reveal" href="https://github.com/Blackcipher101/uw-vio-dvl" data-tilt>
+            <figure>
+              <img src="assets/img/uw-vio-dvl-trajectory.webp" width="900" height="700" loading="lazy" decoding="async" alt="Plot of one trajectory during a 20 second camera blackout: the estimate without DVL wanders far off, the estimate with a simulated DVL stays close to the motion-capture ground truth">
+              <figcaption>Figure: uw-vio-dvl README (one example trajectory) · © Nehal Nevle</figcaption>
+            </figure>
+            <div class="proj-body">
+              <h3>uw-vio-dvl</h3>
+              <p>Visual-inertial odometry with a tightly coupled Doppler velocity log.</p>
+              <div class="metric"><strong>3.88 m → 0.66 m</strong><span>ATE through a 20 s camera blackout, with simulated DVL</span></div>
+            </div>
           </a>
-        </div>
-
-        <div class="contact-card">
-          <div class="contact-icon">📄</div>
-          <h3 class="contact-card-title">My Resume</h3>
-          <p class="contact-card-text">Download my latest CV</p>
-          <a href="/Users/nehalnevle/Downloads/Modern_CV_and_Cover_Letter__2015_version__.pdf" target="_blank" class="contact-link">
-            <span>Download Resume</span>
+          <a class="card proj reveal" href="https://github.com/Blackcipher101/uw-gpu-klt" data-tilt>
+            <figure>
+              <img src="assets/img/uw-gpu-klt-latency.webp" width="900" height="360" loading="lazy" decoding="async" alt="Bar charts comparing CPU and GPU front-end latency per frame and per stage">
+              <figcaption>Figure: uw-gpu-klt README · © Nehal Nevle</figcaption>
+            </figure>
+            <div class="proj-body">
+              <h3>uw-gpu-klt</h3>
+              <p>CUDA KLT feature-tracking front end.</p>
+              <div class="metric"><strong>2.0–4.9×</strong><span>faster, no accuracy loss</span></div>
+            </div>
           </a>
-        </div>
-
-        <div class="contact-card">
-          <div class="contact-icon">💼</div>
-          <h3 class="contact-card-title">Portfolio Drive</h3>
-          <p class="contact-card-text">View all my work</p>
-          <a href="https://blackcipher101.github.io/portfolio" target="_blank" class="contact-link">
-            <span>View Portfolio</span>
+          <a class="card card-cream proj reveal" href="https://github.com/Blackcipher101/uw-inspect-report" data-tilt>
+            <figure>
+              <img src="assets/img/uw-inspect-report-findings.webp" width="900" height="560" loading="lazy" decoding="async" alt="Grid of underwater camera crops with detector boxes for a tire, a window, marine growth, cracks and debris, each marked with the verifier's verdict">
+              <figcaption>Figure: uw-inspect-report README · © Nehal Nevle · camera frames from the AFRL bus_outside recording</figcaption>
+            </figure>
+            <div class="proj-body">
+              <h3>uw-inspect-report</h3>
+              <p>A detector plus a VLM draft the inspection report.</p>
+              <div class="metric"><strong>8/8</strong><span>true findings confirmed · precision 0.89</span></div>
+            </div>
           </a>
+          <a class="card proj reveal" href="https://github.com/Blackcipher101/uw-calib-health" data-tilt>
+            <figure>
+              <img src="assets/img/uw-calib-health-accuracy.webp" width="900" height="446" loading="lazy" decoding="async" alt="Scatter plots of injected versus estimated stereo rotation about each axis, lying on the ideal diagonal">
+              <figcaption>Figure: uw-calib-health README · © Nehal Nevle</figcaption>
+            </figure>
+            <div class="proj-body">
+              <h3>uw-calib-health</h3>
+              <p>In-water stereo calibration monitor.</p>
+              <div class="metric"><strong>≥ 0.2°</strong><span>every change detected · 0 false alarms</span></div>
+            </div>
+          </a>
+          <a class="card proj reveal" href="https://github.com/Blackcipher101/uw-vslam-bench" data-tilt>
+            <figure>
+              <img src="assets/img/uw-vslam-bench-risk.webp" width="900" height="481" loading="lazy" decoding="async" alt="Time series of visual SLAM drift rate and a predicted risk score that does not single out the windows before drift">
+              <figcaption>Figure: uw-vslam-bench README · © Nehal Nevle</figcaption>
+            </figure>
+            <div class="proj-body">
+              <h3>uw-vslam-bench</h3>
+              <p>Underwater visual SLAM benchmark, with the negative results published.</p>
+              <div class="metric"><strong>Benchmark</strong><span>+ negative results</span></div>
+            </div>
+          </a>
+          <div class="card proj-wip reveal">
+            <span class="mono" style="color:var(--lime)">In progress</span>
+            <div class="wip"><span>Humanoid RL in MuJoCo</span><span class="badge">In progress</span></div>
+            <div class="wip"><span>RL controller for an ROV</span><span class="badge">In progress</span></div>
+            <a class="btn btn-ghost" href="https://github.com/Blackcipher101">All repositories on GitHub</a>
+          </div>
         </div>
       </div>
+    </section>
 
-      <div class="social-links">
-        <a href="https://linkedin.com/in/nehalnevle" target="_blank" class="social-icon" title="LinkedIn">
-          💼
-        </a>
-        <a href="https://github.com/blackcipher101" target="_blank" class="social-icon" title="GitHub">
-          💻
-        </a>
-        <a href="https://twitter.com/nehalnevle" target="_blank" class="social-icon" title="Twitter">
-          🐦
-        </a>
-        <a href="tel:+919370094341" class="social-icon" title="Phone">
-          📱
-        </a>
+    <!-- ================= EXPERIENCE ================= -->
+    <section class="sec" id="experience" aria-labelledby="xp-title">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <div>
+            <span class="mono">04 / Experience</span>
+            <h2 id="xp-title">Where I've<br>built robots</h2>
+          </div>
+        </div>
+        <ol class="xp">
+          <li class="card job reveal">
+            <p class="when mono">Sep 2026 – now</p>
+            <div><h3>Autonomy Engineer</h3><p class="org">Griffin Labs · Singapore</p></div>
+            <p class="what">Building generalisable autonomy.</p>
+          </li>
+          <li class="card job reveal">
+            <p class="when mono">Sep 2025 – Aug 2026</p>
+            <div><h3>Senior Robotics Engineer</h3><p class="org">Aeroarc · Bengaluru</p></div>
+            <p class="what">India's defence robotics.</p>
+          </li>
+          <li class="card job reveal">
+            <p class="when mono">Aug 2024 – Aug 2025</p>
+            <div><h3>Robotics &amp; AI</h3><p class="org">BYTES · Bengaluru</p></div>
+            <p class="what">Led tech and product.</p>
+          </li>
+          <li class="card card-warm job reveal">
+            <p class="when mono roles"><span>Mar 2023 – Sep 2024</span><span>Jun 2022 – Mar 2023</span></p>
+            <div class="roles"><h3>Head of Planning &amp; Prediction</h3><h3 style="font-size:.8em;opacity:.85">Founding Engineer, Autonomy</h3><p class="org">Minus Zero · Bengaluru</p></div>
+            <p class="what">Took ZPod, India's first autonomous vehicle (launched at zDay 2023), from zero to 100k+ lines of production code.</p>
+            <ul class="pts">
+              <li>Simulation pipeline and an India-specific AV simulator.</li>
+              <li>Agentic Unreal Engine pipeline to build photorealistic simulators.</li>
+              <li>Closed-loop CI/CD.</li>
+              <li>Genetic-algorithm and actor-critic PID tuning.</li>
+              <li>H-GAIL and PPO for RL driving.</li>
+              <li>NVIDIA DriveWorks.</li>
+            </ul>
+          </li>
+          <li class="card job reveal">
+            <p class="when mono">Oct 2021 – Jun 2022</p>
+            <div><h3>Robotics Intern</h3><p class="org">Clutterbot (via In2peta Robotics)</p></div>
+            <ul class="pts">
+              <li>YOLOv5 + SolvePnP bin localization (+5% accuracy).</li>
+              <li>FSM control and ArUco docking.</li>
+              <li>Led two interns.</li>
+            </ul>
+          </li>
+          <li class="card card-cream job reveal">
+            <p class="when mono">Education</p>
+            <div><h3>B.Tech ECE (Robotics)</h3><p class="org" style="color:var(--ink-soft)">Amrita Vishwa Vidyapeetham</p></div>
+          </li>
+        </ol>
       </div>
+    </section>
 
-      <div class="footer">
-        <p class="footer-text">
-          Designed & Built with ❤️ by <span>Nehal Nevle</span><br>
-          © 2025 All Rights Reserved
-        </p>
+    <!-- ================= CONTACT ================= -->
+    <section class="sec" id="contact" aria-labelledby="contact-title">
+      <div class="wrap bento">
+        <div class="card card-warm contact reveal">
+          <div>
+            <span class="mono">05 / Contact</span>
+            <h2 id="contact-title" style="margin-top:14px">Let's build robots that know where they are.</h2>
+          </div>
+          <div class="links">
+            <a class="btn btn-ink" href="mailto:nehalnevle@gmail.com">nehalnevle@gmail.com <span aria-hidden="true">↗</span></a>
+            <a class="btn btn-cream" href="https://github.com/Blackcipher101">GitHub · Blackcipher101 <span aria-hidden="true">↗</span></a>
+            <a class="btn btn-cream" href="https://www.linkedin.com/search/results/people/?keywords=Nehal%20Nevle">LinkedIn <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
       </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap foot">
+      <p>© 2026 Nehal Nevle. Hand-built, no framework.</p>
+      <p><a href="mech_drone/">3D side quest: Mech Drone viewer</a> (model by Willy Decarpentrie, CC BY 4.0) · <a href="CREDITS.md">Credits</a></p>
     </div>
-  </section>
-
-  <script>
-    // Three.js Drone Setup
-    let droneScene, droneCamera, droneRenderer, droneMesh, mixer, clock;
-    let droneAnimationComplete = false;
-    const headerContent = document.querySelector('.header-content');
-
-    function initDrone() {
-      // Scene setup
-      droneScene = new THREE.Scene();
-      
-      // Camera setup
-      droneCamera = new THREE.PerspectiveCamera(
-        75,
-        window.innerWidth / window.innerHeight,
-        0.1,
-        1000
-      );
-      droneCamera.position.z = 5;
-
-      // Renderer setup
-      const droneCanvas = document.getElementById('drone-canvas');
-      droneRenderer = new THREE.WebGLRenderer({ 
-        canvas: droneCanvas, 
-        alpha: true,
-        antialias: true 
-      });
-      droneRenderer.setSize(window.innerWidth, window.innerHeight);
-      droneRenderer.setClearColor(0x000000, 0);
-
-      // Lighting
-      const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
-      droneScene.add(ambientLight);
-
-      const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-      directionalLight.position.set(5, 10, 5);
-      droneScene.add(directionalLight);
-
-      const pointLight1 = new THREE.PointLight(0x9B5DE0, 1.5, 50);
-      pointLight1.position.set(0, -2, 2);
-      droneScene.add(pointLight1);
-
-      const pointLight2 = new THREE.PointLight(0xFDCFFA, 1, 50);
-      pointLight2.position.set(0, 2, 2);
-      droneScene.add(pointLight2);
-
-      // Clock for animations
-      clock = new THREE.Clock();
-
-      // Load GLTF model
-      const loader = new THREE.GLTFLoader();
-      
-      loader.load(
-        './mech_drone/scene.gltf',
-        function (gltf) {
-          droneMesh = gltf.scene;
-          droneMesh.scale.set(3.5, 3.5, 3.5);
-          droneMesh.position.set(-8, -10, 0);
-          droneMesh.rotation.x = 0.5;
-          droneScene.add(droneMesh);
-          
-          if (gltf.animations && gltf.animations.length > 0) {
-            mixer = new THREE.AnimationMixer(droneMesh);
-            gltf.animations.forEach((clip) => {
-              mixer.clipAction(clip).play();
-            });
-          }
-          
-          console.log('Drone model loaded successfully!');
-        },
-        function (xhr) {
-          console.log((xhr.loaded / xhr.total * 100) + '% loaded');
-        },
-        function (error) {
-          console.error('Error loading drone model:', error);
-          createFallbackDrone();
-        }
-      );
-
-      animateDrone();
-    }
-
-    function createFallbackDrone() {
-      const droneGroup = new THREE.Group();
-      const bodyGeometry = new THREE.BoxGeometry(1, 0.4, 1.5);
-      const bodyMaterial = new THREE.MeshPhongMaterial({ 
-        color: 0x9B5DE0,
-        emissive: 0x4E56C0,
-        emissiveIntensity: 0.3
-      });
-      const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
-      droneGroup.add(body);
-
-      droneMesh = droneGroup;
-      droneMesh.position.set(-8, -10, 0);
-      droneMesh.rotation.x = 0.5;
-      droneScene.add(droneMesh);
-      
-      console.log('Using fallback drone model');
-    }
-
-    let animationProgress = 0;
-    const animationDuration = 10000;
-    let startTime = Date.now();
-    let hasFlownOut = false;
-    let hoverStartTime = 0;
-    let isHovering = false;
-    const hoverDuration = 2000;
-
-    function animateDrone() {
-      requestAnimationFrame(animateDrone);
-
-      if (mixer) {
-        const delta = clock.getDelta();
-        mixer.update(delta);
-      }
-
-      if (droneMesh && !droneAnimationComplete) {
-        const currentTime = Date.now();
-        const elapsed = currentTime - startTime;
-        animationProgress = Math.min(elapsed / animationDuration, 1);
-
-        const easeInOutCubic = (t) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-        const easedProgress = easeInOutCubic(animationProgress);
-
-        const spiralRotations = 2.5;
-        const spiralRadius = 3;
-        const angle = easedProgress * spiralRotations * Math.PI * 2;
-        
-        const startX = -8;
-        const startY = -10;
-        const endX = 4.5;
-        const endY = 0;
-        
-        const verticalProgress = easedProgress;
-        const currentY = startY + (endY - startY) * verticalProgress;
-        
-        const radiusProgress = Math.sin(easedProgress * Math.PI);
-        const currentRadius = spiralRadius * radiusProgress;
-        
-        const spiralX = Math.cos(angle) * currentRadius;
-        const spiralZ = Math.sin(angle) * currentRadius;
-        
-        const horizontalProgress = easedProgress;
-        const baseX = startX + (endX - startX) * horizontalProgress;
-        
-        droneMesh.position.x = baseX + spiralX;
-        droneMesh.position.y = currentY;
-        droneMesh.position.z = spiralZ;
-        
-        const velocity = easedProgress < 0.5 ? easedProgress * 2 : 2 - (easedProgress * 2);
-        droneMesh.rotation.x = 0.5 - (velocity * 0.4) + Math.sin(angle * 2) * 0.1;
-        droneMesh.rotation.z = Math.cos(angle) * 0.3 * radiusProgress;
-        droneMesh.rotation.y = -angle * 0.5;
-        
-        const wobble = Math.sin(currentTime * 0.01) * 0.08 * easedProgress;
-        droneMesh.position.y += wobble;
-        droneMesh.rotation.x += Math.sin(currentTime * 0.012) * 0.05 * easedProgress;
-
-        if (animationProgress >= 1 && !droneAnimationComplete) {
-          droneAnimationComplete = true;
-          isHovering = true;
-          hoverStartTime = Date.now();
-          headerContent.classList.add('visible');
-          setTimeout(typeWriter, 300);
-        }
-      } else if (droneMesh && droneAnimationComplete && isHovering && !hasFlownOut) {
-        const currentTime = Date.now();
-        const hoverElapsed = currentTime - hoverStartTime;
-        const hoverProgress = Math.min(hoverElapsed / hoverDuration, 1);
-        
-        const hoverTime = currentTime * 0.001;
-        
-        droneMesh.position.y = 0 + Math.sin(hoverTime * 1.5) * 0.15;
-        
-        droneMesh.rotation.x = -0.1 + Math.sin(hoverTime * 0.8) * 0.08;
-        droneMesh.rotation.z = Math.cos(hoverTime * 1.2) * 0.06;
-        droneMesh.rotation.y = Math.sin(hoverTime * 0.5) * 0.05;
-        
-        droneMesh.position.x = 4.5 + Math.sin(hoverTime * 0.6) * 0.1;
-        droneMesh.position.z = Math.cos(hoverTime * 0.8) * 0.1;
-        
-        if (hoverProgress >= 1) {
-          isHovering = false;
-          startTime = Date.now();
-          
-          // Show subtitle and buttons
-          const subtitle = document.getElementById('subtitle');
-          const ctaButtons = document.querySelector('.cta-buttons');
-          const scrollIndicator = document.querySelector('.scroll-indicator');
-          
-          if (subtitle) subtitle.classList.add('visible');
-          if (ctaButtons) ctaButtons.classList.add('visible');
-          if (scrollIndicator) scrollIndicator.classList.add('visible');
-        }
-      } else if (droneMesh && droneAnimationComplete && !isHovering && !hasFlownOut) {
-        const currentTime = Date.now();
-        const flyOutElapsed = currentTime - startTime;
-        const flyOutDuration = 3000;
-        const flyOutProgress = Math.min(flyOutElapsed / flyOutDuration, 1);
-        
-        const easeInCubic = (t) => t * t * t;
-        const flyOutEased = easeInCubic(flyOutProgress);
-        
-        const startFlyOutX = 4.5;
-        const startFlyOutY = 0;
-        const endFlyOutX = 12;
-        const endFlyOutY = 15;
-        
-        droneMesh.position.x = startFlyOutX + (endFlyOutX - startFlyOutX) * flyOutEased;
-        droneMesh.position.y = startFlyOutY + (endFlyOutY - startFlyOutY) * flyOutEased;
-        droneMesh.position.z = flyOutEased * 4;
-        
-        droneMesh.rotation.x = -0.3 + flyOutEased * 0.8;
-        droneMesh.rotation.z = -flyOutEased * 0.4;
-        droneMesh.rotation.y += 0.02 * flyOutEased;
-        
-        if (flyOutProgress >= 1) {
-          hasFlownOut = true;
-        }
-      }
-
-      if (droneRenderer && droneScene && droneCamera) {
-        droneRenderer.render(droneScene, droneCamera);
-      }
-    }
-
-    window.addEventListener('load', initDrone);
-
-    window.addEventListener('resize', () => {
-      if (droneCamera && droneRenderer) {
-        droneCamera.aspect = window.innerWidth / window.innerHeight;
-        droneCamera.updateProjectionMatrix();
-        droneRenderer.setSize(window.innerWidth, window.innerHeight);
-      }
-    });
-
-    const words = [
-      { text: 'Robotics Engineer', isName: false },
-      { text: 'AI Innovator', isName: false },
-      { text: 'Hard Tech Builder', isName: false },
-      { text: 'Product Creator', isName: false },
-      { text: 'Nehal Nevle', isName: true }
-    ];
-    let wordIndex = 0;
-    let charIndex = 0;
-    let isDeleting = false;
-    const typewriterElement = document.getElementById('typewriter');
-    const typingSpeed = 100;
-    const deletingSpeed = 60;
-    const pauseBetweenWords = 2000;
-
-    function typeWriter() {
-      const currentItem = words[wordIndex];
-      const currentWord = currentItem.text;
-      
-      if (currentItem.isName && !typewriterElement.classList.contains('white-text')) {
-        typewriterElement.classList.add('white-text');
-      } else if (!currentItem.isName && typewriterElement.classList.contains('white-text')) {
-        typewriterElement.classList.remove('white-text');
-      }
-      
-      if (isDeleting) {
-        typewriterElement.textContent = currentWord.substring(0, charIndex - 1);
-        charIndex--;
-      } else {
-        typewriterElement.textContent = currentWord.substring(0, charIndex + 1);
-        charIndex++;
-      }
-
-      if (!isDeleting && charIndex === currentWord.length) {
-        setTimeout(() => {
-          isDeleting = true;
-          typeWriter();
-        }, pauseBetweenWords);
-        return;
-      }
-
-      if (isDeleting && charIndex === 0) {
-        isDeleting = false;
-        wordIndex = (wordIndex + 1) % words.length;
-      }
-
-      const speed = isDeleting ? deletingSpeed : typingSpeed;
-      setTimeout(typeWriter, speed);
-    }
-
-    const { Engine, Render, World, Bodies, Mouse, MouseConstraint, Events } = Matter;
-
-    const canvas = document.getElementById('physics-canvas');
-    const engine = Engine.create();
-    const world = engine.world;
-
-    engine.world.gravity.y = 0.1;
-
-    const render = Render.create({
-      canvas: canvas,
-      engine: engine,
-      options: {
-        width: window.innerWidth,
-        height: window.innerHeight,
-        wireframes: false,
-        background: 'transparent'
-      }
-    });
-
-    const colors = ['#4E56C0', '#9B5DE0', '#D78FEE', '#FDCFFA'];
-
-    const bodies = [];
-    const numBodies = 25;
-
-    for (let i = 0; i < numBodies; i++) {
-      const size = Math.random() * 40 + 20;
-      const x = Math.random() * window.innerWidth;
-      const y = Math.random() * window.innerHeight;
-      const color = colors[Math.floor(Math.random() * colors.length)];
-      
-      const shape = Math.random() > 0.5 
-        ? Bodies.circle(x, y, size / 2, {
-            restitution: 0.9,
-            friction: 0.05,
-            render: {
-              fillStyle: color,
-              opacity: 0.6
-            }
-          })
-        : Bodies.polygon(x, y, Math.floor(Math.random() * 3) + 4, size / 2, {
-            restitution: 0.9,
-            friction: 0.05,
-            render: {
-              fillStyle: color,
-              opacity: 0.6
-            }
-          });
-      
-      Matter.Body.setVelocity(shape, {
-        x: (Math.random() - 0.5) * 2,
-        y: (Math.random() - 0.5) * 2
-      });
-      
-      bodies.push(shape);
-    }
-
-    World.add(world, bodies);
-
-    const wallOptions = { isStatic: true, render: { visible: false } };
-    const walls = [
-      Bodies.rectangle(window.innerWidth / 2, -25, window.innerWidth, 50, wallOptions),
-      Bodies.rectangle(window.innerWidth / 2, window.innerHeight + 25, window.innerWidth, 50, wallOptions),
-      Bodies.rectangle(-25, window.innerHeight / 2, 50, window.innerHeight, wallOptions),
-      Bodies.rectangle(window.innerWidth + 25, window.innerHeight / 2, 50, window.innerHeight, wallOptions)
-    ];
-    World.add(world, walls);
-
-    const mouse = Mouse.create(render.canvas);
-    const mouseConstraint = MouseConstraint.create(engine, {
-      mouse: mouse,
-      constraint: {
-        stiffness: 0.2,
-        render: { visible: false }
-      }
-    });
-
-    World.add(world, mouseConstraint);
-    render.mouse = mouse;
-
-    setInterval(() => {
-      bodies.forEach(body => {
-        const force = {
-          x: (Math.random() - 0.5) * 0.003,
-          y: (Math.random() - 0.5) * 0.003
-        };
-        Matter.Body.applyForce(body, body.position, force);
-      });
-    }, 2000);
-
-    Matter.Runner.run(engine);
-    Render.run(render);
-
-    window.addEventListener('resize', () => {
-      render.canvas.width = window.innerWidth;
-      render.canvas.height = window.innerHeight;
-      render.options.width = window.innerWidth;
-      render.options.height = window.innerHeight;
-
-      World.remove(world, walls);
-      const newWalls = [
-        Bodies.rectangle(window.innerWidth / 2, -25, window.innerWidth, 50, wallOptions),
-        Bodies.rectangle(window.innerWidth / 2, window.innerHeight + 25, window.innerWidth, 50, wallOptions),
-        Bodies.rectangle(-25, window.innerHeight / 2, 50, window.innerHeight, wallOptions),
-        Bodies.rectangle(window.innerWidth + 25, window.innerHeight / 2, 50, window.innerHeight, wallOptions)
-      ];
-      World.add(world, newWalls);
-      walls.length = 0;
-      walls.push(...newWalls);
-    });
-
-    const journeySection = document.querySelector('.journey-section');
-    const cards = document.querySelectorAll('.journey-card');
-
-    function updateCards() {
-      if (!journeySection) return;
-      
-      const scrollProgress = window.scrollY - journeySection.offsetTop;
-      const sectionHeight = journeySection.offsetHeight;
-      
-      const cardIndex = Math.floor((scrollProgress / sectionHeight) * cards.length);
-      
-      cards.forEach((card, index) => {
-        const cardProgress = (scrollProgress / sectionHeight) * cards.length - index;
-        
-        if (cardProgress >= 0 && cardProgress < 1) {
-          card.classList.add('active');
-          card.classList.remove('exit');
-          
-          const scale = 0.8 + (0.2 * Math.min(cardProgress * 2, 1));
-          const rotateX = -15 + (15 * Math.min(cardProgress * 2, 1));
-          const translateY = (1 - Math.min(cardProgress * 2, 1)) * 50;
-          
-          card.style.transform = `translateY(${translateY}vh) scale(${scale}) rotateX(${rotateX}deg)`;
-          card.style.opacity = Math.min(cardProgress * 2, 1);
-          
-        } else if (cardProgress >= 1) {
-          card.classList.remove('active');
-          card.classList.add('exit');
-          
-          const exitProgress = Math.min((cardProgress - 1) * 2, 1);
-          const scale = 1 - (0.2 * exitProgress);
-          const rotateX = 15 * exitProgress;
-          const translateY = -100 * exitProgress;
-          
-          card.style.transform = `translateY(${translateY}vh) scale(${scale}) rotateX(${rotateX}deg)`;
-          card.style.opacity = 1 - exitProgress;
-          
-        } else {
-          card.classList.remove('active');
-          card.classList.remove('exit');
-          card.style.transform = 'translateY(100vh) scale(0.8) rotateX(-15deg)';
-          card.style.opacity = 0;
-        }
-      });
-    }
-
-    let scrollTimeout;
-    window.addEventListener('scroll', () => {
-      if (scrollTimeout) {
-        window.cancelAnimationFrame(scrollTimeout);
-      }
-      scrollTimeout = window.requestAnimationFrame(updateCards);
-    });
-
-    updateCards();
-
-    const cursor = document.querySelector('.custom-cursor');
-    const trails = [];
-    const maxTrails = 15;
-
-    for (let i = 0; i < maxTrails; i++) {
-      const trail = document.createElement('div');
-      trail.className = 'cursor-trail';
-      trail.style.opacity = (1 - (i / maxTrails)) * 0.6;
-      document.body.appendChild(trail);
-      trails.push({
-        element: trail,
-        x: 0,
-        y: 0
-      });
-    }
-
-    let mouseX = 0;
-    let mouseY = 0;
-    let currentX = 0;
-    let currentY = 0;
-
-    document.addEventListener('mousemove', (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-    });
-
-    document.addEventListener('mouseover', (e) => {
-      if (e.target.closest('button, a, .flip-card')) {
-        cursor.classList.add('hover');
-      }
-    });
-
-    document.addEventListener('mouseout', (e) => {
-      if (e.target.closest('button, a, .flip-card')) {
-        cursor.classList.remove('hover');
-      }
-    });
-
-    function animateCursor() {
-      currentX += (mouseX - currentX) * 0.2;
-      currentY += (mouseY - currentY) * 0.2;
-      
-      cursor.style.left = currentX + 'px';
-      cursor.style.top = currentY + 'px';
-
-      trails.forEach((trail, index) => {
-        if (index === 0) {
-          trail.x += (currentX - trail.x) * 0.15;
-          trail.y += (currentY - trail.y) * 0.15;
-        } else {
-          trail.x += (trails[index - 1].x - trail.x) * 0.15;
-          trail.y += (trails[index - 1].y - trail.y) * 0.15;
-        }
-        
-        trail.element.style.left = trail.x + 'px';
-        trail.element.style.top = trail.y + 'px';
-      });
-
-      requestAnimationFrame(animateCursor);
-    }
-
-    animateCursor();
-
-    document.addEventListener('mouseleave', () => {
-      cursor.style.opacity = '0';
-      trails.forEach(trail => trail.element.style.opacity = '0');
-    });
-
-    document.addEventListener('mouseenter', () => {
-      cursor.style.opacity = '1';
-      trails.forEach((trail, index) => {
-        trail.element.style.opacity = (1 - (index / maxTrails)) * 0.6;
-      });
-    });
-
-    // Flip card click handling - click to toggle
-    const flipCards = document.querySelectorAll('.flip-card');
-
-    flipCards.forEach(card => {
-      card.addEventListener('click', function(e) {
-        // Toggle this card
-        this.classList.toggle('flipped');
-      });
-    });
-  </script>
+  </footer>
 </body>
 </html>
