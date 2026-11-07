@@ -41,3 +41,5 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          timeout: 1800000  # ms; the default 10 min timed out twice on 2026-11-07 while GitHub was still syncing files
