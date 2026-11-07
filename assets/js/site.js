@@ -109,3 +109,17 @@ if (demos.length) {
   }
   document.addEventListener('visibilitychange', () => demos.forEach(sync));
 }
+
+// ---- looping videos: play only while on screen; with reduced motion, stay paused on the poster with controls ----
+const loopVideos = document.querySelectorAll('video[loop]');
+if (reduceMotion) {
+  loopVideos.forEach((v) => { v.removeAttribute('autoplay'); v.pause(); v.controls = true; });
+} else if ('IntersectionObserver' in window) {
+  const vio = new IntersectionObserver((entries) => {
+    for (const e of entries) {
+      if (e.isIntersecting) e.target.play().catch(() => {}); // autoplay can be refused (e.g. data saver); the poster stays
+      else e.target.pause();
+    }
+  }, { threshold: 0.1 });
+  loopVideos.forEach((v) => vio.observe(v));
+}

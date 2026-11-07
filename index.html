@@ -18,7 +18,7 @@
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
   <link rel="preload" href="assets/fonts/space-grotesk-latin-var.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="assets/css/site.css?v=20261106q">
+  <link rel="stylesheet" href="assets/css/site.css?v=20261107a">
   <script>document.documentElement.classList.add('js');
   // Section order for the audience preset, set before first paint so nothing moves (no layout shift).
   // Same choice rule and preset -> group map as assets/js/audience.js (PRESETS[..].sections), which re-checks it.
@@ -32,12 +32,12 @@
     // hero does not change height on screen. Same URL as the module tag below, so it runs only once.
     if (g.hasOwnProperty(id)) {
       var s = document.createElement('script');
-      s.type = 'module'; s.src = 'assets/js/audience.js?v=20261106q'; s.setAttribute('blocking', 'render');
+      s.type = 'module'; s.src = 'assets/js/audience.js?v=20261107a'; s.setAttribute('blocking', 'render');
       document.head.appendChild(s);
     }
   })();</script>
-  <script type="module" src="assets/js/site.js?v=20261106q"></script>
-  <script type="module" src="assets/js/audience.js?v=20261106q"></script>
+  <script type="module" src="assets/js/site.js?v=20261107a"></script>
+  <script type="module" src="assets/js/audience.js?v=20261107a"></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -66,7 +66,7 @@
             <div class="tailor-ask">
               <label class="mono tailor-label" id="tailor-title" for="tailor-input">Who's visiting?</label>
               <div class="tailor-field">
-                <input id="tailor-input" name="who" type="text" maxlength="160" placeholder="I'm hiring for an underwater robotics startup…" aria-describedby="tailor-hint">
+                <input id="tailor-input" name="who" type="text" maxlength="160" placeholder="I'm hiring for an embodied AI startup…" aria-describedby="tailor-hint">
                 <button class="btn btn-lime" type="submit">Tailor the page</button>
               </div>
               <p class="tailor-hint" id="tailor-hint">The page reorders itself for you. Nothing is sent anywhere.</p>
@@ -98,7 +98,7 @@
             <span class="pill-label mono"><span class="dot" aria-hidden="true"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="3" fill="#fff"/></svg></span><span data-aud="pill">State estimation · SLAM · Planning · Embodied AI</span></span>
             <h1 data-aud="headline">I build the software that tells robots <b>where they are</b> and <b>where to go</b>.</h1>
             <div>
-              <p class="lede" data-aud="lede">State estimation, SLAM, planning and embodied AI, across the full robotics stack, through to deployment on real robots. Nearly every embodiment so far, from autonomous pods to quadrupeds. Now underwater.</p>
+              <p class="lede" data-aud="lede">State estimation, SLAM, planning and embodied AI, across the full robotics stack, through to deployment on real robots. Nearly every embodiment so far, from autonomous pods to quadrupeds. Now humanoids: policies that learn to walk, get up and spin-kick in simulation.</p>
             </div>
             <div class="actions">
               <a class="btn btn-ink" href="#demos">Play the demos
@@ -113,10 +113,10 @@
           </figure>
 
           <div class="card card-lime c-rov">
-            <img src="assets/img/rov.svg" width="580" height="650" alt="Original illustration of an underwater ROV with thrusters, a camera dome, a tether and Doppler velocity log beams" fetchpriority="high">
+            <div class="now-art" data-aud="nowart"><video class="now-vid" src="assets/vid/g1-spinkick.mp4" poster="assets/vid/g1-spinkick.webp" width="640" height="480" autoplay muted loop playsinline preload="metadata" aria-label="Simulated Unitree G1 humanoid doing an airborne spin kick, tracked by a learned SuperMimic policy"></video></div>
             <span class="mono">Now</span>
-            <h2>Underwater autonomy</h2>
-            <p>Visual-inertial odometry, DVL fusion and inspection tooling for robots that cannot see GPS.</p>
+            <h2 data-aud="nowtitle">Embodied AI</h2>
+            <p data-aud="nowtext">Humanoid policies in MuJoCo: a Unitree G1 spin kick at real torque limits, 64/64 clean runs, 0 falls.</p>
           </div>
 
           <div class="card card-warm c-stack" data-tilt>
@@ -142,7 +142,8 @@
           <li class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></svg>Defence robotics</li>
           <li class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="10" cy="10" r="6"/><path d="M15 15l6 6M7 10h6"/></svg>Inspection robots &amp; scanners</li>
           <li class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 20h8M8 20v-4l4-6 6 2M18 12l2-3M18 12l2 3"/><circle cx="12" cy="10" r="1.5"/></svg>Manipulators &amp; AMRs</li>
-          <li class="chip chip-now"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 13c0-2.5 3-4 8-4h4c3 0 6 1.5 6 4s-3 4-6 4h-4c-5 0-8-1.5-8-4z"/><path d="M12 9V6h3"/></svg>Underwater, now</li>
+          <li class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 13c0-2.5 3-4 8-4h4c3 0 6 1.5 6 4s-3 4-6 4h-4c-5 0-8-1.5-8-4z"/><path d="M12 9V6h3"/></svg>Underwater</li>
+          <li class="chip chip-now"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="4.5" r="2"/><path d="M12 7v7M7 10l5-1.5 5 1.5M9 21l3-7 3 7"/></svg>Humanoids, now</li>
         </ul>
       </div>
     </section>
@@ -574,10 +575,28 @@
             <span class="mono"><span class="sec-n"></span> / Open source</span>
             <h2 id="work-title">Current<br>projects</h2>
           </div>
-          <p>Underwater perception and estimation, with results measured against ground truth. Negative results are published too.</p>
+          <p>Embodied AI, perception and estimation, with results measured against ground truth. Negative results are published too.</p>
         </div>
         <div class="bento">
-          <a class="card proj proj-wide reveal" data-proj="vio" href="https://github.com/Blackcipher101/uw-vio-dvl" data-tilt>
+          <a class="card proj proj-wide reveal" data-proj="humanoid" href="https://github.com/Blackcipher101/humanoid-mimic-rl" data-tilt>
+            <figure>
+              <div class="vid-grid">
+                <div class="vid-tile"><video src="assets/vid/g1-spinkick-sm.mp4" poster="assets/vid/g1-spinkick-sm.webp" width="360" height="270" autoplay muted loop playsinline preload="none" aria-label="Unitree G1 doing an airborne spin kick (SuperMimic, CMU mocap clip)"></video><span class="mono">G1 spin kick</span></div>
+                <div class="vid-tile"><video src="assets/vid/t1-getup-sm.mp4" poster="assets/vid/t1-getup-sm.webp" width="360" height="270" autoplay muted loop playsinline preload="none" aria-label="Booster T1 getting up from lying on its back (PPO)"></video><span class="mono">T1 get-up</span></div>
+                <div class="vid-tile"><video src="assets/vid/t1-supermimic-walk-sm.mp4" poster="assets/vid/t1-supermimic-walk-sm.webp" width="360" height="270" autoplay muted loop playsinline preload="none" aria-label="Booster T1 tracking a walk clip with the SuperMimic policy"></video><span class="mono">SuperMimic walk</span></div>
+                <div class="vid-tile"><video src="assets/vid/t1-ppo-walk-sm.mp4" poster="assets/vid/t1-ppo-walk-sm.webp" width="360" height="270" autoplay muted loop playsinline preload="none" aria-label="Booster T1 walking forward at 0.5 m/s (PPO)"></video><span class="mono">PPO walk</span></div>
+              </div>
+              <figcaption>Simulation videos: humanoid-mimic-rl README · © Nehal Nevle · CMU mocap data: mocap.cs.cmu.edu</figcaption>
+            </figure>
+            <div class="proj-body">
+              <h3>humanoid-mimic-rl</h3>
+              <p>Humanoid policies in MuJoCo MJX: PPO walk and get-up on the Booster T1, and a SuperMimic reimplementation (learned world model, backprop through imagined rollouts) tracking mocap on the T1 and a Unitree G1 at its published peak torques, with self-collision.</p>
+              <div class="metric"><strong>64/64</strong><span>G1 spin kick completed, 0 falls, joint error 0.067 rad</span></div>
+              <div class="metric"><strong>127/128</strong><span>T1 get-ups end standing · median 1.32 s</span></div>
+              <div class="metric"><strong>0 falls</strong><span>128 × 20 s PPO walk episodes · 0.47 m/s vs 0.5 commanded</span></div>
+            </div>
+          </a>
+          <a class="card proj reveal" data-proj="vio" href="https://github.com/Blackcipher101/uw-vio-dvl" data-tilt>
             <figure>
               <img src="assets/img/uw-vio-dvl-trajectory.webp" width="900" height="700" loading="lazy" decoding="async" alt="Plot of one trajectory during a 20 second camera blackout: the estimate without DVL wanders far off, the estimate with a simulated DVL stays close to the motion-capture ground truth">
               <figcaption>Figure: uw-vio-dvl README (one example trajectory) · © Nehal Nevle</figcaption>
@@ -634,8 +653,8 @@
           </a>
           <a class="card proj reveal" data-proj="rov" href="https://github.com/Blackcipher101/rov-rl-mujoco" data-tilt>
             <figure>
-              <img src="assets/img/rov-nav-overhead.webp" width="900" height="422" loading="lazy" decoding="async" alt="Overhead map of an ROV navigating with sonar through an obstacle field with moving obstacles: RL policy on the left, VFH+ planner on the right">
-              <figcaption>Figure: rov-rl-mujoco README · © Nehal Nevle</figcaption>
+              <video src="assets/vid/rov-nav-overhead.mp4" poster="assets/vid/rov-nav-overhead.webp" width="960" height="320" autoplay muted loop playsinline preload="none" aria-label="Overhead view of one ROV episode through crossing traffic with sonar only, three controllers side by side: fine-tuned RL policy, VFH+ baseline, and the RL policy before fine-tuning, which fails"></video>
+              <figcaption>One evaluation episode, picked for illustration: fine-tuned RL · VFH+ · RL before fine-tuning · © Nehal Nevle</figcaption>
             </figure>
             <div class="proj-body">
               <h3>rov-rl-mujoco</h3>
@@ -665,20 +684,9 @@
               <div class="metric"><strong>RRT*</strong><span>custom Nav2 plugin in C++ · Docker image</span></div>
             </div>
           </a>
-          <a class="card proj reveal" data-proj="humanoid" href="https://github.com/Blackcipher101/humanoid-mimic-rl" data-tilt>
-            <figure>
-              <img src="assets/img/humanoid-walk.webp" width="640" height="480" loading="lazy" decoding="async" alt="Booster T1 humanoid walking forward in MuJoCo with a trained PPO policy">
-              <figcaption>Frame: humanoid-mimic-rl README · © Nehal Nevle</figcaption>
-            </figure>
-            <div class="proj-body">
-              <h3>humanoid-mimic-rl</h3>
-              <p>Booster T1 humanoid in MuJoCo MJX: PPO walking, plus get-up, backflip, DeepMimic imitation and a SuperMimic reimplementation (training).</p>
-              <div class="metric"><strong>0 falls</strong><span>128 × 20 s walk episodes · 100 % success · 0.47 m/s vs 0.5 commanded</span></div>
-            </div>
-          </a>
           <div class="card proj-wip reveal" data-proj="wip">
             <span class="mono" style="color:var(--lime)">In progress</span>
-            <div class="wip"><span>Humanoid get-up, backflip and SuperMimic</span><span class="badge">Training</span></div>
+            <div class="wip"><span>Humanoid backflip → spin kick routine on the G1, and SuperMimic improvements</span><span class="badge">Training</span></div>
             <div class="wip"><span>Sonar-based RL navigation for the ROV</span><span class="badge">Evaluating</span></div>
             <a class="btn btn-ghost" href="https://github.com/Blackcipher101">All repositories on GitHub</a>
           </div>

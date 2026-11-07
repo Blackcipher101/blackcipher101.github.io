@@ -13,6 +13,8 @@
 | `assets/img/og.jpg`, `assets/img/apple-touch-icon.png` | Screenshots of this site | Original work |
 | `assets/img/stereo-devkit.svg` | Drawn for this site (generated isometric SVG) | Original work, an illustration rather than a photo |
 | `assets/img/turtlebot-slam-rviz.webp` | https://raw.githubusercontent.com/Blackcipher101/turtlebot_autonomy/main/assets/screenshot_slam_rviz.png (cropped) | Nehal Nevle (own repository screenshot) |
+| `assets/vid/g1-spinkick*.mp4`, `t1-getup-sm.mp4`, `t1-supermimic-walk-sm.mp4`, `t1-ppo-walk-sm.mp4` (+ `.webp` posters) | Simulation renders from https://github.com/Blackcipher101/humanoid-mimic-rl (`docs/media`), re-encoded | Nehal Nevle (own renders). Robot models: Booster T1 and Unitree G1 via MuJoCo Playground (Apache-2.0), G1 meshes MuJoCo Menagerie (BSD-3-Clause). The spin kick follows CMU mocap 88_06: "The data used in this project was obtained from mocap.cs.cmu.edu. The database was created with funding from NSF EIA-0196217." |
+| `assets/vid/rov-nav-overhead.mp4` (+ `.webp` poster) | Evaluation render from rov-rl-mujoco (one episode, picked for illustration), re-encoded | Nehal Nevle (own render) |
 
 ## Robot and product photos (Experience section)
 

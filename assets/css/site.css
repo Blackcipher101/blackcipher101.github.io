@@ -522,3 +522,14 @@ footer { padding: 40px 0 48px; color: var(--muted); font-size: 14px; }
   .js .reveal { opacity: 1; transform: none; }
   [data-tilt] { transform: none !important; }
 }
+
+/* ---------- videos (hero "Now" card, project cards) ---------- */
+.c-rov .now-art { position: absolute; left: 14px; right: 14px; top: 14px; }
+.c-rov .now-vid { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 16px; background: #fff; }
+.c-rov .now-art img { position: static; transform: none; width: 100%; filter: none; } /* underwater preset: ROV illustration */
+.proj figure > video { display: block; width: 100%; height: 220px; object-fit: contain; background: #fff; }
+.vid-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; background: #fff; }
+.proj-wide .vid-grid { grid-template-columns: repeat(4, 1fr); }
+.vid-tile { position: relative; }
+.vid-tile video { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; }
+.vid-tile span { position: absolute; left: 6px; top: 6px; padding: 2px 7px; border-radius: 8px; font-size: 10px; background: rgba(14,13,18,.72); color: var(--cream); }
