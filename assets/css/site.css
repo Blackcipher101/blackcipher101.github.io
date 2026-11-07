@@ -524,9 +524,11 @@ footer { padding: 40px 0 48px; color: var(--muted); font-size: 14px; }
 }
 
 /* ---------- videos (hero "Now" card, project cards) ---------- */
-.c-rov .now-art { position: absolute; left: 14px; right: 14px; top: 14px; }
+.c-rov .now-art { margin-bottom: auto; } /* video: in the card's flow above the text, so the text never sits under it */
+.c-rov:has(.now-vid) { margin-top: 0; } /* the phone layout's top margin only makes room for the overhanging ROV illustration */
 .c-rov .now-vid { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 16px; background: #fff; }
-.c-rov .now-art img { position: static; transform: none; width: 100%; filter: none; } /* underwater preset: ROV illustration */
+/* underwater preset puts the ROV illustration in .now-art: let it keep the original .c-rov img placement (relative to the card) */
+.c-rov .now-art:has(> img) { margin: 0; }
 .proj figure > video { display: block; width: 100%; height: 220px; object-fit: contain; background: #fff; }
 .vid-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; background: #fff; }
 .proj-wide .vid-grid { grid-template-columns: repeat(4, 1fr); }
