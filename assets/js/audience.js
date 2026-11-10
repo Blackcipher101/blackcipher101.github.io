@@ -21,6 +21,18 @@ export const SECTION_ORDER = {
 const hasDom = typeof document !== 'undefined';
 const reduceMotion = hasDom && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+/** Hero "Now" card variants shared by several presets (static, trusted markup). */
+const NOW_FASTLIO = {
+  nowart: '<svg class="now-vid now-chart" viewBox="0 0 640 480" role="img" aria-label="Bar chart of CPU use, in percent of one core, measured live on a Jetson Orin before and after moving FAST-LIO2 and the localizer to the GPU: FAST-LIO2 46 to 16, localizer 28 to 16, lidar pipeline 40.9 to 10.2, cloud merger 8.9 to 7.0; FAST-LIO2 alone 0.46 to 0.16 cores, all four 1.24 to 0.49 cores"><rect width="640" height="480" fill="#0e0d12"/><text x="32" y="50" fill="#f4efe4" font-size="22" font-weight="600">CPU, % of one core</text><text x="32" y="76" fill="#9b95a6" font-size="15">measured live on a Jetson Orin · CPU build vs exact GPU build</text><text x="32" y="116" fill="#d6d1de" font-size="16">FAST-LIO2</text><rect x="32" y="126" width="350" height="14" rx="4" fill="#4a4556"/><text x="392" y="138" fill="#9b95a6" font-size="14">46</text><rect class="bar" style="animation-delay:0.00s" x="32" y="144" width="122" height="14" rx="4" fill="#d9f552"/><text x="164" y="156" fill="#d9f552" font-size="14" font-weight="600">16</text><text x="32" y="188" fill="#d6d1de" font-size="16">Localizer</text><rect x="32" y="198" width="213" height="14" rx="4" fill="#4a4556"/><text x="255" y="210" fill="#9b95a6" font-size="14">28</text><rect class="bar" style="animation-delay:0.15s" x="32" y="216" width="122" height="14" rx="4" fill="#d9f552"/><text x="164" y="228" fill="#d9f552" font-size="14" font-weight="600">16</text><text x="32" y="260" fill="#d6d1de" font-size="16">Lidar pipeline</text><rect x="32" y="270" width="311" height="14" rx="4" fill="#4a4556"/><text x="353" y="282" fill="#9b95a6" font-size="14">40.9</text><rect class="bar" style="animation-delay:0.30s" x="32" y="288" width="78" height="14" rx="4" fill="#d9f552"/><text x="120" y="300" fill="#d9f552" font-size="14" font-weight="600">10.2</text><text x="32" y="332" fill="#d6d1de" font-size="16">Cloud merger</text><rect x="32" y="342" width="68" height="14" rx="4" fill="#4a4556"/><text x="110" y="354" fill="#9b95a6" font-size="14">8.9</text><rect class="bar" style="animation-delay:0.45s" x="32" y="360" width="53" height="14" rx="4" fill="#d9f552"/><text x="95" y="372" fill="#d9f552" font-size="14" font-weight="600">7</text><text x="32" y="434" fill="#f4efe4" font-size="34" font-weight="700">0.46 → 0.16 cores</text><text x="32" y="460" fill="#9b95a6" font-size="15">FAST-LIO2 alone · all four nodes 1.24 → 0.49 · same results as CPU</text></svg>',
+  nowtitle: 'Exact GPU FAST-LIO2',
+  nowtext: 'FAST-LIO2 and the map localizer on a Jetson Orin GPU with the same results as the CPU code. FAST-LIO2 went from 0.46 to 0.16 CPU cores and the whole localization chain from 1.24 to 0.49, measured live on the robot.',
+};
+const NOW_NAV_RL = {
+  nowart: '<video class="now-vid now-wide" src="assets/vid/rov-nav-overhead.mp4" poster="assets/vid/rov-nav-overhead.webp" width="960" height="320" autoplay muted loop playsinline preload="metadata" aria-label="Overhead view of one ROV episode through crossing traffic with sonar only, driven by the fine-tuned RL policy"></video>',
+  nowtitle: 'Navigation RL in MuJoCo',
+  nowtext: 'An RL policy steering an ROV through crossing traffic on sonar only. One episode, picked for illustration; the results are being re-validated.',
+};
+
 /** Presets. headline may contain <b>; it is static, trusted copy. */
 export const PRESETS = {
   startup: {
@@ -37,6 +49,7 @@ export const PRESETS = {
     points: ['zero', 'series', 'raise', 'demo', 'accel'],
   },
   enterprise: {
+    ...NOW_FASTLIO,
     label: 'Big company / enterprise',
     pill: 'Production code · CI/CD · Leadership',
     headline: 'Autonomy code that <b>runs in production</b>, with CI behind it.',
@@ -44,7 +57,7 @@ export const PRESETS = {
     pitch: 'Led planning & prediction, wrote production-scale autonomy code, and builds evaluation you can reproduce.',
     work: 'Benchmarked against ground truth, with the evaluation scripts in each repo.',
     projects: ['vio', 'klt', 'bench', 'calib', 'inspect', 'tb3'],
-    demos: ['scara', 'slam', 'mppi', 'dvl'],
+    demos: ['scara', 'filters', 'slam', 'mppi'],
     sections: 'proof',
     jobs: ['mz', 'griffin', 'aeroarc'],
     points: ['zero', 'series', 'ci', 'sim'],
@@ -60,7 +73,7 @@ export const PRESETS = {
     nowtext: 'Visual-inertial odometry, DVL fusion and inspection tooling for robots that cannot see GPS.',
     work: 'Underwater perception and estimation, with results measured against ground truth. Negative results are published too.',
     projects: ['vio', 'rov', 'klt', 'calib', 'inspect', 'bench'],
-    demos: ['dvl', 'sonar', 'slam', 'mppi'],
+    demos: ['dvl', 'filters', 'sonar', 'slam'],
     sections: 'base',
     jobs: [],
     points: [],
@@ -79,6 +92,7 @@ export const PRESETS = {
     points: ['rl', 'ue', 'sim', 'mlss', 'eeml'],
   },
   av: {
+    ...NOW_NAV_RL,
     label: 'Autonomous vehicles',
     pill: 'Planning · Prediction · Simulation',
     headline: 'Planning and prediction for <b>autonomous vehicles</b>.',
@@ -86,12 +100,13 @@ export const PRESETS = {
     pitch: 'ZPod end to end: planning, prediction, simulation and CI for India\'s first autonomous vehicle.',
     work: 'Planning, SLAM and estimation projects outside work.',
     projects: ['tb3', 'vio', 'klt', 'bench', 'q14', 'rov'],
-    demos: ['mppi', 'slam', 'cartpole', 'dvl'],
+    demos: ['mppi', 'filters', 'slam', 'dvl'],
     sections: 'base',
     jobs: ['mz', 'bytes'],
     points: ['zero', 'sim', 'ue', 'ci', 'ga', 'rl', 'dw'],
   },
   defence: {
+    ...NOW_FASTLIO,
     label: 'Defence',
     pill: 'Defence robotics · UGV · Quadruped',
     headline: 'Autonomy for <b>defence robotics</b>.',
@@ -99,12 +114,13 @@ export const PRESETS = {
     pitch: 'Defence robotics at Aeroarc (VIRA, ARCV MULE), plus estimation built for degraded sensing.',
     work: 'Estimation that survives sensor dropout, measured against ground truth.',
     projects: ['vio', 'calib', 'klt', 'q14', 'tb3', 'bench'],
-    demos: ['boxtrack', 'sonar', 'standoff', 'dvl'],
+    demos: ['boxtrack', 'filters', 'sonar', 'dvl'],
     sections: 'base',
     jobs: ['aeroarc', 'mz'],
     points: ['sim', 'ci'],
   },
   inspection: {
+    ...NOW_FASTLIO,
     label: 'Inspection / industrial',
     pill: 'Inspection · Reality capture · Facilities',
     headline: 'Robots that <b>inspect</b>, scan and report.',
@@ -131,14 +147,15 @@ export const PRESETS = {
     points: ['rl', 'ga'],
   },
   recruiter: {
+    ...NOW_FASTLIO,
     label: 'Recruiter / hiring manager',
     pill: 'Exact GPU SLAM · Estimation · Planning · RL',
-    headline: '<b>FAST-LIO2</b> on the GPU, <b>exact</b> results, under <b>half the CPU</b>.',
-    lede: 'Autonomy Engineer at Griffin Labs (now): moved FAST-LIO2 and the map localizer onto the Jetson Orin GPU with results that match the CPU code (0 mismatches over 7.27 M nearest-neighbour searches); live on the robot, the localization nodes went from 1.24 to 0.49 CPU cores. Before: Senior Robotics Engineer at Aeroarc, Robotics & AI at BYTES (led tech and product), Head of Planning & Prediction and Founding Engineer at Minus Zero (ZPod), Robotics Intern at Clutterbot. B.Tech ELC (Robotics), Amrita.',
+    headline: '<b>FAST-LIO2</b> on the GPU, <b>exact</b> results, a <b>third of the CPU</b>.',
+    lede: 'Autonomy Engineer at Griffin Labs (now): moved FAST-LIO2 and the map localizer onto the Jetson Orin GPU with results that match the CPU code (0 mismatches over 7.27 M nearest-neighbour searches); live on the robot, FAST-LIO2 went from 0.46 to 0.16 CPU cores and the whole localization chain from 1.24 to 0.49. Before: Senior Robotics Engineer at Aeroarc, Robotics & AI at BYTES (led tech and product), Head of Planning & Prediction and Founding Engineer at Minus Zero (ZPod), Robotics Intern at Clutterbot. B.Tech ELC (Robotics), Amrita.',
     pitch: 'Skills: state estimation, SLAM, GPU acceleration, planning & prediction, RL, simulation, CI/CD · C++, Python, CUDA, ROS 2 · nehalnevle@gmail.com',
     work: 'A short list of public projects, each with measured results.',
     projects: ['vio', 'humanoid', 'rov', 'q14', 'klt', 'inspect'],
-    demos: ['slam', 'cartpole', 'scara', 'mppi'],
+    demos: ['filters', 'slam', 'cartpole', 'mppi'],
     sections: 'proof',
     jobs: ['griffin', 'aeroarc', 'bytes', 'mz'],
     points: ['lio', 'zero', 'series', 'raise', 'accel', 'ci', 'lead', 'mlss', 'eeml'],

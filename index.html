@@ -18,7 +18,7 @@
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
   <link rel="preload" href="assets/fonts/space-grotesk-latin-var.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="assets/css/site.css?v=20261107c">
+  <link rel="stylesheet" href="assets/css/site.css?v=20261110a">
   <script>document.documentElement.classList.add('js');
   // Section order for the audience preset, set before first paint so nothing moves (no layout shift).
   // Same choice rule and preset -> group map as assets/js/audience.js (PRESETS[..].sections), which re-checks it.
@@ -32,12 +32,12 @@
     // hero does not change height on screen. Same URL as the module tag below, so it runs only once.
     if (g.hasOwnProperty(id)) {
       var s = document.createElement('script');
-      s.type = 'module'; s.src = 'assets/js/audience.js?v=20261107c'; s.setAttribute('blocking', 'render');
+      s.type = 'module'; s.src = 'assets/js/audience.js?v=20261110a'; s.setAttribute('blocking', 'render');
       document.head.appendChild(s);
     }
   })();</script>
-  <script type="module" src="assets/js/site.js?v=20261107c"></script>
-  <script type="module" src="assets/js/audience.js?v=20261107c"></script>
+  <script type="module" src="assets/js/site.js?v=20261110a"></script>
+  <script type="module" src="assets/js/audience.js?v=20261110a"></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -325,6 +325,46 @@
               <details class="demo-more">
                 <summary>How it works · numbers</summary>
                 <p>Wheel odometry has a small heading bias, so the estimate (coral) drifts away from the truth (dashed). Drive back to the start: a loop-closure edge (lime) appears. Optimise runs Levenberg–Marquardt on the full 2D pose graph.</p>
+              </details>
+            </div>
+          </article>
+
+          <!-- Demo: localisation filters, linear KF vs EKF vs UKF -->
+          <article class="card demo demo-tiled reveal" data-demo="filters" aria-labelledby="filters-title">
+            <div class="demo-stage">
+              <canvas width="1000" height="625" style="--ar: 8 / 5" aria-label="Top view of a robot driving a figure-eight past four beacons, with the true path and the position estimates and 2-sigma ellipses of a linear Kalman filter, an extended Kalman filter and an unscented Kalman filter." role="img"></canvas>
+              <span class="demo-hint mono">Loading demo…</span>
+            </div>
+            <div class="demo-tiles">
+              <dl class="stats">
+                <div class="stat"><dt style="color:var(--coral)">Linear KF</dt><dd><span data-out="rmse-kf">–</span><small data-out="cons-kf"></small></dd></div>
+                <div class="stat"><dt style="color:var(--lime)">EKF</dt><dd><span data-out="rmse-ekf">–</span><small data-out="cons-ekf"></small></dd></div>
+                <div class="stat"><dt style="color:var(--violet)">UKF</dt><dd><span data-out="rmse-ukf">–</span><small data-out="cons-ukf"></small></dd></div>
+                <div class="stat"><dt>Run</dt><dd><span data-out="run">–</span><small data-out="flag"></small></dd></div>
+              </dl>
+            </div>
+            <div class="demo-side">
+              <span class="mono demo-tag" style="color:var(--lime)">Localisation</span>
+              <h3 id="filters-title">Three filters, one robot</h3>
+              <p class="demo-lede">Simulated figure-eight, identical odometry and beacon data for all three filters. Watch the linear KF lag in the turns and grow overconfident as bearing noise rises.</p>
+              <ul class="demo-head" aria-label="Headline numbers"><li>KF vs EKF vs UKF</li><li>range + bearing beacons</li><li>live RMSE and consistency</li></ul>
+              <p class="demo-ctx"><span class="mono">From my work</span> FAST-LIO2, an iterated error-state Kalman filter, localising a robot at <a href="#xp-griffin">Griffin Labs</a>.</p>
+              <div class="controls">
+                <button class="btn btn-ghost" type="button" data-act="noise">Bearing noise: 10°</button>
+                <button class="btn btn-ghost" type="button" data-act="rate">Updates: 2 Hz</button>
+                <button class="btn btn-cream" type="button" data-act="off">Beacons off 5 s</button>
+                <button class="btn btn-ghost" type="button" data-act="reset">Restart</button>
+              </div>
+              <div class="legend" aria-hidden="true">
+                <span><i style="background:#f4efe4"></i>truth</span>
+                <span><i style="background:#ff6b57"></i>linear KF</span>
+                <span><i style="background:#d9f45b"></i>EKF</span>
+                <span><i style="background:#7d70ff"></i>UKF</span>
+              </div>
+              <p class="demo-msg demo-live" data-out="msg" aria-live="polite"></p>
+              <details class="demo-more">
+                <summary>How it works · numbers</summary>
+                <p>A unicycle robot (state x, y, heading) drives two tangent circles at 2 m/s with noisy speed and yaw-rate odometry at 20 Hz, and hears range and world-frame bearing from beacons within 7 m. Bearing noise and update rate are the controls; the run is seeded, so it repeats. The linear KF is a constant-velocity filter on [x, y, vx, vy] that turns each range/bearing pair into a Cartesian fix with a first-order converted-measurement covariance; it ignores the odometry and the heading. The EKF and UKF estimate [x, y, heading] with the odometry as input, one with analytic Jacobians, one with scaled sigma points and a circular mean for the heading. Readouts: position RMSE so far, the share of time the truth is inside the filter's own 2σ ellipse (a consistent 2-D filter sits near 86%) and the mean position NEES (ideal 2). Maths: <code>assets/js/demos/lib/filters-core.js</code>; headless check: <code>tools/eval_filters.mjs</code>.</p>
               </details>
             </div>
           </article>
@@ -690,7 +730,7 @@
           </a>
           <div class="card proj-wip reveal" data-proj="wip">
             <span class="mono" style="color:var(--lime)">In progress</span>
-            <div class="wip"><span>Exact GPU FAST-LIO2 and localizer on the Jetson Orin: same results as the CPU code, at under half the CPU</span><span class="badge">Robot testing</span></div>
+            <div class="wip"><span>Exact GPU FAST-LIO2 and localizer on the Jetson Orin: same results as the CPU code, at a third of the CPU</span><span class="badge">Robot testing</span></div>
             <div class="wip"><span>Sonar-based RL navigation for the ROV</span><span class="badge">Evaluating</span></div>
             <a class="btn btn-ghost" href="https://github.com/Blackcipher101">All repositories on GitHub</a>
           </div>

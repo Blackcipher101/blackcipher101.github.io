@@ -313,6 +313,7 @@ html[data-order="play"] .nav-links a[href="#demos"] { order: 1; } html[data-orde
 .stat dt { font-family: var(--mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
 .stat dd { margin: 2px 0 0; font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums; }
 /* two controllers in one tile: series A (lime) and B (peach), keyed by .vs-key */
+.stat dd small { display: block; margin-top: 2px; font-size: 11px; font-weight: 400; color: var(--muted); }
 .stat dd.vs-pair { display: flex; flex-wrap: wrap; gap: 0 10px; font-size: 16px; }
 .vs-a { color: var(--lime); }
 .vs-b { color: var(--peach); }
@@ -529,6 +530,12 @@ footer { padding: 40px 0 48px; color: var(--muted); font-size: 14px; }
 .c-rov .now-vid { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 16px; background: #fff; }
 /* underwater preset puts the ROV illustration in .now-art: let it keep the original .c-rov img placement (relative to the card) */
 .c-rov .now-art:has(> img) { margin: 0; }
+/* per-audience variants of the Now card art: a CPU chart (inline SVG) and the first panel of a 3:1 three-panel video */
+.c-rov .now-chart { background: #0e0d12; font-family: inherit; }
+.c-rov .now-chart .bar { transform-box: fill-box; transform-origin: left center; animation: now-bar 1.1s cubic-bezier(.2,.7,.2,1) both; }
+@keyframes now-bar { from { transform: scaleX(3); opacity: .35; } to { transform: scaleX(1); opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .c-rov .now-chart .bar { animation: none; } }
+.c-rov .now-wide { aspect-ratio: 1 / 1; object-fit: cover; object-position: left center; background: #fff; } /* shows the first of the three square panels */
 .proj figure > video { display: block; width: 100%; height: 220px; object-fit: contain; background: #fff; }
 .vid-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; background: #fff; }
 .proj-wide .vid-grid { grid-template-columns: repeat(4, 1fr); }

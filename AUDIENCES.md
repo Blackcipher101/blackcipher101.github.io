@@ -11,7 +11,7 @@ The "Who's visiting?" bar re-tailors the page in the browser. It has no backend 
   - the hero pill, headline and lede
   - the projects intro
   - which project cards show and in what order (at most 6, most relevant first)
-  - which demos show and in what order (4 of the 8, the featured one first; the general page shows all 8)
+  - which demos show and in what order (4 of the 9, the featured one first; the general page shows all 9)
   - the order of the Experience, Demos and Projects sections (with their 02/03/04 numbers and the nav links)
   - which experience cards get a "Relevant" badge, and which bullets are bolded
   - a one-line pitch in the "Viewing as" bar
@@ -51,14 +51,14 @@ agree, moves the sections in the DOM so keyboard order matches, and animates the
 | id | Demos, in order | Why the first one |
 |---|---|---|
 | `startup` | MPPI, cart-pole RL, SCARA, SLAM | planning was the ZPod job; then breadth |
-| `enterprise` | SCARA, SLAM, MPPI, DVL | deterministic, limit-aware motion planning (IK + A*), measured against a learned policy |
-| `underwater` | DVL, sonar VFH, SLAM, MPPI | the idea behind uw-vio-dvl |
+| `enterprise` | SCARA, localisation filters, SLAM, MPPI | deterministic, limit-aware motion planning (IK + A*), measured against a learned policy |
+| `underwater` | DVL, localisation filters, sonar VFH, SLAM | the idea behind uw-vio-dvl |
 | `embodied` | cart-pole RL, stand-off DQN, SCARA, MPPI | a learned policy (`tools/train_pendulum.py`) racing LQR in the same run; then a Double DQN against a tuned P controller (`tools/train_standoff.mjs`) |
-| `av` | MPPI, SLAM, cart-pole RL, DVL | planning & prediction at Minus Zero |
-| `defence` | box-track diffusion, sonar VFH, stand-off DQN, DVL | tracking a manoeuvring target in a long-range camera with calibrated uncertainty (synthetic tracks); then navigating and estimating with degraded sensing |
+| `av` | MPPI, localisation filters, SLAM, DVL | planning & prediction at Minus Zero |
+| `defence` | box-track diffusion, localisation filters, sonar VFH, DVL | tracking a manoeuvring target in a long-range camera with calibrated uncertainty (synthetic tracks); then estimating and navigating with degraded sensing |
 | `inspection` | SCARA, SLAM, sonar VFH, DVL | manipulation for workcells such as Mega: learned reaching vs an IK planner |
 | `legged` | cart-pole RL, SCARA, MPPI, SLAM | balance and recovery from pushes |
-| `recruiter` | SLAM, cart-pole RL, SCARA, MPPI | a mix across estimation, learning, manipulation, planning |
+| `recruiter` | localisation filters, SLAM, cart-pole RL, MPPI | estimation first (the FAST-LIO2 work), then learning and planning |
 
 The `embodied` and `recruiter` presets also bold the two summer schools in the Education card. The `recruiter` preset also bolds the exact GPU FAST-LIO2 bullets in the Griffin Labs card.
 
