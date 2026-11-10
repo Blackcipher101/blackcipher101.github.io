@@ -132,9 +132,9 @@ export const PRESETS = {
   },
   recruiter: {
     label: 'Recruiter / hiring manager',
-    pill: 'Estimation · SLAM · Planning · RL',
-    headline: 'Robotics engineer: <b>estimation</b>, <b>SLAM</b>, <b>planning</b>.',
-    lede: 'Autonomy Engineer at Griffin Labs (now). Before: Senior Robotics Engineer at Aeroarc, Robotics & AI at BYTES (led tech and product), Head of Planning & Prediction and Founding Engineer at Minus Zero (ZPod), Robotics Intern at Clutterbot. B.Tech ELC (Robotics), Amrita.',
+    pill: 'Exact GPU SLAM · Estimation · Planning · RL',
+    headline: '<b>FAST-LIO2</b> on the GPU, <b>exact</b> results, under <b>half the CPU</b>.',
+    lede: 'Autonomy Engineer at Griffin Labs (now): moved FAST-LIO2 and the map localizer onto the Jetson Orin GPU with results that match the CPU code (0 mismatches over 7.27 M nearest-neighbour searches); live on the robot, the localization nodes went from 1.24 to 0.49 CPU cores. Before: Senior Robotics Engineer at Aeroarc, Robotics & AI at BYTES (led tech and product), Head of Planning & Prediction and Founding Engineer at Minus Zero (ZPod), Robotics Intern at Clutterbot. B.Tech ELC (Robotics), Amrita.',
     pitch: 'Skills: state estimation, SLAM, GPU acceleration, planning & prediction, RL, simulation, CI/CD · C++, Python, CUDA, ROS 2 · nehalnevle@gmail.com',
     work: 'A short list of public projects, each with measured results.',
     projects: ['vio', 'humanoid', 'rov', 'q14', 'klt', 'inspect'],

@@ -29,7 +29,7 @@ The "Who's visiting?" bar re-tailors the page in the browser. It has no backend 
 | `defence` | Defence | Aeroarc VIRA and ARCV MULE, estimation under sensor dropout |
 | `inspection` | Inspection / industrial / facilities | PhiSCAN, uw-inspect-report, uw-calib-health, Griffin Labs (TCR, Mega), Clutterbot |
 | `legged` | Legged robots | ARCV MULE, Q14 Dynamics Lab, humanoid RL in progress |
-| `recruiter` | Recruiter / hiring manager | the timeline in one paragraph, a skills line, contact |
+| `recruiter` | Recruiter / hiring manager | the exact GPU FAST-LIO2 result first, then the timeline in one paragraph, a skills line, contact |
 
 These nine cover the kinds of reader the work actually serves: company stage (startup, enterprise), domain (underwater, AV, defence, inspection), robot type (embodied/humanoid, legged), and role (recruiting). A domain that has no matching work behind it has no preset.
 
