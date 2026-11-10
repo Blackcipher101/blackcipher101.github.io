@@ -150,7 +150,7 @@ export const PRESETS = {
     ...NOW_FASTLIO,
     label: 'Recruiter / hiring manager',
     pill: 'Exact GPU SLAM · Estimation · Planning · RL',
-    headline: '<b>FAST-LIO2</b> on the GPU: exact, <b>2.9× less CPU</b>, <b>2.2× faster</b>.',
+    headline: 'I made <b>FAST-LIO2</b> <b>2.2×&nbsp;faster</b> on <b>2.9×&nbsp;less&nbsp;CPU</b>. Same&nbsp;results.',
     lede: 'Autonomy Engineer at Griffin Labs (now): moved FAST-LIO2 and the map localizer onto the Jetson Orin GPU with results that match the CPU code (0 mismatches over 7.27 M nearest-neighbour searches); <b>2.9× less CPU</b> for FAST-LIO2 live on the robot (0.46 → 0.16 cores), <b>2.5× less</b> for the whole localization chain (1.24 → 0.49), <b>2.2× faster</b> per scan (42.9 → 19.8 ms) and <b>7× lower</b> cloud-merge latency (104 → 14 ms). Before: Senior Robotics Engineer at Aeroarc, Robotics & AI at BYTES (led tech and product), Head of Planning & Prediction and Founding Engineer at Minus Zero (ZPod), Robotics Intern at Clutterbot. B.Tech ELC (Robotics), Amrita.',
     pitch: 'Skills: state estimation, SLAM, GPU acceleration, planning & prediction, RL, simulation, CI/CD · C++, Python, CUDA, ROS 2 · nehalnevle@gmail.com',
     work: 'A short list of public projects, each with measured results.',
