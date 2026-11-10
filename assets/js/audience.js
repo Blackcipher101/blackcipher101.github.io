@@ -135,13 +135,13 @@ export const PRESETS = {
     pill: 'Estimation · SLAM · Planning · RL',
     headline: 'Robotics engineer: <b>estimation</b>, <b>SLAM</b>, <b>planning</b>.',
     lede: 'Autonomy Engineer at Griffin Labs (now). Before: Senior Robotics Engineer at Aeroarc, Robotics & AI at BYTES (led tech and product), Head of Planning & Prediction and Founding Engineer at Minus Zero (ZPod), Robotics Intern at Clutterbot. B.Tech ELC (Robotics), Amrita.',
-    pitch: 'Skills: state estimation, SLAM, planning & prediction, RL, simulation, CI/CD · C++, Python, CUDA, ROS 2 · nehalnevle@gmail.com',
+    pitch: 'Skills: state estimation, SLAM, GPU acceleration, planning & prediction, RL, simulation, CI/CD · C++, Python, CUDA, ROS 2 · nehalnevle@gmail.com',
     work: 'A short list of public projects, each with measured results.',
     projects: ['vio', 'humanoid', 'rov', 'q14', 'klt', 'inspect'],
     demos: ['slam', 'cartpole', 'scara', 'mppi'],
     sections: 'proof',
     jobs: ['griffin', 'aeroarc', 'bytes', 'mz'],
-    points: ['zero', 'series', 'raise', 'accel', 'ci', 'lead', 'mlss', 'eeml'],
+    points: ['lio', 'zero', 'series', 'raise', 'accel', 'ci', 'lead', 'mlss', 'eeml'],
   },
 };
 

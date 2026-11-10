@@ -60,7 +60,7 @@ agree, moves the sections in the DOM so keyboard order matches, and animates the
 | `legged` | cart-pole RL, SCARA, MPPI, SLAM | balance and recovery from pushes |
 | `recruiter` | SLAM, cart-pole RL, SCARA, MPPI | a mix across estimation, learning, manipulation, planning |
 
-The `embodied` and `recruiter` presets also bold the two summer schools in the Education card.
+The `embodied` and `recruiter` presets also bold the two summer schools in the Education card. The `recruiter` preset also bolds the exact GPU FAST-LIO2 bullets in the Griffin Labs card.
 
 ## Keyword lists (summary; the exact weights are in `KEYWORDS`)
 

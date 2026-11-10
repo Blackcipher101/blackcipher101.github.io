@@ -175,6 +175,10 @@
               <h3>Autonomy Engineer</h3>
               <p class="org">Griffin Labs · Singapore</p>
               <p class="what">Building generalisable autonomy. Working on TCR and Mega.</p>
+              <ul class="pts">
+                <li data-pt="lio">Moved FAST-LIO2 and the map localizer onto the Jetson Orin GPU with exact results: 0 mismatches against the CPU code over 7.27 M nearest-neighbour searches.</li>
+                <li data-pt="lio">Live on the robot, the localization nodes went from 1.24 to 0.49 CPU cores (−60 %); FAST-LIO alone from 46 % to 16 % of a core.</li>
+              </ul>
             </div>
           </li>
 
@@ -686,7 +690,7 @@
           </a>
           <div class="card proj-wip reveal" data-proj="wip">
             <span class="mono" style="color:var(--lime)">In progress</span>
-            <div class="wip"><span>Humanoid backflip → spin kick routine on the G1, and SuperMimic improvements</span><span class="badge">Training</span></div>
+            <div class="wip"><span>Exact GPU FAST-LIO2 and localizer on the Jetson Orin: same results as the CPU code, at under half the CPU</span><span class="badge">Robot testing</span></div>
             <div class="wip"><span>Sonar-based RL navigation for the ROV</span><span class="badge">Evaluating</span></div>
             <a class="btn btn-ghost" href="https://github.com/Blackcipher101">All repositories on GitHub</a>
           </div>
